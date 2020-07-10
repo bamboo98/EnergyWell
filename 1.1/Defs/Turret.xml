@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ThingDef ParentName="BuildingBase">
+        <defName>VoidNetTurret_Base</defName>
+        <label>幽能哨戒炮-基础型</label>
+        <description>A portable automatic turret. Requires steel to refurbish its barrel after heavy use. May explode when damaged. Its dumb AI brain can't be directly controlled, so beware of friendly fire.</description>
+        <thingClass>zhuzi.AdvancedEnergy.EnergyWell.Builds.VoidNetTurret</thingClass>
+        <graphicData>
+            <texPath>Things/Building/Security/TurretMini_Base</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(3,3)</drawSize>
+            <damageData>
+                <rect>(0.2,0.2,0.6,0.6)</rect>
+            </damageData>
+            <shadowData>
+                <volume>(0.27,0.25,0.27)</volume>
+                <offset>(0,0,0)</offset>
+            </shadowData>
+        </graphicData>
+        <uiIconPath>Things/Building/Security/TurretMini_MenuIcon</uiIconPath>
+        <uiIconScale>0.90</uiIconScale>
+        <minifiedDef>MinifiedThing</minifiedDef>
+        <altitudeLayer>Building</altitudeLayer>
+        <stealable>false</stealable>
+        <rotatable>false</rotatable>
+        <thingCategories>
+            <li>BuildingsSecurity</li>
+        </thingCategories>
+        <statBases>
+            <MaxHitPoints>100</MaxHitPoints>
+            <Flammability>0</Flammability>
+            <WorkToBuild>1800</WorkToBuild>
+            <Mass>8</Mass>
+            <Beauty>0</Beauty>
+            <ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
+        </statBases>
+        <tickerType>Normal</tickerType>
+        <comps>
+            <li Class="CompProperties_Forbiddable"/>
+            <li Class="CompProperties_Flickable"/>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetPortProp"/>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetBuildShieldProp"/>
+        </comps>
+        <passability>PassThroughOnly</passability>
+        <pathCost>50</pathCost>
+        <fillPercent>0.4</fillPercent>
+        <hasTooltip>true</hasTooltip>
+        <stuffCategories>
+            <li>Metallic</li>
+        </stuffCategories>
+        <costStuffCount>30</costStuffCount>
+        <costList>
+            <Steel>70</Steel>
+            <ComponentIndustrial>3</ComponentIndustrial>
+        </costList>
+        <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+        <designationCategory>Security</designationCategory>
+        <!-- <constructionSkillPrerequisite>5</constructionSkillPrerequisite> -->
+        <building>
+            <combatPower>45</combatPower>            <!-- same as a scavenger -->
+            <ai_combatDangerous>true</ai_combatDangerous>
+            <turretGunDef>VoidEnergyRifle_Turret</turretGunDef>
+            <turretBurstCooldownTime>0.5</turretBurstCooldownTime>
+            <turretBurstWarmupTime>0.5</turretBurstWarmupTime>
+        </building>
+        <placeWorkers>
+            <li>PlaceWorker_TurretTop</li>
+            <li>PlaceWorker_ShowTurretRadius</li>
+        </placeWorkers>
+        <!-- <designationHotKey>Misc2</designationHotKey> -->
+        <!-- <researchPrerequisites>
+            <li>GunTurrets</li>
+        </researchPrerequisites> -->
+    </ThingDef>
+
+    
+    <ThingDef ParentName="BaseHumanMakeableGun">
+        <defName>VoidEnergyRifle_Turret</defName>
+        <label>幽能步枪-基础型</label>
+        <description>可以将幽能转换为粗糙的能量弹射出,精度不佳,但破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
+        <techLevel>Spacer</techLevel>
+        <graphicData>
+            <texPath>Things/Item/Equipment/WeaponRanged/ChargeRifle</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <soundInteract>Interact_ChargeRifle</soundInteract>
+        <statBases>
+            <WorkToMake>45000</WorkToMake>
+            <Mass>4.6</Mass>
+            <AccuracyTouch>0.4</AccuracyTouch>
+            <AccuracyShort>0.45</AccuracyShort>
+            <AccuracyMedium>0.35</AccuracyMedium>
+            <AccuracyLong>0.25</AccuracyLong>
+            <RangedWeapon_Cooldown>1.2</RangedWeapon_Cooldown>
+        </statBases>
+        <recipeMaker>
+            <!-- <researchPrerequisite>ChargedShot</researchPrerequisite> -->
+            <!-- <skillRequirements>
+                <Crafting>7</Crafting>
+            </skillRequirements> -->
+            <recipeUsers Inherit="False">
+                <li>FabricationBench</li>
+            </recipeUsers>
+        </recipeMaker>
+        <costList>
+            <Plasteel>50</Plasteel>
+            <!-- <ComponentSpacer>2</ComponentSpacer> -->
+        </costList>
+        <thingSetMakerTags>
+            <li>RewardStandardLowFreq</li>
+            <li>RewardStandardQualitySuper</li>
+        </thingSetMakerTags>
+        <!-- <weaponTags>
+            <li>SpacerGun</li>
+        </weaponTags> -->
+        <verbs>
+            <li>
+                <verbClass>zhuzi.AdvancedEnergy.EnergyWell.Verbs.VoidNetWeapon_Lanuch</verbClass>
+                <hasStandardCommand>true</hasStandardCommand>
+                <defaultProjectile>Bullet_ChargeRifle</defaultProjectile>
+                <warmupTime>1</warmupTime>
+                <range>28</range>
+                <!-- 炮塔要加个最小范围 -->
+                <minRange>0</minRange>
+                <ticksBetweenBurstShots>6</ticksBetweenBurstShots>
+                <burstShotCount>3</burstShotCount>
+                <soundCast>Shot_ChargeRifle</soundCast>
+                <soundCastTail>GunTail_Medium</soundCastTail>
+                <muzzleFlashScale>9</muzzleFlashScale>
+            </li>
+        </verbs>
+        <tools>
+            <li>
+                <label>stock</label>
+                <capacities>
+                    <li>Blunt</li>
+                </capacities>
+                <power>9</power>
+                <cooldownTime>2</cooldownTime>
+            </li>
+            <li>
+                <label>barrel</label>
+                <capacities>
+                    <li>Blunt</li>
+                    <li>Poke</li>
+                </capacities>
+                <power>9</power>
+                <cooldownTime>2</cooldownTime>
+            </li>
+        </tools>
+        <comps>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetTurretEquipmentPortProp">
+            </li>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponShootModeProp">
+            </li>
+
+        </comps>
+    </ThingDef>
+</Defs>

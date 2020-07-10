@@ -7,7 +7,7 @@
         <description>Produces power by consuming chemfuel. Must be periodically refueled by hand.</description>
         <thingClass>Building</thingClass>
         <graphicData>
-            <texPath>Things/Building/Power/ChemfuelPoweredGenerator</texPath>
+            <texPath>Build_VoidEnergyWell</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>(2,2)</drawSize>
             <shadowData>
@@ -53,11 +53,11 @@
 
     <ThingDef ParentName="BuildingBase">
         <defName>VoidNetTower</defName>
-        <label>幽能方尖塔</label>
+        <label>幽能方尖碑</label>
         <description>Produces power by consuming chemfuel. Must be periodically refueled by hand.</description>
         <thingClass>Building</thingClass>
         <graphicData>
-            <texPath>Things/Building/Power/ChemfuelPoweredGenerator</texPath>
+            <texPath>Build_VoidEnergyTower</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>(2,2)</drawSize>
             <shadowData>
@@ -106,7 +106,7 @@
         <description>Produces power by consuming chemfuel. Must be periodically refueled by hand.</description>
         <thingClass>Building</thingClass>
         <graphicData>
-            <texPath>Things/Building/Power/ChemfuelPoweredGenerator</texPath>
+            <texPath>Build_VoidEnergyConverter</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>(2,2)</drawSize>
             <shadowData>
@@ -139,8 +139,7 @@
                 <glowRadius>10</glowRadius>
                 <glowColor>(131,236,255,0)</glowColor>
             </li>
-            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetPortProp">
-            </li>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetPortProp"/>
 			<li Class="CompProperties_Power">
                 <compClass>zhuzi.AdvancedEnergy.EnergyWell.Comp.VoidEnergyConverter</compClass>
                 <transmitsPower>true</transmitsPower>
@@ -153,4 +152,82 @@
 
     </ThingDef>
 
+    <ThingDef ParentName="BuildingBase">
+        <defName>VoidNetAutoRepairWall</defName>
+        <label>幽能墙</label>
+        <description>幽能墙,具有自动修复功能,修复时需要消耗大量幽能</description>
+        <thingClass>Building</thingClass>
+        <category>Building</category>
+        <graphicData>
+            <texPath>Things/Building/Linked/Wall</texPath>
+            <graphicClass>Graphic_Appearances</graphicClass>
+            <linkType>CornerFiller</linkType>
+            <linkFlags>
+                <li>Wall</li>
+                <li>Rock</li>
+            </linkFlags>
+            <damageData>
+                <cornerTL>Damage/Corner</cornerTL>
+                <cornerTR>Damage/Corner</cornerTR>
+                <cornerBL>Damage/Corner</cornerBL>
+                <cornerBR>Damage/Corner</cornerBR>
+                <edgeTop>Damage/Edge</edgeTop>
+                <edgeBot>Damage/Edge</edgeBot>
+                <edgeLeft>Damage/Edge</edgeLeft>
+                <edgeRight>Damage/Edge</edgeRight>
+            </damageData>
+        </graphicData>
+        <uiIconPath>Things/Building/Linked/WallSmooth_MenuIcon</uiIconPath>
+        <statBases>
+            <MaxHitPoints>1000</MaxHitPoints>
+            <WorkToBuild>1</WorkToBuild>
+            <Flammability>0</Flammability>
+            <MeditationFocusStrength>0.22</MeditationFocusStrength>
+        </statBases>
+        <costStuffCount>1</costStuffCount>
+
+        <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+        <altitudeLayer>Building</altitudeLayer>
+        <passability>Impassable</passability>
+        <blockWind>true</blockWind>
+        <castEdgeShadows>true</castEdgeShadows>
+        <fillPercent>1</fillPercent>
+        <coversFloor>true</coversFloor>
+        <placingDraggableDimensions>1</placingDraggableDimensions>
+        <tickerType>Rare</tickerType>
+        <rotatable>false</rotatable>
+        <selectable>true</selectable>
+        <neverMultiSelect>true</neverMultiSelect>
+        <useStuffTerrainAffordance>true</useStuffTerrainAffordance>
+        <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+        <holdsRoof>true</holdsRoof>
+        <designationCategory>Structure</designationCategory>
+        <staticSunShadowHeight>1.0</staticSunShadowHeight>
+        <blockLight>true</blockLight>
+        <canOverlapZones>false</canOverlapZones>
+        <fertility>0</fertility>
+        <stuffCategories>
+            <li>Metallic</li>
+        </stuffCategories>
+        <building>
+            <isInert>true</isInert>
+            <ai_chillDestination>false</ai_chillDestination>
+            <blueprintGraphicData>
+                <texPath>Things/Building/Linked/Wall_Blueprint_Atlas</texPath>
+            </blueprintGraphicData>
+        </building>
+        <comps>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetAutoRepairProp">
+                <!-- <RepairRatePerSec>0.01</RepairRatePerSec>
+                <PowerRateOnRapairing>10</PowerRateOnRapairing> -->
+            </li>
+        </comps>
+        <damageMultipliers>
+            <li>
+                <damageDef>Bomb</damageDef>
+                <multiplier>0.3</multiplier>
+            </li>
+        </damageMultipliers>
+        <designationHotKey>Misc3</designationHotKey>
+    </ThingDef>
 </Defs>

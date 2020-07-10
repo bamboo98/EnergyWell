@@ -77,16 +77,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builds\VoidNetTurret.cs" />
     <Compile Include="Comp\EnergyWell.cs" />
     <Compile Include="Comp\GameComp_VoidNet.cs" />
     <Compile Include="Comp\Prop\EnergyWellProp.cs" />
+    <Compile Include="Comp\Prop\VoidNetAutoRepairProp.cs" />
+    <Compile Include="Comp\Prop\VoidNetBuildShieldProp.cs" />
     <Compile Include="Comp\Prop\VoidNetPortProp.cs" />
     <Compile Include="Comp\Prop\VoidNetTowerProp.cs" />
     <Compile Include="Comp\Prop\VoidNetWeaponPortProp.cs" />
     <Compile Include="Comp\Prop\VoidNetWeaponShootModeProp.cs" />
     <Compile Include="Comp\VoidEnergyConverter.cs" />
+    <Compile Include="Comp\VoidNetAutoRepair.cs" />
+    <Compile Include="Comp\VoidNetBuildShield.cs" />
     <Compile Include="Comp\VoidNetPort.cs" />
     <Compile Include="Comp\VoidNetTower.cs" />
+    <Compile Include="Comp\VoidNetTurretWeaponPort.cs" />
     <Compile Include="Comp\VoidNetWeaponPort.cs" />
     <Compile Include="Comp\VoidNetWeaponShootMode.cs" />
     <Compile Include="Manager.cs" />

@@ -175,6 +175,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         {
             //节点都没建立你玩个鸡掰
             if (!hasNetNode || Towers.Count == 0) return false;
+            if (count <= 0) return true;
             usingNet += count;
             if (EnergyCache < count)
             {
@@ -194,6 +195,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         {
             //节点都没建立你玩个鸡掰
             if (!hasNetNode || Towers.Count == 0) return 0;
+            if (count <= 0) return count;
             usingNet += count;
             if (EnergyCache < count)
             {

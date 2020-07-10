@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
 
-	<ToolTip_SetPersionalTerminalSavingRate>设置护盾充能阈值\n当幽能终端内存储幽能低于设定值({0}%)时\n不会给幽能护盾补充能量</ToolTip_SetPersionalTerminalSavingRate>
-
+	<ToolTip_SetPersionalTerminalSavingRate>设置终端供能阈值\n当幽能终端内存储幽能低于设定值({0}%)时\n不会给武器以外的装备提供能量</ToolTip_SetPersionalTerminalSavingRate>
+	<ToolTip_SetVoidNetPortSavingRate>设置终端供能阈值\n当幽能终端内存储幽能低于设定值({0}%)时\n不会给武器以外的组件提供能量</ToolTip_SetVoidNetPortSavingRate>
 
 </LanguageData>

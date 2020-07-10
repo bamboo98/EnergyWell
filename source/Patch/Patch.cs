@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using RimWorld;
 using Verse;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
@@ -69,7 +70,6 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
 
 
 
-
     [HarmonyPatch(typeof(Pawn_EquipmentTracker))]
     internal class Pawn_EquipmentTracker_TryDropEquipment_Patch
     {
@@ -103,6 +103,22 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
         }
 
     }
+
+    //[HarmonyPatch(typeof(Building_TurretGun))]
+    //internal class Building_TurretGun_Patch
+    //{
+    //    [HarmonyPostfix]
+    //    [HarmonyPatch("BurstCooldownTime")]
+    //    public static void BurstCooldownTime_Postfix(ref float __result)
+    //    {
+    //        if (Methons.rangedWeapon_Cooldown_Prop != null)
+    //        {
+    //            __result = ((float)Methons.rangedWeapon_Cooldown_Prop);
+    //            Methons.rangedWeapon_Cooldown_Prop = null;
+    //        }
+    //    }
+
+    //}
 
     [HarmonyPatch(typeof(VerbProperties))]
     internal class VerbProperties_Patch
@@ -150,7 +166,30 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
         }
 
     }
+    [HarmonyPatch(typeof(PlaceWorker_ShowTurretRadius))]
+    internal class PlaceWorker_ShowTurretRadius_Patch
+    {
+        [HarmonyPrefix]
+        [HarmonyPatch("AllowsPlacing")]
+        
+        public static bool PlaceWorker_ShowTurretRadius_Prefix(ref AcceptanceReport __result ,BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
+        {
+            __result = true;
 
+
+            VerbProperties verbProperties = ((ThingDef)checkingDef).building.turretGunDef.Verbs.Find((VerbProperties v) => v.verbClass == typeof(Verbs.VoidNetWeapon_Lanuch));
+            if (verbProperties == null) return true;
+            if (verbProperties.range > 0f)
+            {
+                GenDraw.DrawRadiusRing(loc, verbProperties.range);
+            }
+            if (verbProperties.minRange > 0f)
+            {
+                GenDraw.DrawRadiusRing(loc, verbProperties.minRange);
+            }
+            return false;
+        }
+    }
 
 
 
@@ -172,7 +211,10 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
             if (__instance.EquipmentSource == null)
                 return true;
             Comp.VoidNetEquipmentPort cp = __instance.EquipmentSource.TryGetComp<Comp.VoidNetEquipmentPort>();
-            if (cp == null) return true;
+            if (cp == null)
+            {
+                return true;
+            }
             bool flag=true;
             if (!cp.TryStartCastOn(__instance, castTarg, destTarg, surpriseAttack, canHitNonTargetPawns))
             {

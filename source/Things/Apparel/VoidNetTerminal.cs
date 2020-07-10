@@ -7,6 +7,7 @@ using RimWorld;
 using Verse;
 using UnityEngine;
 using Verse.Sound;
+using zhuzi.AdvancedEnergy.EnergyWell.Resources;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Things
 {
@@ -35,7 +36,16 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
         private float energyCur = 0f;
         private float shieldCur = 0;
         private int shieldInit = 600;
-        public float savingRate = 0.5f;
+        public float savingRate = 0.25f;
+
+
+        public bool IsSavingEnergy
+        {
+            get
+            {
+                return energyCur / energyCacheMax <= savingRate;
+            }
+        }
         public float EnergyCur
         {
             get
@@ -108,6 +118,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
         }
         public virtual bool CostEnergy(float count)
         {
+            if (count <= 0)
+                return true;
             if (energyCur < count)
                 return false;
             energyCur -= count;
@@ -293,49 +305,12 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
                 Comp.VoidNetWeaponShootMode comp=Wearer.equipment.Primary.TryGetComp<Comp.VoidNetWeaponShootMode>();
                 if (comp != null)
                 {
-                    switch (comp.WeaponShootMode)
+                    foreach (Gizmo item in comp.CompGetGizmosExtra())
                     {
-                        case Comp.VoidNetWeaponShootMode.ShootMode.OneShoot:
-
-                            yield return new Command_Action
-                            {
-                                defaultLabel = "OneShoot",
-                                defaultDesc = "当前: 单发模式\n瞄准时间+30%,伤害+100%,耗能+125%,后摇+30%,精度+35%\n点击切换到三连发",
-                                
-                                action = delegate ()
-                                {
-                                    comp.WeaponShootMode = Comp.VoidNetWeaponShootMode.ShootMode.ThreeShoot;
-                                }
-                            };
-                            break;
-                        case Comp.VoidNetWeaponShootMode.ShootMode.ThreeShoot:
-                            yield return new Command_Action
-                            {
-                                defaultLabel = "ThreeShoot",
-                                defaultDesc = "当前: 三连发模式\n点击切换到全自动",
-                                action = delegate ()
-                                {
-                                    comp.WeaponShootMode = Comp.VoidNetWeaponShootMode.ShootMode.FullAuto;
-                                }
-                            };
-                            break;
-                        case Comp.VoidNetWeaponShootMode.ShootMode.FullAuto:
-                            yield return new Command_Action
-                            {
-                                defaultLabel = "FullAuto",
-                                defaultDesc = "当前: 全自动模式\n瞄准时间-100%,伤害-50%,耗能-35%,后摇-100%,精度-60%\n点击切换到三连发",
-                                action = delegate ()
-                                {
-                                    comp.WeaponShootMode = Comp.VoidNetWeaponShootMode.ShootMode.OneShoot;
-                                }
-                            };
-                            break;
-                        default:
-                            break;
+                        yield return item;
                     }
                 }
             }
-
 
             yield break;
         }
@@ -371,7 +346,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
             Scribe_Values.Look(ref shieldCur, "shieldCur", 0f);
             Scribe_Values.Look(ref shieldInit, "shieldInit", 600);
             Scribe_Values.Look(ref lastKeepDisplayTick, "lastKeepDisplayTick");
-            Scribe_Values.Look(ref savingRate, "savingRate");
+            Scribe_Values.Look(ref savingRate, "savingRate",0.25f);
             base.ExposeData();
         }
 
@@ -432,7 +407,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
                 Rect rect4 = rect2;
                 rect4.yMin = rect2.y + rect2.height / 3f;
                 float fillPercent = terminal.EnergyCur / terminal.EnergyCacheMax;
-                Widgets.FillableBar(rect4, fillPercent, FullVoidBarTex, EmptyBarTex, false);
+                Widgets.FillableBar(rect4, fillPercent, Texture2Ds.FullVoidBarTex, Texture2Ds.EmptyBarTex, false);
                 Text.Font = GameFont.Small;
                 Text.Anchor = TextAnchor.MiddleCenter;
                 Widgets.Label(rect4, (terminal.EnergyCur * 100f).ToString("F0") + " / " + (terminal.EnergyCacheMax * 100f).ToString("F0"));
@@ -446,7 +421,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
                 rect4.yMin = rect2.y + rect2.height / 3f;
                 rect4.height = rect4.height / 2f - 2f;
                 float fillPercent = terminal.ShieldCur / terminal.ShieldMax;
-                Widgets.FillableBar(rect4, fillPercent, FullShieldBarTex, EmptyBarTex, false);
+                Widgets.FillableBar(rect4, fillPercent, Texture2Ds.FullShieldBarTex, Texture2Ds.EmptyBarTex, false);
                 Text.Font = GameFont.Small;
                 Text.Anchor = TextAnchor.MiddleCenter;
                 if (terminal.ShieldInit > 0)
@@ -463,7 +438,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
                 rect5.yMin = rect4.yMax + 4f;
                 rect5.height = rect4.height;
                 float fillPercent2 = terminal.EnergyCur / terminal.EnergyCacheMax;
-                Widgets.FillableBar(rect5, fillPercent2, FullVoidBarTex, EmptyBarTex, false);
+                Widgets.FillableBar(rect5, fillPercent2, Texture2Ds.FullVoidBarTex, Texture2Ds.EmptyBarTex, false);
                 Text.Font = GameFont.Small;
                 Text.Anchor = TextAnchor.MiddleCenter;
                 Widgets.Label(rect5,(terminal.EnergyCur * 100f).ToString("F0") + " / " + (terminal.EnergyCacheMax * 100f).ToString("F0"));
@@ -499,9 +474,5 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
 
         public VoidNetTerminal terminal;
 
-        private static readonly Texture2D FullVoidBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(70f / 255f, 0, 112f / 255f));
-        private static readonly Texture2D FullShieldBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0f / 255f, 90f/255f, 75f / 255f));
-
-        private static readonly Texture2D EmptyBarTex = SolidColorMaterials.NewSolidColorTexture(Color.clear);
     }
 }

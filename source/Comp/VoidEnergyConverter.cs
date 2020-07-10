@@ -24,7 +24,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
-            compVoidNetPort = parent.GetComp<VoidNetPort>();
+            compVoidNetPort = parent.TryGetComp<VoidNetPort>();
 
             base.PostSpawnSetup(respawningAfterLoad);
         }

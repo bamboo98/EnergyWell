@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Verse;
 using RimWorld;
 using System.Reflection;
+using zhuzi.AdvancedEnergy.EnergyWell.Resources;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 {
@@ -102,20 +103,45 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             {
                 case ShootMode.OneShoot:
                     Patch.Methons.NextWarmupTime = base_WarmupTime * 1.3f;
-                    Patch.Methons.NextRangedWeapon_Cooldown = parent.GetStatValue(StatDefOf.RangedWeapon_Cooldown, true) * 1.3f;
 
                     break;
                 case ShootMode.ThreeShoot:
+                    Patch.Methons.NextWarmupTime = base_WarmupTime;
                     break;
                 case ShootMode.FullAuto:
                     Patch.Methons.NextWarmupTime = 0;
-                    Patch.Methons.NextRangedWeapon_Cooldown = 0;
                     break;
                 default:
                     break;
             }
             return true;
         }
+        /// <summary>
+        /// 最后一发子弹射出之前,修改僵直时间
+        /// </summary>
+        public virtual void PostPreLastShoot()
+        {
+
+            switch (WeaponShootMode)
+            {
+                case ShootMode.OneShoot:
+                    Patch.Methons.NextRangedWeapon_Cooldown = parent.GetStatValue(StatDefOf.RangedWeapon_Cooldown, true) * 1.3f;
+
+                    break;
+                case ShootMode.ThreeShoot:
+                    Patch.Methons.NextRangedWeapon_Cooldown = parent.GetStatValue(StatDefOf.RangedWeapon_Cooldown, true);
+                    break;
+                case ShootMode.FullAuto:
+                    Patch.Methons.NextRangedWeapon_Cooldown = 0;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        private int lastShootTick = -9999;
+        private int continuous = 0;
         /// <summary>
         /// 在每发子弹射出之前触发
         /// </summary>
@@ -129,9 +155,20 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                     Patch.Methons.NextAdjustedAccuracyFactor = 0.35f;
                     break;
                 case ShootMode.ThreeShoot:
+                    //Patch.Methons.NextAdjustedAccuracyFactor = 0f;
                     break;
                 case ShootMode.FullAuto:
-                    Patch.Methons.NextAdjustedAccuracyFactor = -0.6f;
+                    int gt = Find.TickManager.TicksGame;
+                    if (gt - lastShootTick < 15)
+                    {
+                        Patch.Methons.NextAdjustedAccuracyFactor = -0.6f + (continuous++ * 0.01f);
+                    }
+                    else
+                    { 
+                        Patch.Methons.NextAdjustedAccuracyFactor = -0.6f;
+                        continuous = 0;
+                    }
+                    lastShootTick = gt;
                     break;
                 default:
                     break;
@@ -167,10 +204,59 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             }
         }
 
+        public new virtual IEnumerable<Gizmo> CompGetGizmosExtra()
+        {
+            switch (WeaponShootMode)
+            {
+                case ShootMode.OneShoot:
+
+                    yield return new Command_Action
+                    {
+                        defaultLabel = "OneShoot",
+                        defaultDesc = "当前: 单发模式\n瞄准时间+30%,伤害+100%,耗能+125%,后摇+30%,精度+35%\n点击切换到三连发",
+                        icon= Texture2Ds.Icon_OneShoot,
+                        
+                        action = delegate ()
+                        {
+                            WeaponShootMode = ShootMode.ThreeShoot;
+                        }
+                    };
+                    break;
+                case ShootMode.ThreeShoot:
+                    yield return new Command_Action
+                    {
+                        defaultLabel = "ThreeShoot",
+                        defaultDesc = "当前: 三连发模式\n点击切换到全自动",
+                        icon = Texture2Ds.Icon_ThreeShoot,
+                        action = delegate ()
+                        {
+                            WeaponShootMode = ShootMode.FullAuto;
+                        }
+                    };
+                    break;
+                case ShootMode.FullAuto:
+                    yield return new Command_Action
+                    {
+                        defaultLabel = "FullAuto",
+                        defaultDesc = "当前: 全自动模式\n瞄准时间-100%,伤害-50%,耗能-35%,后摇-100%,精度-60%\n点击切换到三连发",
+                        icon = Texture2Ds.Icon_FullAuto,
+                        iconAngle = Find.TickManager.TicksGame % 360,
+                        action = delegate ()
+                        {
+                            WeaponShootMode = ShootMode.OneShoot;
+                        }
+                    };
+                    break;
+                default:
+                    break;
+            }
+        }
 
         public override void PostExposeData()
         {
-            Scribe_Values.Look(ref WeaponShootMode, "WeaponShootMode",ShootMode.ThreeShoot);
+            Scribe_Values.Look(ref WeaponShootMode, "WeaponShootMode", ShootMode.ThreeShoot);
+            Scribe_Values.Look(ref lastShootTick, "lastShootTick", -9999);
+            Scribe_Values.Look(ref continuous, "continuous", 0);
             base.PostExposeData();
         }
 

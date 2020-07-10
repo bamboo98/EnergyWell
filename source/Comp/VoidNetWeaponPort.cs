@@ -13,14 +13,14 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
     {
 
         public Things.VoidNetTerminal voidNetTerminal;
-        private float energyEachShot = 0.2f;
-        private int slientTick = -100;
+        protected float energyEachShot = 0.2f;
+        protected int slientTick = -100;
         private int checkNetTick = -100;
 
 
 
-        private VoidNetWeaponShootMode compShootMode;
-        private VoidNetWeaponShootMode CompShootMode
+        protected VoidNetWeaponShootMode compShootMode;
+        public VoidNetWeaponShootMode CompShootMode
         {
             get
             {
@@ -33,7 +33,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 
 
 
-        private float EnergyEachShot
+        protected float EnergyEachShot
         {
             get
             {
@@ -57,19 +57,25 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         //装备时触发
         public override void Notify_Equipped(Pawn pawn)
         {
-            voidNetTerminal = Things.VoidNetTerminal.FindTerminal(pawn);
-            if (voidNetTerminal != null)
+            if (pawn != null)
             {
-                voidNetTerminal.Online(this);
+                voidNetTerminal = Things.VoidNetTerminal.FindTerminal(pawn);
+                if (voidNetTerminal != null)
+                {
+                    voidNetTerminal.Online(this);
+                }
             }
             base.Notify_Equipped(pawn);
         }
         //丢弃时触发(patch实现,可能不全)
         public virtual void Notify_Dropped(Pawn pawn)
         {
-            if (voidNetTerminal != null)
+            if (pawn != null)
             {
-                voidNetTerminal.Offline(this);
+                if (voidNetTerminal != null)
+                {
+                    voidNetTerminal.Offline(this);
+                }
             }
         }
 
@@ -141,7 +147,16 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         {
             if (voidNetTerminal == null)
                 return false;
-            return voidNetTerminal.CostEnergy(EnergyEachShot);
+            if (voidNetTerminal.CostEnergy(EnergyEachShot))
+            {
+
+                if (CompShootMode != null && burstShotsLeft == 1)
+                {
+                    CompShootMode.PostPreLastShoot();
+                }
+                return true;
+            }
+            return false;
 
         }
 
