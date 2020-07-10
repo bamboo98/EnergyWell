@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <StatCategoryDef>
+    <defName>zzPower_stat</defName>
+    <label>护盾参数</label>
+    <displayOrder>70</displayOrder>
+  </StatCategoryDef>
+
+	<StatDef Name="zzBaseMiscStat_Power" Abstract="True">
+		<category>zzPower_stat</category>
+		<defaultBaseValue>0</defaultBaseValue>
+		<toStringStyle>FloatOne</toStringStyle>
+		<showIfUndefined>false</showIfUndefined>
+		<showOnDefaultValue>false</showOnDefaultValue>
+	</StatDef>
+
+
+	<StatDef ParentName="zzBaseMiscStat_Power">
+		<defName>zzPower_VoidEnergyGet</defName>
+		<label>幽能收集率</label>
+		<description>幽能井每秒钟可以收集多少个单位的幽能</description>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<toStringStyle>FloatOne</toStringStyle>
+    	<displayPriorityInCategory>230</displayPriorityInCategory>
+	</StatDef>
+
+	<StatDef ParentName="zzBaseMiscStat_Power">
+		<defName>zzPower_VoidEnergyCache</defName>
+		<label>幽能储量</label>
+		<description>幽能井内可以安全储存的幽能上限\n幽能储量超过安全上限时,幽能井会向外辐射高能粒子,并快速升温\n长时间超出安全上限时,有自燃和爆炸的可能</description>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<toStringStyle>FloatOne</toStringStyle>
+    	<displayPriorityInCategory>230</displayPriorityInCategory>
+	</StatDef>
+
+	<StatDef ParentName="zzBaseMiscStat_Power">
+		<defName>zzPower_VoidEnergyTransport</defName>
+		<label>幽能传输率</label>
+		<description>幽能网络每秒可以传输的最大幽能数量</description>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<toStringStyle>FloatOne</toStringStyle>
+    	<displayPriorityInCategory>230</displayPriorityInCategory>
+	</StatDef>
+
+	<StatDef ParentName="zzBaseMiscStat_Power">
+		<defName>zzPower_VoidEnergyNeed</defName>
+		<label>幽能需求</label>
+		<description>装置每秒消耗的幽能数量</description>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<toStringStyle>FloatOne</toStringStyle>
+    	<displayPriorityInCategory>230</displayPriorityInCategory>
+	</StatDef>
+
+	<StatDef ParentName="zzBaseMiscStat_Power">
+		<defName>zzPower_VoidEnergyConvert</defName>
+		<label>电能转化率</label>
+		<description>幽能反应堆将幽能转化为电能时的效率</description>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<toStringStyle>PercentZero</toStringStyle>
+    	<displayPriorityInCategory>230</displayPriorityInCategory>
+	</StatDef>
+
+	<StatDef ParentName="zzBaseMiscStat_Power">
+		<defName>zzPower_VoidEnergyUse</defName>
+		<label>电能缓存上限</label>
+		<description>幽能反应堆可以缓存的电能上限\n超出上限的电能会被释放到空气中并提高周围温度,有引起雷击的可能</description>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<toStringStyle>Integer</toStringStyle>
+    	<displayPriorityInCategory>230</displayPriorityInCategory>
+	</StatDef>
+
+
+
+<!-- 
+[次级]幽能井        从虚空中提取幽能,启动时需要消耗大量储电,启动后需要少量电能维持运行,升级项{幽能收集率,幽能储量}
+幽能网络服务器      允许无线传输幽能[可跨地图],升级项{幽能传输率,跨地图升级}(要在某张地图上连接世界幽能网络,需要先建造幽能网络服务器,并升级跨地图插件)
+幽能反应堆          将幽能转化为原版电能,升级项{幽能消耗速率,电能转化率,电能缓存上限}(只缓存自身产电,不接收外部电能输入)
+
+幽能护盾            可拓展的能量护盾,消耗幽能抵挡来袭的子弹和炮弹
+小型幽能机枪塔      消耗幽能射出子弹,对敌人造成伤害,低功率模式伤害较低,高功率模式伤害较高,但是每发射3发需要一定时间散热
+大型幽能炮塔        消耗幽能射出炮弹,伤害较高,耗能也很高,需要手动操作
+
+幽能深钻井          消耗幽能,原版深钻井plus
+幽能恒温器          消耗幽能,空调plus
+幽能反重力地砖      消耗幽能,加快生物移动速度,高清洁度,高美观度
+幽能太阳灯          ......
+幽能墙体            消耗幽能和电力进行自我修复
+
+SOS2联动->
+1000mm幽能对舰炮    强,无敌,建筑材料为1000mm幽能对舰炮残骸碎片*5,获取难度等同于原版AI核心
+幽能推进器          消耗幽能进行常规动力推进
+
+武器->
+幽能手枪/步枪/狙    从幽能网络中获取能源并射出幽能弹药,在没有建立幽能网络服务器的地图中无法使用
+ -->
+
+
+
+
+</Defs>

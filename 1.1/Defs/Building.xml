@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <ThingDef ParentName="BuildingBase">
+        <defName>SecondaryVoidEnergyWell</defName>
+        <label>次级幽能井</label>
+        <description>Produces power by consuming chemfuel. Must be periodically refueled by hand.</description>
+        <thingClass>Building</thingClass>
+        <graphicData>
+            <texPath>Things/Building/Power/ChemfuelPoweredGenerator</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(2,2)</drawSize>
+            <shadowData>
+                <volume>(1.93,1,1.69)</volume>
+                <offset>(-0.03,0,-0.1)</offset>
+            </shadowData>
+        </graphicData>
+        <altitudeLayer>Building</altitudeLayer>
+        <passability>PassThroughOnly</passability>
+        <pathCost>150</pathCost>
+        <blockWind>true</blockWind>
+        <fillPercent>1.0</fillPercent>
+        <rotatable>false</rotatable>
+        <statBases>
+            <MaxHitPoints>1000</MaxHitPoints>
+            <WorkToBuild>1</WorkToBuild>
+            <Flammability>0</Flammability>
+            <Beauty>0</Beauty>
+        </statBases>
+        <tickerType>Normal</tickerType>
+        <canOverlapZones>false</canOverlapZones>
+        <size>(2,2)</size>
+        <costList>
+            <Steel>100</Steel>
+            <ComponentIndustrial>3</ComponentIndustrial>
+        </costList>
+        <comps>
+            <li Class="CompProperties_Flickable" />
+            <li Class="CompProperties_Glower">
+                <glowRadius>10</glowRadius>
+                <glowColor>(131,236,255,0)</glowColor>
+            </li>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.EnergyWellProp">
+            </li>
+
+        </comps>
+        <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+        <designationCategory>Power</designationCategory>
+        <constructEffect>ConstructMetal</constructEffect>
+
+    </ThingDef>
+
+
+    <ThingDef ParentName="BuildingBase">
+        <defName>VoidNetTower</defName>
+        <label>幽能方尖塔</label>
+        <description>Produces power by consuming chemfuel. Must be periodically refueled by hand.</description>
+        <thingClass>Building</thingClass>
+        <graphicData>
+            <texPath>Things/Building/Power/ChemfuelPoweredGenerator</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(2,2)</drawSize>
+            <shadowData>
+                <volume>(1.93,1,1.69)</volume>
+                <offset>(-0.03,0,-0.1)</offset>
+            </shadowData>
+        </graphicData>
+        <altitudeLayer>Building</altitudeLayer>
+        <passability>PassThroughOnly</passability>
+        <pathCost>150</pathCost>
+        <blockWind>true</blockWind>
+        <fillPercent>1.0</fillPercent>
+        <rotatable>false</rotatable>
+        <statBases>
+            <MaxHitPoints>1000</MaxHitPoints>
+            <WorkToBuild>1</WorkToBuild>
+            <Flammability>0</Flammability>
+            <Beauty>0</Beauty>
+        </statBases>
+        <tickerType>Normal</tickerType>
+        <canOverlapZones>false</canOverlapZones>
+        <size>(2,2)</size>
+        <costList>
+            <Steel>100</Steel>
+            <ComponentIndustrial>3</ComponentIndustrial>
+        </costList>
+        <comps>
+            <li Class="CompProperties_Flickable" />
+            <li Class="CompProperties_Glower">
+                <glowRadius>10</glowRadius>
+                <glowColor>(131,236,255,0)</glowColor>
+            </li>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetTowerProp">
+            </li>
+
+        </comps>
+        <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+        <designationCategory>Power</designationCategory>
+        <constructEffect>ConstructMetal</constructEffect>
+
+    </ThingDef>
+
+    <ThingDef ParentName="BuildingBase">
+        <defName>VoidPowerConverter</defName>
+        <label>幽能反应堆</label>
+        <description>Produces power by consuming chemfuel. Must be periodically refueled by hand.</description>
+        <thingClass>Building</thingClass>
+        <graphicData>
+            <texPath>Things/Building/Power/ChemfuelPoweredGenerator</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(2,2)</drawSize>
+            <shadowData>
+                <volume>(1.93,1,1.69)</volume>
+                <offset>(-0.03,0,-0.1)</offset>
+            </shadowData>
+        </graphicData>
+        <altitudeLayer>Building</altitudeLayer>
+        <passability>PassThroughOnly</passability>
+        <pathCost>150</pathCost>
+        <blockWind>true</blockWind>
+        <fillPercent>1.0</fillPercent>
+        <rotatable>false</rotatable>
+        <statBases>
+            <MaxHitPoints>1000</MaxHitPoints>
+            <WorkToBuild>1</WorkToBuild>
+            <Flammability>0</Flammability>
+            <Beauty>0</Beauty>
+        </statBases>
+        <tickerType>Normal</tickerType>
+        <canOverlapZones>false</canOverlapZones>
+        <size>(2,2)</size>
+        <costList>
+            <Steel>100</Steel>
+            <ComponentIndustrial>3</ComponentIndustrial>
+        </costList>
+        <comps>
+            <li Class="CompProperties_Flickable" />
+            <li Class="CompProperties_Glower">
+                <glowRadius>10</glowRadius>
+                <glowColor>(131,236,255,0)</glowColor>
+            </li>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetPortProp">
+            </li>
+			<li Class="CompProperties_Power">
+                <compClass>zhuzi.AdvancedEnergy.EnergyWell.Comp.VoidEnergyConverter</compClass>
+                <transmitsPower>true</transmitsPower>
+            </li>
+
+        </comps>
+        <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+        <designationCategory>Power</designationCategory>
+        <constructEffect>ConstructMetal</constructEffect>
+
+    </ThingDef>
+
+</Defs>
