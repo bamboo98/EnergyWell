@@ -8,11 +8,13 @@ using Verse;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop
 {
-    class VoidNetTowerProp: CompProperties
+    public class VoidNetTowerProp: CompProperties
     {
         public VoidNetTowerProp()
         {
             compClass = typeof(VoidNetTower);
         }
+        public float energyTransportPerSec = 1f;
+        public bool transportToWorld = false;
     }
 }

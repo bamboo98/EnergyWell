@@ -7,10 +7,11 @@ using zzLib;
 using RimWorld;
 using Verse;
 using UnityEngine;
+using System.Collections;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 {
-    class WorldVoidEnergyNet:GameComponent
+    public class WorldVoidEnergyNet:GameComponent
     {
         private readonly Game game;
         public readonly List<EnergyWell> Wells = new List<EnergyWell>();
@@ -23,13 +24,27 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         public float EnergyCache = 0;
         public float EnergyCacheMax = 0;
 
-        private float energyNeedTotal = 0;
-        private float usingNet = 0;
+        private readonly Queue<balanceInfo> balanceInfos = new Queue<balanceInfo>();
+        //private float energyNeedTotal = 0;
+        //private float usingNet = 0;
+
+        private float energyNeedTotal
+        {
+            get
+            {
+                float sum = 0;
+                foreach (balanceInfo item in balanceInfos)
+                {
+                    sum += item.value;
+                }
+                return sum;
+            }
+        }
 
         public override void GameComponentTick()
         {
-            energyNeedTotal = usingNet;
-            usingNet = 0;
+            //energyNeedTotal = usingNet;
+            //usingNet = 0;
             base.GameComponentTick();
             //统计下世界网络能缓存的最大能量
             EnergyCacheMax = 0;
@@ -41,7 +56,19 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                     EnergyCacheMax += comp.EnergyTransportPerSec;
                 }
             }
-            EnergyCacheMax /= 60;
+            //缓存250ticks的能量,防止rareTick的comp不够用
+            EnergyCacheMax *= 4.17f;
+
+            int gt = Find.TickManager.TicksGame;
+            while (balanceInfos.Count > 0)
+            {
+                if (gt - balanceInfos.Peek().tick > 249)
+                {
+                    balanceInfos.Dequeue();
+                }
+                else
+                    break;
+            }
         }
         public void AddWell(EnergyWell comp)
         {
@@ -90,7 +117,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         /// <returns>是否成功获取</returns>
         public bool TryGetEnergy(float count)
         {
-            usingNet += count;
+            //usingNet += count;
+            addBalanceInfo(count);
             if (EnergyCache<count)
                 return false;
             EnergyCache -= count;
@@ -103,7 +131,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         /// <returns>实际给了多少能量</returns>
         public float GetEnergy(float count)
         {
-            usingNet += count;
+            //usingNet += count;
+            addBalanceInfo(count);
             if (EnergyCache < count)
             {
                 float real = EnergyCache;
@@ -112,6 +141,16 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             }
             EnergyCache -= count;
             return count;
+        }
+        private void addBalanceInfo(float count)
+        {
+            if(count>0)
+                balanceInfos.Enqueue(new balanceInfo
+                {
+                    tick = Find.TickManager.TicksGame,
+                    value = count
+
+                });
         }
         public string GetBurdenStr()
         {
@@ -136,13 +175,19 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         }
 
     }
-
-    class MapVoidEnergyNet : MapComponent
+    struct balanceInfo
+    {
+        public int tick;
+        public float value;
+    }
+    public class MapVoidEnergyNet : MapComponent
     {
 
         public readonly List<EnergyWell> Wells = new List<EnergyWell>();
         public readonly List<VoidNetTower> Towers = new List<VoidNetTower>();
         private readonly WorldVoidEnergyNet WorldNet;
+
+        private Queue<balanceInfo> balanceInfos = new Queue<balanceInfo>();
 
 
         private bool hasNetNode = false;
@@ -151,8 +196,36 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         public float EnergyCache = 0;
         public float EnergyCacheMax = 0;
 
-        private float energyNeedTotal = 0;
-        private float usingNet = 0;
+        //private float energyNeedTotal = 0;
+        //private float usingNet = 0;
+
+        private float energyNeedTotal
+        {
+            get
+            {
+                float sum = 0;
+                foreach (balanceInfo item in balanceInfos)
+                {
+                    sum += item.value;
+                }
+                return sum;
+            }
+        }
+
+        private float produceEnergyPerSec
+        {
+            get
+            {
+                float sum = 0;
+
+                foreach (EnergyWell item in Wells)
+                {
+                    sum += item.ProduceEnergy * 60f;
+                }
+
+                return sum;
+            }
+        }
 
         public MapVoidEnergyNet(Map map) : base(map)
         {
@@ -171,12 +244,15 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         }
 
 
+
+
         public bool TryGetEnergy(float count)
         {
             //节点都没建立你玩个鸡掰
             if (!hasNetNode || Towers.Count == 0) return false;
             if (count <= 0) return true;
-            usingNet += count;
+            //usingNet += count;
+            addBalanceInfo(count);
             if (EnergyCache < count)
             {
                 float part = count - EnergyCache;
@@ -196,7 +272,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             //节点都没建立你玩个鸡掰
             if (!hasNetNode || Towers.Count == 0) return 0;
             if (count <= 0) return count;
-            usingNet += count;
+            //usingNet += count;
+            addBalanceInfo(count);
             if (EnergyCache < count)
             {
                 float real = EnergyCache;
@@ -212,8 +289,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         {
             float wantMapCache = 0;
             float wantWorldCache = 0;
-            energyNeedTotal = usingNet;
-            usingNet = 0;
+            //energyNeedTotal = usingNet;
+            //usingNet = 0;
 
             //统计下要提取的能量和当前地图网络能缓存的最大能量
             foreach (VoidNetTower comp in Towers)
@@ -225,18 +302,21 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                     wantWorldCache += comp.EnergyTransportPerSec;
                 }
             }
+
+            //缓存250ticks的能量,防止rareTick的comp不够用
+            EnergyCacheMax = wantMapCache*4.17f;
+
             //秒换成tick
             wantMapCache /= 60;
             wantWorldCache /= 60;
 
-            EnergyCacheMax = wantMapCache;
             //把冗余能量输送到世界节点
-            if(EnergyCache>0)
+            if (EnergyCache>0)
                 WorldNet.AddEnergy(ref EnergyCache,wantWorldCache);
 
 
             //从能量井里提取
-            wantMapCache = EnergyCacheMax - EnergyCache;
+            wantMapCache = Mathf.Min(wantMapCache, EnergyCacheMax - EnergyCache);
             List<EnergyWell> fullWells = Wells.ListFullCopy();
             List<int> waitToRemove = new List<int>();
             //要计算产能,先走一遍流程再说
@@ -258,11 +338,21 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             } while (wantMapCache > 0.0001 && fullWells.Count != 0) ;
 
 
+            int gt = Find.TickManager.TicksGame;
+            while (balanceInfos.Count > 0)
+            {
+                if (gt - balanceInfos.Peek().tick > 249)
+                {
+                    balanceInfos.Dequeue();
+                }
+                else
+                    break;
+            }
             base.MapComponentTick();
         }
 
 
-
+        
 
 
 
@@ -305,6 +395,20 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             WorldNet.RemoveTower(comp);
         }
 
+
+
+        private void addBalanceInfo(float count)
+        {
+            if (count > 0)
+                balanceInfos.Enqueue(new balanceInfo
+                {
+                    tick = Find.TickManager.TicksGame,
+                    value = count
+
+                });
+        }
+
+
         public string GetBurdenStr()
         {
             if (EnergyCacheMax == 0)
@@ -316,8 +420,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 storage += item.EnergyStorage;
                 storageMax += item.EnergyStorageMax;
             }
-            return "\n地图网络负载: " + (energyNeedTotal / EnergyCacheMax * 100f).ToString("f0") + "%\n" +
-                "地图幽能储量: " + (storage / storageMax * 100f).ToString("f0") + "%";
+            return "\n本地幽能产能: " + produceEnergyPerSec.ToString("f3") + "单位/秒" +
+                "\n传输负载/储量: " + (energyNeedTotal / EnergyCacheMax * 100f).ToString("f0") + "% / " + (storage / storageMax * 100f).ToString("f0") + "%";
         }
 
 

@@ -7,14 +7,14 @@ using Verse;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop
 {
-    class VoidNetWeaponPortProp : CompProperties
+    public class VoidNetWeaponPortProp : CompProperties
     {
         public VoidNetWeaponPortProp()
         {
             compClass = typeof(VoidNetEquipmentPort);
         }
     }
-    class VoidNetTurretEquipmentPortProp : CompProperties
+    public class VoidNetTurretEquipmentPortProp : CompProperties
     {
         public VoidNetTurretEquipmentPortProp()
         {

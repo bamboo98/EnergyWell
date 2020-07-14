@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<ThingDef ParentName="BaseHumanMakeableGun">
+		<defName>VoidEnergyRifle</defName>
+		<label>幽能步枪-基础型</label>
+		<description>可以将幽能转换为粗糙的能量弹射出,精度不佳,但破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
+		<techLevel>Spacer</techLevel>
+		<graphicData>
+			<texPath>Things/Item/Equipment/WeaponRanged/ChargeRifle</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<soundInteract>Interact_ChargeRifle</soundInteract>
+		<statBases>
+			<WorkToMake>45000</WorkToMake>
+			<!-- 枪重 -->
+			<Mass>4.3</Mass>
+			<!-- 精度 -->
+			<AccuracyTouch>0.5</AccuracyTouch>
+			<AccuracyShort>0.5</AccuracyShort>
+			<AccuracyMedium>0.4</AccuracyMedium>
+			<AccuracyLong>0.3</AccuracyLong>
+			<!-- 被覆盖,无效 -->
+			<RangedWeapon_Cooldown>1.6</RangedWeapon_Cooldown>
+		</statBases>
+		<recipeMaker>
+			<!-- <researchPrerequisite>ChargedShot</researchPrerequisite> -->
+			<!-- <skillRequirements>
+                <Crafting>7</Crafting>
+            </skillRequirements> -->
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+		</recipeMaker>
+		<costList>
+			<Plasteel>50</Plasteel>
+			<!-- <ComponentSpacer>2</ComponentSpacer> -->
+		</costList>
+		<thingSetMakerTags>
+			<li>RewardStandardLowFreq</li>
+			<li>RewardStandardQualitySuper</li>
+		</thingSetMakerTags>
+		<!-- <weaponTags>
+            <li>SpacerGun</li>
+        </weaponTags> -->
+		<verbs>
+			<li>
+				<verbClass>zhuzi.AdvancedEnergy.EnergyWell.Verbs.VoidNetWeapon_Lanuch</verbClass>
+				<hasStandardCommand>true</hasStandardCommand>
+				<!-- 子弹类型 -->
+				<defaultProjectile>Bullet_VoidEnergy_Normal</defaultProjectile>
+				<!-- 被覆盖,无效 -->
+				<warmupTime>1</warmupTime>
+				<!-- 范围 -->
+				<range>36</range>
+				<!-- 下面2个无效 -->
+				<ticksBetweenBurstShots>6</ticksBetweenBurstShots>
+				<burstShotCount>3</burstShotCount>
+				<!-- 声效和闪光范围 -->
+				<soundCast>Shot_ChargeRifle</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>9</muzzleFlashScale>
+			</li>
+		</verbs>
+		<tools>
+			<li>
+				<label>stock</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+			<li>
+				<label>barrel</label>
+				<capacities>
+					<li>Blunt</li>
+					<li>Poke</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+		</tools>
+		<comps>
+			<li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponPortProp">
+			</li>
+			<li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponShootModeProp">
+				<!-- 允许全自动(无瞄准时间和冷却的5发连射) -->
+				<enableFullAuto>false</enableFullAuto>
+				<!-- 单发子弹基础耗能 -->
+				<baseEnergyCost>0.2</baseEnergyCost>
+				<!-- 基础伤害比例 -->
+				<baseAmount>1</baseAmount>
+				<!-- 基础瞄准时间 -->
+				<baseWarmupTime>1</baseWarmupTime>
+				<!-- 基础后摇时间 -->
+				<baseCooldown>1</baseCooldown>
+				<!-- 基础子弹发射间隔(三连发为1.5倍) -->
+				<baseTicksBetweenBurstShots>10</baseTicksBetweenBurstShots>
+				<!-- 基础精度 -->
+				<baseAccuracy>1</baseAccuracy>
+			</li>
+
+		</comps>
+	</ThingDef>
+
+	<ThingDef ParentName="BaseHumanMakeableGun">
+		<defName>VoidEnergyPistol</defName>
+		<label>幽能手枪-基础型</label>
+		<description>可以将幽能转换为粗糙的能量弹射出,精度不佳,但破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
+		<techLevel>Spacer</techLevel>
+		<graphicData>
+			<texPath>Things/Item/Equipment/WeaponRanged/ChargeRifle</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<soundInteract>Interact_ChargeRifle</soundInteract>
+		<statBases>
+			<WorkToMake>45000</WorkToMake>
+			<Mass>2.05</Mass>
+			<AccuracyTouch>0.7</AccuracyTouch>
+			<AccuracyShort>0.5</AccuracyShort>
+			<AccuracyMedium>0.3</AccuracyMedium>
+			<AccuracyLong>0.25</AccuracyLong>
+			<RangedWeapon_Cooldown>1.2</RangedWeapon_Cooldown>
+		</statBases>
+		<recipeMaker>
+			<!-- <researchPrerequisite>ChargedShot</researchPrerequisite> -->
+			<!-- <skillRequirements>
+                <Crafting>7</Crafting>
+            </skillRequirements> -->
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+		</recipeMaker>
+		<costList>
+			<Plasteel>50</Plasteel>
+			<!-- <ComponentSpacer>2</ComponentSpacer> -->
+		</costList>
+		<thingSetMakerTags>
+			<li>RewardStandardLowFreq</li>
+			<li>RewardStandardQualitySuper</li>
+		</thingSetMakerTags>
+		<!-- <weaponTags>
+            <li>SpacerGun</li>
+        </weaponTags> -->
+		<verbs>
+			<li>
+				<verbClass>zhuzi.AdvancedEnergy.EnergyWell.Verbs.VoidNetWeapon_Lanuch</verbClass>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>Bullet_VoidEnergy_Small</defaultProjectile>
+				<warmupTime>0.6</warmupTime>
+				<range>20</range>
+				<ticksBetweenBurstShots>20</ticksBetweenBurstShots>
+				<burstShotCount>1</burstShotCount>
+				<soundCast>Shot_ChargeRifle</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>5</muzzleFlashScale>
+			</li>
+		</verbs>
+		<tools>
+			<li>
+				<label>stock</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+			<li>
+				<label>barrel</label>
+				<capacities>
+					<li>Blunt</li>
+					<li>Poke</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+		</tools>
+		<comps>
+			<li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponPortProp">
+			</li>
+			<li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponShootModeProp">
+				<!-- 允许全自动(无瞄准时间和冷却的5发连射) -->
+				<enableFullAuto>false</enableFullAuto>
+				<!-- 单发子弹基础耗能 -->
+				<baseEnergyCost>0.1</baseEnergyCost>
+				<!-- 基础伤害比例 -->
+				<baseAmount>1</baseAmount>
+				<!-- 基础瞄准时间 -->
+				<baseWarmupTime>0.75</baseWarmupTime>
+				<!-- 基础后摇时间 -->
+				<baseCooldown>0.5</baseCooldown>
+				<!-- 基础子弹发射间隔(三连发为1.5倍) -->
+				<baseTicksBetweenBurstShots>20</baseTicksBetweenBurstShots>
+				<!-- 基础精度 -->
+				<baseAccuracy>1</baseAccuracy>
+			</li>
+
+		</comps>
+	</ThingDef>
+
+	<ThingDef ParentName="BaseHumanMakeableGun">
+		<defName>VoidEnergyMachineGun</defName>
+		<label>幽能轻机枪</label>
+		<description>可以在短时间内倾泻大量幽能子弹\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
+		<techLevel>Spacer</techLevel>
+		<graphicData>
+			<texPath>Things/Item/Equipment/WeaponRanged/ChargeRifle</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<soundInteract>Interact_ChargeRifle</soundInteract>
+		<statBases>
+			<WorkToMake>45000</WorkToMake>
+			<!-- 枪重 -->
+			<Mass>4.3</Mass>
+			<!-- 精度 -->
+			<AccuracyTouch>0.4</AccuracyTouch>
+			<AccuracyShort>0.3</AccuracyShort>
+			<AccuracyMedium>0.25</AccuracyMedium>
+			<AccuracyLong>0.2</AccuracyLong>
+			<!-- 被覆盖,无效 -->
+			<RangedWeapon_Cooldown>1.6</RangedWeapon_Cooldown>
+		</statBases>
+		<recipeMaker>
+			<!-- <researchPrerequisite>ChargedShot</researchPrerequisite> -->
+			<!-- <skillRequirements>
+                <Crafting>7</Crafting>
+            </skillRequirements> -->
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+		</recipeMaker>
+		<costList>
+			<Plasteel>50</Plasteel>
+			<!-- <ComponentSpacer>2</ComponentSpacer> -->
+		</costList>
+		<thingSetMakerTags>
+			<li>RewardStandardLowFreq</li>
+			<li>RewardStandardQualitySuper</li>
+		</thingSetMakerTags>
+		<!-- <weaponTags>
+            <li>SpacerGun</li>
+        </weaponTags> -->
+		<verbs>
+			<li>
+				<verbClass>zhuzi.AdvancedEnergy.EnergyWell.Verbs.VoidNetWeapon_Lanuch</verbClass>
+				<hasStandardCommand>true</hasStandardCommand>
+				<!-- 子弹类型 -->
+				<defaultProjectile>Bullet_VoidEnergy_Normal</defaultProjectile>
+				<!-- 被覆盖,无效 -->
+				<warmupTime>1</warmupTime>
+				<!-- 范围 -->
+				<range>36</range>
+				<!-- 下面2个无效 -->
+				<ticksBetweenBurstShots>6</ticksBetweenBurstShots>
+				<burstShotCount>3</burstShotCount>
+				<!-- 声效和闪光范围 -->
+				<soundCast>Shot_ChargeRifle</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>9</muzzleFlashScale>
+			</li>
+		</verbs>
+		<tools>
+			<li>
+				<label>stock</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+			<li>
+				<label>barrel</label>
+				<capacities>
+					<li>Blunt</li>
+					<li>Poke</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+		</tools>
+		<comps>
+			<li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponPortProp">
+			</li>
+			<li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponShootModeProp">
+				<!-- 允许全自动(无瞄准时间和冷却的5发连射) -->
+				<enableFullAuto>true</enableFullAuto>
+				<!-- 单发子弹基础耗能 -->
+				<baseEnergyCost>0.035</baseEnergyCost>
+				<!-- 基础伤害比例 -->
+				<baseAmount>0.35</baseAmount>
+				<!-- 基础瞄准时间 -->
+				<baseWarmupTime>0.5</baseWarmupTime>
+				<!-- 基础后摇时间 -->
+				<baseCooldown>1</baseCooldown>
+				<!-- 基础子弹发射间隔(三连发为1.5倍) -->
+				<baseTicksBetweenBurstShots>6</baseTicksBetweenBurstShots>
+				<!-- 基础精度 -->
+				<baseAccuracy>0.8</baseAccuracy>
+			</li>
+
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BaseHumanMakeableGun">
+		<defName>VoidEnergySniper</defName>
+		<label>幽能狙击枪-基础型</label>
+		<description>可以将幽能转换为粗糙的能量弹射出,精度不佳,但破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
+		<techLevel>Spacer</techLevel>
+		<graphicData>
+			<texPath>Things/Item/Equipment/WeaponRanged/ChargeRifle</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<soundInteract>Interact_ChargeRifle</soundInteract>
+		<statBases>
+			<WorkToMake>45000</WorkToMake>
+			<Mass>4.1</Mass>
+			<AccuracyTouch>0.35</AccuracyTouch>
+			<AccuracyShort>0.6</AccuracyShort>
+			<AccuracyMedium>0.7</AccuracyMedium>
+			<AccuracyLong>0.5</AccuracyLong>
+			<RangedWeapon_Cooldown>1.8</RangedWeapon_Cooldown>
+		</statBases>
+		<recipeMaker>
+			<!-- <researchPrerequisite>ChargedShot</researchPrerequisite> -->
+			<!-- <skillRequirements>
+                <Crafting>7</Crafting>
+            </skillRequirements> -->
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+		</recipeMaker>
+		<costList>
+			<Plasteel>50</Plasteel>
+			<!-- <ComponentSpacer>2</ComponentSpacer> -->
+		</costList>
+		<thingSetMakerTags>
+			<li>RewardStandardLowFreq</li>
+			<li>RewardStandardQualitySuper</li>
+		</thingSetMakerTags>
+		<!-- <weaponTags>
+            <li>SpacerGun</li>
+        </weaponTags> -->
+		<verbs>
+			<li>
+				<verbClass>zhuzi.AdvancedEnergy.EnergyWell.Verbs.VoidNetWeapon_Lanuch</verbClass>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>Bullet_VoidEnergy_Sniper</defaultProjectile>
+				<warmupTime>1.5</warmupTime>
+				<range>45</range>
+				<ticksBetweenBurstShots>20</ticksBetweenBurstShots>
+				<burstShotCount>1</burstShotCount>
+				<soundCast>Shot_ChargeRifle</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>5</muzzleFlashScale>
+			</li>
+		</verbs>
+		<tools>
+			<li>
+				<label>stock</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+			<li>
+				<label>barrel</label>
+				<capacities>
+					<li>Blunt</li>
+					<li>Poke</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+		</tools>
+		<comps>
+			<li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponPortProp">
+			</li>
+			<li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponShootModeProp">
+				<!-- 允许全自动(无瞄准时间和冷却的5发连射) -->
+				<enableFullAuto>false</enableFullAuto>
+				<!-- 单发子弹基础耗能 -->
+				<baseEnergyCost>0.7</baseEnergyCost>
+				<!-- 基础伤害比例 -->
+				<baseAmount>0.75</baseAmount>
+				<!-- 基础瞄准时间 -->
+				<baseWarmupTime>2.2</baseWarmupTime>
+				<!-- 基础后摇时间 -->
+				<baseCooldown>1.5</baseCooldown>
+				<!-- 基础子弹发射间隔(三连发为1.5倍) -->
+				<baseTicksBetweenBurstShots>0</baseTicksBetweenBurstShots>
+				<!-- 基础精度 -->
+				<baseAccuracy>1</baseAccuracy>
+			</li>
+
+		</comps>
+	</ThingDef>
+
+	<ThingDef ParentName="BaseHumanMakeableGun">
+		<defName>VoidEnergySniper_Advance</defName>
+		<label>幽能精准狙击枪</label>
+		<description>可以将幽能转换为的能量弹射出,破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
+		<techLevel>Spacer</techLevel>
+		<graphicData>
+			<texPath>Things/Item/Equipment/WeaponRanged/ChargeRifle</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<soundInteract>Interact_ChargeRifle</soundInteract>
+		<statBases>
+			<WorkToMake>45000</WorkToMake>
+			<Mass>4.1</Mass>
+			<AccuracyTouch>0.35</AccuracyTouch>
+			<AccuracyShort>0.8</AccuracyShort>
+			<AccuracyMedium>0.9</AccuracyMedium>
+			<AccuracyLong>0.85</AccuracyLong>
+			<RangedWeapon_Cooldown>1.8</RangedWeapon_Cooldown>
+		</statBases>
+		<recipeMaker>
+			<!-- <researchPrerequisite>ChargedShot</researchPrerequisite> -->
+			<!-- <skillRequirements>
+                <Crafting>7</Crafting>
+            </skillRequirements> -->
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+		</recipeMaker>
+		<costList>
+			<Plasteel>50</Plasteel>
+			<!-- <ComponentSpacer>2</ComponentSpacer> -->
+		</costList>
+		<thingSetMakerTags>
+			<li>RewardStandardLowFreq</li>
+			<li>RewardStandardQualitySuper</li>
+		</thingSetMakerTags>
+		<!-- <weaponTags>
+            <li>SpacerGun</li>
+        </weaponTags> -->
+		<verbs>
+			<li>
+				<verbClass>zhuzi.AdvancedEnergy.EnergyWell.Verbs.VoidNetWeapon_Lanuch</verbClass>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>Bullet_VoidEnergy_Sniper</defaultProjectile>
+				<warmupTime>1.5</warmupTime>
+				<range>53</range>
+				<ticksBetweenBurstShots>20</ticksBetweenBurstShots>
+				<burstShotCount>1</burstShotCount>
+				<soundCast>Shot_ChargeRifle</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>5</muzzleFlashScale>
+			</li>
+		</verbs>
+		<tools>
+			<li>
+				<label>stock</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+			<li>
+				<label>barrel</label>
+				<capacities>
+					<li>Blunt</li>
+					<li>Poke</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+		</tools>
+		<comps>
+			<li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponPortProp">
+			</li>
+			<li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponShootModeProp">
+				<!-- 允许全自动(无瞄准时间和冷却的5发连射) -->
+				<enableFullAuto>false</enableFullAuto>
+				<!-- 单发子弹基础耗能 -->
+				<baseEnergyCost>0.5</baseEnergyCost>
+				<!-- 基础伤害比例 -->
+				<baseAmount>1.15</baseAmount>
+				<!-- 基础瞄准时间 -->
+				<baseWarmupTime>1.65</baseWarmupTime>
+				<!-- 基础后摇时间 -->
+				<baseCooldown>1.25</baseCooldown>
+				<!-- 基础子弹发射间隔(三连发为1.5倍) -->
+				<baseTicksBetweenBurstShots>0</baseTicksBetweenBurstShots>
+				<!-- 基础精度 -->
+				<baseAccuracy>1.3</baseAccuracy>
+			</li>
+
+		</comps>
+	</ThingDef>
+
+
+	<ThingDef ParentName="BaseBullet">
+		<defName>Bullet_VoidEnergy_Normal</defName>
+		<label>幽能通常弹</label>
+		<graphicData>
+			<texPath>Things/Projectile/Charge_Small</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<projectile>
+			<damageDef>Bullet</damageDef>
+			<damageAmountBase>15</damageAmountBase>
+			<armorPenetrationBase>1.35</armorPenetrationBase>
+			<speed>80</speed>
+		</projectile>
+	</ThingDef>
+	<ThingDef ParentName="BaseBullet">
+		<defName>Bullet_VoidEnergy_Small</defName>
+		<label>幽能手枪弹</label>
+		<graphicData>
+			<texPath>Things/Projectile/Charge_Small</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<projectile>
+			<damageDef>Bullet</damageDef>
+			<damageAmountBase>11</damageAmountBase>
+			<armorPenetrationBase>0.95</armorPenetrationBase>
+			<speed>60</speed>
+		</projectile>
+	</ThingDef>
+	<ThingDef ParentName="BaseBullet">
+		<defName>Bullet_VoidEnergy_Sniper</defName>
+		<label>幽能狙击弹</label>
+		<graphicData>
+			<texPath>Things/Projectile/Charge_Small</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<projectile>
+			<damageDef>Bullet</damageDef>
+			<damageAmountBase>25</damageAmountBase>
+			<armorPenetrationBase>1.8</armorPenetrationBase>
+			<speed>160</speed>
+		</projectile>
+	</ThingDef>
+
+</Defs>

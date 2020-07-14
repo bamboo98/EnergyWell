@@ -173,8 +173,9 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Builds
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
             base.SpawnSetup(map, respawningAfterLoad);
+
             //关掉组件的显示
-            GetComp<Comp.VoidNetPort>().showInfo = false;
+            GetComp<Comp.VoidNetPort>().ShowMode = Comp.ShowInfoMode.Gizmo;
 
             Flickable = GetComp<CompFlickable>();
             this.dormantComp = base.GetComp<CompCanBeDormant>();
@@ -321,7 +322,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Builds
                                 mote.offsetZ = -0.8f;
                             }
                         }
-                        if (this.burstCooldownTicksLeft <= 0)// && this.IsHashIntervalTick(10))
+                        if (this.burstCooldownTicksLeft <= 0)// && this.IsHashIntervalTick(TryStartShootSomethingIntervalTicks))
                         {
                             this.TryStartShootSomething(true);
                         }
@@ -396,13 +397,12 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Builds
             IAttackTargetSearcher attackTargetSearcher = this.TargSearcher();
             Faction faction = attackTargetSearcher.Thing.Faction;
             float range = this.AttackVerb.verbProps.range;
-            Building t;
             if (Rand.Value < 0.5f && this.AttackVerb.ProjectileFliesOverhead() && faction.HostileTo(Faction.OfPlayer) && base.Map.listerBuildings.allBuildingsColonist.Where(delegate (Building x)
             {
                 float num = this.AttackVerb.verbProps.EffectiveMinRange(x, this);
                 float num2 = (float)x.Position.DistanceToSquared(this.Position);
                 return num2 > num * num && num2 < range * range;
-            }).TryRandomElement(out t))
+            }).TryRandomElement(out Building t))
             {
                 return t;
             }
@@ -432,8 +432,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Builds
         // Token: 0x06004BBD RID: 19389 RVA: 0x001982A8 File Offset: 0x001964A8
         private bool IsValidTarget(Thing t)
         {
-            Pawn pawn = t as Pawn;
-            if (pawn != null)
+            if (t is Pawn pawn)
             {
                 if (this.AttackVerb.ProjectileFliesOverhead())
                 {
@@ -582,7 +581,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Builds
                 }
             }
 
-            IEnumerator<Gizmo> enumerator = null;
+            //IEnumerator<Gizmo> enumerator = null;
             if (this.CanExtractShell)
             {
                 CompChangeableProjectile compChangeableProjectile = this.gun.TryGetComp<CompChangeableProjectile>();
@@ -608,17 +607,19 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Builds
                 {
                     yield return gizmo2;
                 }
-                enumerator = null;
+                //enumerator = null;
             }
             if (this.CanSetForcedTarget)
             {
-                Command_VerbTarget command_VerbTarget = new Command_VerbTarget();
-                command_VerbTarget.defaultLabel = "CommandSetForceAttackTarget".Translate();
-                command_VerbTarget.defaultDesc = "CommandSetForceAttackTargetDesc".Translate();
-                command_VerbTarget.icon = ContentFinder<Texture2D>.Get("UI/Commands/Attack", true);
-                command_VerbTarget.verb = this.AttackVerb;
-                command_VerbTarget.hotKey = KeyBindingDefOf.Misc4;
-                command_VerbTarget.drawRadius = false;
+                Command_VerbTarget command_VerbTarget = new Command_VerbTarget
+                {
+                    defaultLabel = "CommandSetForceAttackTarget".Translate(),
+                    defaultDesc = "CommandSetForceAttackTargetDesc".Translate(),
+                    icon = ContentFinder<Texture2D>.Get("UI/Commands/Attack", true),
+                    verb = this.AttackVerb,
+                    hotKey = KeyBindingDefOf.Misc4,
+                    drawRadius = false
+                };
                 if (base.Spawned && this.IsMortarOrProjectileFliesOverhead && base.Position.Roofed(base.Map))
                 {
                     command_VerbTarget.Disable("CannotFire".Translate() + ": " + "Roofed".Translate().CapitalizeFirst());
@@ -627,14 +628,16 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Builds
             }
             if (this.forcedTarget.IsValid)
             {
-                Command_Action command_Action = new Command_Action();
-                command_Action.defaultLabel = "CommandStopForceAttack".Translate();
-                command_Action.defaultDesc = "CommandStopForceAttackDesc".Translate();
-                command_Action.icon = ContentFinder<Texture2D>.Get("UI/Commands/Halt", true);
-                command_Action.action = delegate ()
+                Command_Action command_Action = new Command_Action
                 {
-                    this.ResetForcedTarget();
-                    SoundDefOf.Tick_Low.PlayOneShotOnCamera(null);
+                    defaultLabel = "CommandStopForceAttack".Translate(),
+                    defaultDesc = "CommandStopForceAttackDesc".Translate(),
+                    icon = ContentFinder<Texture2D>.Get("UI/Commands/Halt", true),
+                    action = delegate ()
+                    {
+                        this.ResetForcedTarget();
+                        SoundDefOf.Tick_Low.PlayOneShotOnCamera(null);
+                    }
                 };
                 if (!this.forcedTarget.IsValid)
                 {
@@ -668,7 +671,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Builds
         // Token: 0x06004BC5 RID: 19397 RVA: 0x0019867C File Offset: 0x0019687C
         private void ExtractShell()
         {
-            GenPlace.TryPlaceThing(this.gun.TryGetComp<CompChangeableProjectile>().RemoveShell(), base.Position, base.Map, ThingPlaceMode.Near, null, null, default(Rot4));
+            GenPlace.TryPlaceThing(this.gun.TryGetComp<CompChangeableProjectile>().RemoveShell(), base.Position, base.Map, ThingPlaceMode.Near, null, null, default);
         }
 
         // Token: 0x06004BC6 RID: 19398 RVA: 0x001986B7 File Offset: 0x001968B7

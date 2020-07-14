@@ -11,27 +11,62 @@ using Verse.Sound;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 {
-    public class VoidNetPort:ThingComp
+    public class VoidNetPort: VoidNetBuildCompBase
     {
-
-        MapVoidEnergyNet VoidNet;
+        //地图网络节点
+        protected MapVoidEnergyNet VoidNet;
+        //开关组件
         protected CompFlickable flickableComp;
+        private Prop.VoidNetPortProp prop;
 
-        private float energyCacheMax = 1f;
-        private float energyCostPerSec = 0.03f;
-        private float energyRechargePerSec = 0.1f;
+        //最大能量缓存
+        protected float energyCacheMax = 1f;
+        //每秒充能
+        protected float energyRechargePerSec = 0.1f;
+        //初始化耗时
+        protected int initTicks = 60;
 
-
-        private int initTicks = 60;
-
-        //save
-        private float energyCache = 0;
-        private bool online = false;
-        private int initCountdown = 60;
-        public bool showInfo = true;
+        //存档
+        //当前能量缓存
+        protected float energyCache = 0;
+        //初始化倒计时
+        protected int initCountdown = 60;
+        //辅助信息的形式方式
+        public ShowInfoMode ShowMode = ShowInfoMode.Both;
+        //为武器保留能量比例
         public float savingRate = 0.25f;
 
 
+        private readonly List<VoidNetBuildCompBase> voidNetBuildCompBases = new List<VoidNetBuildCompBase>();
+
+
+        //所有已注册组件的耗能
+        private float CompsEnergyCost
+        {
+            get
+            {
+                float sum = 0;
+                foreach (VoidNetBuildCompBase compBase in voidNetBuildCompBases)
+                {
+                    sum += compBase.EnergyCostPerTick;
+                }
+                return sum;
+            }
+        }
+
+        /// <summary>
+        /// 是否初始化完毕
+        /// </summary>
+        public bool InitCompleted
+        {
+            get
+            {
+                return initCountdown <= 0;
+            }
+        }
+        /// <summary>
+        /// 当前能量缓存
+        /// </summary>
         public float EnergyCache
         {
             get
@@ -39,6 +74,9 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 return energyCache;
             }
         }
+        /// <summary>
+        /// 能量缓存上限
+        /// </summary>
         public float EnergyCacheMax
         {
             get
@@ -46,22 +84,30 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 return energyCacheMax;
             }
         }
-
-        public bool PowerOn
-        {
-            get {
-                return online && energyCache >= energyCostPerSec/60f;
-
-            }
-        }
-        public float EnergyCost
+        /// <summary>
+        /// 开关是否打开
+        /// </summary>
+        public bool FlickOn
         {
             get
             {
-                return energyCostPerSec/60f;
+                return flickableComp == null || flickableComp.SwitchIsOn;
             }
         }
 
+        /// <summary>
+        /// 是否可以维持基础供能
+        /// </summary>
+        public new bool PowerOn
+        {
+            get {
+                return InitCompleted && energyCache >= CompsEnergyCost && FlickOn;
+
+            }
+        }
+        /// <summary>
+        /// 是否低于预留能量线
+        /// </summary>
         public bool IsSavingEnergy
         {
             get
@@ -70,13 +116,36 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             }
         }
 
-        public virtual bool CanCostEnergy(float count)
+
+        public override void Initialize(CompProperties props)
+        {
+            base.Initialize(props);
+            prop = (Prop.VoidNetPortProp)props;
+
+            energyCacheMax = prop.energyCacheMax;
+            energyRechargePerSec = prop.energyRechargePerSec;
+            initTicks = prop.initTicks;
+            savingRate = prop.savingRate;
+
+        }
+
+        /// <summary>
+        /// 是否可以消耗指定数量的能量
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public new virtual bool CanCostEnergy(float count)
         {
             if (flickableComp != null && !flickableComp.SwitchIsOn)
                 return false;
             return energyCache >= count;
         }
-        public virtual bool CostEnergy(float count)
+        /// <summary>
+        /// 消耗能量
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns>是否成功</returns>
+        public new virtual bool CostEnergy(float count)
         {
             if (flickableComp != null && !flickableComp.SwitchIsOn)
                 return false;
@@ -87,7 +156,27 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             energyCache -= count;
             return true;
         }
-
+        /// <summary>
+        /// 注册耗能组件到节点
+        /// </summary>
+        /// <param name="comp"></param>
+        public void RegisterToNetPort(VoidNetBuildCompBase comp)
+        {
+            if (voidNetBuildCompBases.Any((x) => { return x == comp; }))
+            {
+                zzLib.Log.Warning("存在重复注册的组件");
+                return;
+            }
+            voidNetBuildCompBases.Add(comp);
+        }
+        /// <summary>
+        /// 从节点中移除耗能组件
+        /// </summary>
+        /// <param name="comp"></param>
+        public void RestoreFormNetPort(VoidNetBuildCompBase comp)
+        {
+            voidNetBuildCompBases.Remove(comp);
+        }
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             VoidNet = parent.Map.GetComponent<MapVoidEnergyNet>();
@@ -97,16 +186,21 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 
         public override void CompTick()
         {
+            base.CompTick();
             if (flickableComp != null && !flickableComp.SwitchIsOn)
                 return;
-            float energtCostPerTick = energyCostPerSec / 60f;
+            //这里包括了其他组件的基础待机耗能
+            float energtCostPerTick = CompsEnergyCost;
             //cost
-            if (online)
+            if (InitCompleted)
             {
                 if(energtCostPerTick > energyCache)
                 { 
-                    online = false;
                     initCountdown = initTicks;
+                    foreach (VoidNetBuildCompBase compBase in voidNetBuildCompBases)
+                    {
+                        compBase.NotifyPostOffline();
+                    }
                 }
                 else
                 {
@@ -120,27 +214,69 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 else
                 {
                     energyCache -= energtCostPerTick;
-                    if (initCountdown-- <= 0)
-                        online = true;
+                    initCountdown--;
                 }
             }
             //recharge
             energyCache += VoidNet.GetEnergy(Mathf.Min(energyRechargePerSec/60f,energyCacheMax - energyCache));
             if (DebugSettings.godMode)
                 energyCache = energyCacheMax;
-            base.CompTick();
         }
+
+
+        public override void CompTickRare()
+        {
+            base.CompTickRare();
+
+            if (flickableComp != null && !flickableComp.SwitchIsOn)
+                return;
+
+            //rare tick =250tick
+            float energtCostPerTick = CompsEnergyCost * 250f;
+            //cost
+            if (InitCompleted)
+            {
+                if (energtCostPerTick > energyCache)
+                {
+                    initCountdown = initTicks;
+                    foreach (VoidNetBuildCompBase compBase in voidNetBuildCompBases)
+                    {
+                        compBase.NotifyPostOffline();
+                    }
+                }
+                else
+                {
+                    energyCache -= energtCostPerTick;
+                }
+            }
+            else
+            {
+                if (energtCostPerTick > energyCache)
+                    initCountdown = initTicks;
+                else
+                {
+                    energyCache -= energtCostPerTick;
+                    initCountdown-=250;
+                }
+            }
+            //recharge
+            energyCache += VoidNet.GetEnergy(Mathf.Min(energyRechargePerSec / 60f * 250f, energyCacheMax - energyCache));
+            if (DebugSettings.godMode)
+                energyCache = energyCacheMax;
+        }
+
+
 
 
         public override string CompInspectStringExtra()
         {
-            if (!showInfo) return "";
+            if ((ShowMode & ShowInfoMode.InspectString) != ShowInfoMode.InspectString) return "";
             StringBuilder str = new StringBuilder();
             if (!PowerOn)
                 str.AppendLine("启动进度: " +((float)(initTicks-initCountdown)/(float)initTicks*100).ToString("f1")+"%");
             else
                 str.AppendLine("幽能缓存: " + energyCache.ToString("f1") + "/" + energyCacheMax.ToString("f2"));
-            str.Append("幽能需求: " + energyCostPerSec.ToString("f3") + "/秒");
+            str.Append("幽能需求: " + (CompsEnergyCost * 60f).ToString("f3") + "/秒");
 
 
 
@@ -153,11 +289,13 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             {
                 yield return gizmo;
             }
-            yield return new Gizmo_VoidNetPortStatus
-            {
-                voidNetPort = this,
-                voidNetBuildShield=parent.TryGetComp<VoidNetBuildShield>()
-            };
+
+            if ((ShowMode & ShowInfoMode.Gizmo) == ShowInfoMode.Gizmo) 
+                yield return new Gizmo_VoidNetPortStatus
+                {
+                    voidNetPort = this,
+                    voidNetBuildShield = parent.TryGetComp<VoidNetBuildShield>()
+                };
 
             if (Prefs.DevMode)
             {
@@ -168,7 +306,6 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                     {
                         energyCache = energyCacheMax;
                         initCountdown = 0;
-                        online = true;
                     }
                 };
                 yield return new Command_Action
@@ -178,7 +315,6 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                     {
                         energyCache = 0;
                         initCountdown = initTicks;
-                        online = false;
                     }
                 };
             }
@@ -204,9 +340,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         public override void PostExposeData()
         {
             Scribe_Values.Look(ref energyCache, "energyCache", 0);
-            Scribe_Values.Look(ref online, "online", false);
             Scribe_Values.Look(ref initCountdown, "initCountdown", 60);
-            Scribe_Values.Look(ref showInfo, "showInfo", true);
+            Scribe_Values.Look(ref ShowMode, "ShowMode", ShowInfoMode.Both);
             Scribe_Values.Look(ref savingRate, "savingRate",0.25f);
             base.PostExposeData();
         }
@@ -318,7 +453,6 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                     {
                         Vector2 mousePosition = Event.current.mousePosition;
                         voidNetPort.savingRate = (mousePosition.x - (rect5.x + 3f)) / (rect5.width - 8f);
-                        zzLib.Log.Message("savingRate: " + voidNetPort.savingRate);
                         SoundDefOf.DragSlider.PlayOneShotOnCamera(null);
                     }
                     TooltipHandler.TipRegion(rect5, "ToolTip_SetVoidNetPortSavingRate".Translate((voidNetPort.savingRate * 100f).ToString("f0")));
@@ -335,5 +469,13 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         public VoidNetPort voidNetPort;
         public VoidNetBuildShield voidNetBuildShield;
 
+    }
+    [Flags]
+    public enum ShowInfoMode
+    {
+        None,
+        InspectString,
+        Gizmo,
+        Both,
     }
 }

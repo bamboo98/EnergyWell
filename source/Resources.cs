@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using RimWorld;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Resources
 {
     [StaticConstructorOnStartup]
-    class Texture2Ds
+    internal class Texture2Ds
     {
 
         public static readonly Texture2D LimitedTex = ContentFinder<Texture2D>.Get("UI/Icons/EntropyLimit/Limited", true);
@@ -25,10 +26,68 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Resources
     }
 
     [StaticConstructorOnStartup]
-    class Materials
+    internal class Materials
     {
 
-        public static readonly Material BubbleMat = MaterialPool.MatFrom("Other/ShieldBubble", ShaderDatabase.Transparent);
+        public static readonly Material BubbleMat = MaterialPool.MatFrom("Other/ShieldBubble", ShaderDatabase.Transparent);//, new Color(40f / 255f, 0, 115f / 255f));
         public static Material ForcedTargetLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.Transparent, new Color(1f, 0.5f, 0.5f));
     }
+
+    [DefOf]
+    public static class ThingDefs
+    {
+        public static ThingDef VoidNetDeepDrill;
+        public static ThingDef VoidNetTerminal_Scout;
+        public static ThingDef EnergyWellActiving;
+    }
+
+    [DefOf]
+    public static class JobDefs
+    {
+        public static JobDef OperateVoidNetDeepDrill;
+    }
+
+    [DefOf]
+    public static class StatDefs
+    {
+        /// <summary>
+        /// 幽能缓存上限
+        /// </summary>
+        public static StatDef VoidEnergyCacheMax;
+        /// <summary>
+        /// 幽能回充速率
+        /// </summary>
+        public static StatDef VoidEnergyRecharge;
+        /// <summary>
+        /// 护盾上限
+        /// </summary>
+        public static StatDef VoidEnergyShieldMax;
+        /// <summary>
+        /// 护盾回充速率
+        /// </summary>
+        public static StatDef VoidEnergyShieldRecharge;
+        /// <summary>
+        /// 护盾转化率
+        /// </summary>
+        public static StatDef VoidEnergyShieldConvertRate;
+        /// <summary>
+        /// 护盾韧性
+        /// </summary>
+        public static StatDef VoidEnergyShieldStrength;
+
+        public static StatDef VoidEnergyCostPerSec;
+    }
+
+    [DefOf]
+    public static class StatCategoryDefs
+    {
+        public static StatCategoryDef VoidEnergy;
+    }
+
+    [DefOf]
+    public static class HediffDefs
+    {
+        public static HediffDef VoidEnergyHediffTerminalMoveSpeed;
+    }
+
 }

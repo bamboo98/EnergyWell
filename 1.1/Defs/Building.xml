@@ -27,7 +27,7 @@
             <Flammability>0</Flammability>
             <Beauty>0</Beauty>
         </statBases>
-        <tickerType>Normal</tickerType>
+        <tickerType>Rare</tickerType>
         <canOverlapZones>false</canOverlapZones>
         <size>(2,2)</size>
         <costList>
@@ -41,8 +41,17 @@
                 <glowColor>(131,236,255,0)</glowColor>
             </li>
             <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.EnergyWellProp">
+                <!-- 缓存的幽能上限 -->
+                <energyStorageMax>500</energyStorageMax>
+                <!-- 每秒生产的幽能数量 -->
+                <produceEnergyPerSec>0.15</produceEnergyPerSec>
+                <!-- 过热速率 -->
+                <heatAccumulationRate>2.5</heatAccumulationRate>
             </li>
-
+            <li Class="CompProperties_Power">
+                <compClass>CompPowerTrader</compClass>
+                <basePowerConsumption>1000</basePowerConsumption>
+            </li>
         </comps>
         <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
         <designationCategory>Power</designationCategory>
@@ -91,6 +100,10 @@
                 <glowColor>(131,236,255,0)</glowColor>
             </li>
             <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetTowerProp">
+                <!-- 每秒可以传输多少幽能到网络中 -->
+                <energyTransportPerSec>1</energyTransportPerSec>
+                <!-- 是否连通宇宙节点 -->
+                <transportToWorld>false</transportToWorld>
             </li>
 
         </comps>
@@ -139,10 +152,21 @@
                 <glowRadius>10</glowRadius>
                 <glowColor>(131,236,255,0)</glowColor>
             </li>
-            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetPortProp"/>
-			<li Class="CompProperties_Power">
-                <compClass>zhuzi.AdvancedEnergy.EnergyWell.Comp.VoidEnergyConverter</compClass>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetPortProp">
+                <!-- 幽能缓存上限 -->
+                <energyCacheMax>30</energyCacheMax>
+                <!-- 每秒从网络中获取的幽能 -->
+                <energyRechargePerSec>0.075</energyRechargePerSec>
+                <!-- 待机功耗 -->
+                <energyCostPerSec>0.05</energyCostPerSec>
+                <!-- 初始化耗时 -->
+                <initTicks>60</initTicks>
+            </li>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidEnergyConverterProp">
+                <!-- 这个类继承CompProperties_Power -->
                 <transmitsPower>true</transmitsPower>
+                <!-- 幽能->电能 转换率 -->
+                <convertRate>100000</convertRate>
             </li>
 
         </comps>
@@ -217,9 +241,14 @@
             </blueprintGraphicData>
         </building>
         <comps>
+            <!-- 考虑到性能问题,这个墙壁不使用通用幽能终端,直接从网络中获取能量 -->
+            <!-- 同时支持Rare和Normal两种TickerType,后者性能消耗大约是前者的一两百倍,修复速度相同 -->
             <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetAutoRepairProp">
-                <!-- <RepairRatePerSec>0.01</RepairRatePerSec>
-                <PowerRateOnRapairing>10</PowerRateOnRapairing> -->
+                <!-- 每秒修复*血量上限/转换率=消耗幽能 -->
+                <!-- 每秒修复百分比 -->
+                <RepairRatePerSec>0.01</RepairRatePerSec>
+                <!-- 转换率,每点幽能可以修复多少血量 -->
+                <VoidEnergyConvertRate>500</VoidEnergyConvertRate>
             </li>
         </comps>
         <damageMultipliers>
@@ -230,4 +259,210 @@
         </damageMultipliers>
         <designationHotKey>Misc3</designationHotKey>
     </ThingDef>
+
+    <ThingDef ParentName="BuildingBase">
+        <defName>VoidNetDeepDrill</defName>
+        <label>幽能钻井</label>
+        <description>A deep-crust drilling rig for extracting minerals from deep under the surface. Use a ground-penetrating scanner to detect the resources. This drill will yield stone chunks if no resources are present. Can be repositioned freely.</description>
+        <graphicData>
+            <graphicClass>Graphic_Single</graphicClass>
+            <texPath>Things/Building/Production/DeepDrill</texPath>
+            <drawSize>(2,2)</drawSize>
+            <drawRotated>false</drawRotated>
+            <shadowData>
+                <volume>(0.52, 0.53, 0.09)</volume>
+                <offset>(0,0,-0.43)</offset>
+            </shadowData>
+        </graphicData>
+        <size>(1,1)</size>
+        <altitudeLayer>Building</altitudeLayer>
+        <passability>PassThroughOnly</passability>
+        <pathCost>70</pathCost>
+        <fillPercent>0.5</fillPercent>
+        <hasInteractionCell>true</hasInteractionCell>
+        <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+        <designationCategory>Production</designationCategory>
+        <!-- <designationHotKey>Misc12</designationHotKey> -->
+        <specialDisplayRadius>2.6</specialDisplayRadius>        <!-- 21 closest cells, must be in sync with CompDeepDrill -->
+        <rotatable>true</rotatable>
+        <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+        <constructionSkillPrerequisite>4</constructionSkillPrerequisite>
+        <uiIconOffset>(0, 0.03)</uiIconOffset>
+        <uiIconScale>0.85</uiIconScale>
+        <minifiedDef>MinifiedThing</minifiedDef>
+        <building>
+            <uninstallWork>1800</uninstallWork>
+            <buildingTags>
+                <li>Production</li>
+            </buildingTags>
+        </building>
+        <tickerType>Normal</tickerType>
+        <thingCategories>
+            <li>BuildingsProduction</li>
+        </thingCategories>
+        <costList>
+            <Steel>100</Steel>
+            <ComponentIndustrial>2</ComponentIndustrial>
+        </costList>
+        <placeWorkers>
+            <li>PlaceWorker_DeepDrill</li>
+            <li>PlaceWorker_PreventInteractionSpotOverlap</li>
+        </placeWorkers>
+        <drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
+        <!-- <researchPrerequisites>
+      <li>DeepDrilling</li>
+    </researchPrerequisites> -->
+        <statBases>
+            <MaxHitPoints>300</MaxHitPoints>
+            <WorkToBuild>10000</WorkToBuild>
+            <Flammability>0.5</Flammability>
+            <Beauty>-25</Beauty>
+            <Mass>35</Mass>
+        </statBases>
+        <comps>
+            <li Class="CompProperties_Forbiddable"/>
+            <li Class="CompProperties_Flickable"/>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetPortProp">
+                <!-- 幽能缓存上限 -->
+                <energyCacheMax>30</energyCacheMax>
+                <!-- 每秒从网络中获取的幽能 -->
+                <energyRechargePerSec>0.075</energyRechargePerSec>
+                <!-- 待机功耗 -->
+                <energyCostPerSec>0.01</energyCostPerSec>
+                <!-- 初始化耗时 -->
+                <initTicks>60</initTicks>
+            </li>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetDeepDrillProp">
+                <!-- 待机功耗 -->
+                <energyCostPerSec>0.05</energyCostPerSec>
+                <!-- 挖掘工作量 -->
+                <WorkPerPortionBase>1000</WorkPerPortionBase>
+            </li>
+            <!-- <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>200</basePowerConsumption>
+      </li> -->
+            <!-- <li Class="CompProperties_DeepDrill" /> -->
+            <!-- <li Class="CompProperties_CreatesInfestations" /> -->
+        </comps>
+    </ThingDef>
+
+    <ThingDef ParentName="BuildingBase">
+        <defName>VoidEnergyThermostat</defName>
+        <label>幽能恒温器</label>
+        <description>A device that can control the temperature near the target value.</description>
+        <thingClass>zhuzi.AdvancedEnergy.EnergyWell.Builds.VoidEnergyThermostat</thingClass>
+        <graphicData>
+            <texPath>Build_VoidEnergyThermostat</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <shadowData>
+                <volume>(0.7,0.1,0.7)</volume>
+            </shadowData>
+            <damageData>
+                <cornerTL>Damage/Corner</cornerTL>
+                <cornerTR>Damage/Corner</cornerTR>
+                <cornerBL>Damage/Corner</cornerBL>
+                <cornerBR>Damage/Corner</cornerBR>
+            </damageData>
+        </graphicData>
+        <minifiedDef>MinifiedThing</minifiedDef>
+        <altitudeLayer>DoorMoveable</altitudeLayer>
+        <passability>Standable</passability>
+        <pathCost>5</pathCost>
+        <blockWind>false</blockWind>
+        <rotatable>false</rotatable>
+        <fillPercent>0</fillPercent>
+        <thingCategories>
+            <li>BuildingsTemperature</li>
+        </thingCategories>
+        <statBases>
+            <WorkToBuild>1000</WorkToBuild>
+            <MaxHitPoints>100</MaxHitPoints>
+            <Mass>6</Mass>
+            <Flammability>0</Flammability>
+        </statBases>
+        <tickerType>Rare</tickerType>
+        <costList>
+            <Steel>50</Steel>
+            <ComponentIndustrial>4</ComponentIndustrial>
+        </costList>
+        <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+        <placeWorkers>
+            <li>zhuzi.AdvancedEnergy.EnergyWell.Builds.PlaceWorker_VoidEnergyThermostat</li>
+        </placeWorkers>
+        <drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
+        <comps>
+            <li Class="CompProperties_Flickable" />
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetTempControllerProp">
+                <energyPerSecond>28</energyPerSecond>
+                <energyCostPerSec>0.03</energyCostPerSec>
+            </li>
+            <!--<li Class="CompProperties_Glower"><glowRadius>3</glowRadius><glowColor>(255,150,100,0)</glowColor></li>-->
+        </comps>
+        <designationCategory>Temperature</designationCategory>
+        <!-- <researchPrerequisites>
+            <li>PolarisThermostat</li>
+        </researchPrerequisites> -->
+        <constructionSkillPrerequisite>5</constructionSkillPrerequisite>
+        <building>
+            <isEdifice>false</isEdifice>
+        </building>
+        <canOverlapZones>true</canOverlapZones>
+        <clearBuildingArea>false</clearBuildingArea>
+    </ThingDef>
+    
+  <ThingDef ParentName="LampBase">
+    <defName>VoidNetSunLamp</defName>
+    <label>幽能太阳灯</label>
+    <description>An industrial lamp which lights an area brightly enough to grow crops, but consumes a huge amount of power. Automatically turns itself off at night.</description>
+    <thingClass>Building_SunLamp</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Production/LampSun</texPath>
+    </graphicData>
+    <blockWind>true</blockWind>
+    <tickerType>Rare</tickerType>
+    <statBases>
+      <WorkToBuild>330</WorkToBuild>
+      <Mass>4.5</Mass>
+    </statBases>
+    <costList>
+      <Steel>40</Steel>
+    </costList>
+    <comps>
+      <li Class="CompProperties_Glower">
+        <overlightRadius>7.0</overlightRadius>
+        <glowRadius>14</glowRadius>
+        <glowColor>(140,0,140,0)</glowColor>
+      </li>
+      <!-- <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <shortCircuitInRain>true</shortCircuitInRain>
+        <basePowerConsumption>2900</basePowerConsumption>
+      </li> -->
+      <li Class="CompProperties_Schedule">
+        <!-- Match plant growing times -->
+        <startTime>0.25</startTime>
+        <endTime>0.8</endTime>
+        <offMessage>Off for plant resting period</offMessage>
+      </li>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetPortProp">
+                <!-- 幽能缓存上限 -->
+                <energyCacheMax>30</energyCacheMax>
+                <!-- 每秒从网络中获取的幽能 -->
+                <energyRechargePerSec>0.05</energyRechargePerSec>
+                <!-- 待机功耗 -->
+                <energyCostPerSec>0.04</energyCostPerSec>
+                <!-- 初始化耗时 -->
+                <initTicks>60</initTicks>
+            </li>
+      <!-- <li Class="CompProperties_HeatPusher">
+        <compClass>CompHeatPusherPowered</compClass>
+        <heatPerSecond>3</heatPerSecond>
+      </li> -->
+    </comps>
+    <!-- Determined by trial and error
+    This value isn't perfect because these radii use different algorithms
+    but it matches in this case-->
+    <specialDisplayRadius>5.8</specialDisplayRadius>
+  </ThingDef>
 </Defs>

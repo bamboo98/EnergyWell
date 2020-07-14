@@ -13,5 +13,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop
         {
             compClass = typeof(VoidNetAutoRepair);
         }
+        public float RepairRatePerSec = 0.01f;// 每秒修复*血量上限/转换率=消耗幽能
+        public float VoidEnergyConvertRate = 500f;
     }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <JobDef>
+    <defName>OperateVoidNetDeepDrill</defName>
+    <driverClass>zhuzi.AdvancedEnergy.EnergyWell.AI.JobDriver_OperateVoidNetDeepDrill</driverClass>
+    <reportString>drilling at TargetA.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+
+  <WorkGiverDef>
+    <defName>VoidNetDeepDrill</defName>
+    <label>drill at deep drill</label>
+    <giverClass>zhuzi.AdvancedEnergy.EnergyWell.AI.WorkGiver_VoidNetDeepDrill</giverClass>
+    <workType>Mining</workType>
+    <priorityInType>49</priorityInType>
+    <verb>drill</verb>
+    <gerund>drilling</gerund>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+  </WorkGiverDef>
+
+</Defs>

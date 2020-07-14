@@ -13,7 +13,6 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
     {
 
         public Things.VoidNetTerminal voidNetTerminal;
-        protected float energyEachShot = 0.2f;
         protected int slientTick = -100;
         private int checkNetTick = -100;
 
@@ -37,7 +36,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         {
             get
             {
-                return energyEachShot * CompShootMode.EnergyCostRate;
+                return CompShootMode.EnergyCostRate;
             }
         }
 
@@ -153,6 +152,10 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 if (CompShootMode != null && burstShotsLeft == 1)
                 {
                     CompShootMode.PostPreLastShoot();
+                }
+                if(compShootMode!=null && burstShotsLeft > 1)
+                {
+                    CompShootMode.PostPreNonLastShoot();
                 }
                 return true;
             }

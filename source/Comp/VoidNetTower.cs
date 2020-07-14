@@ -9,12 +9,21 @@ using RimWorld;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 {
-    class VoidNetTower:ThingComp
+    /*
+     * 你以为真的是用Tower传输的?
+     * 1.地图组件根据tower世界升级的数量,将地图缓存提升到世界缓存
+     * 2.地图组件根据tower,从well中提取能量缓存
+     * 3.耗电组件从地图缓存中提取能量,地图缓存不够时尝试提取世界缓存
+     * 
+     */
+    public class VoidNetTower:ThingComp
     {
         public MapVoidEnergyNet MapNetNode;
         public WorldVoidEnergyNet WorldNetNode;
+        private Prop.VoidNetTowerProp prop;
 
         private float energyTransportPerSec = 1f;
+        private bool transportToWorld = false;
 
         public float EnergyTransportPerSec
         {
@@ -27,7 +36,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         {
             get;
         } = true;
-        private bool transportToWorld = false;
+
         public bool TransportToWorld
         {
             get
@@ -35,7 +44,15 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 return transportToWorld;
             }
         }
+        public override void Initialize(CompProperties props)
+        {
+            base.Initialize(props);
+            prop = (Prop.VoidNetTowerProp)props;
 
+            energyTransportPerSec = prop.energyTransportPerSec;
+            transportToWorld = prop.transportToWorld;
+
+        }
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
 
@@ -82,11 +99,13 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 }
             return str.ToString();
         }
-        /*
-         * 1.地图组件根据tower,从well中提取能量缓存
-         * 2.地图组件根据tower世界升级的数量,将地图缓存提升到世界缓存
-         * 3.耗电组件从地图缓存中提取能量,地图缓存不够时尝试提取世界缓存
-         * */
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look(ref energyTransportPerSec, "energyTransportPerSec");
+            Scribe_Values.Look(ref transportToWorld, "transportToWorld");
+        }
 
     }
 }

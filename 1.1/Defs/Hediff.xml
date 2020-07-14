@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!--Base-->
+  <HediffDef Name="VoidEnergyHediffBase" Abstract="True">
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.65, 0.3, 0.9)</defaultLabelColor>
+    <isBad>false</isBad>
+  </HediffDef>
+  
+  <HediffDef ParentName="VoidEnergyHediffBase">
+    <defName>VoidEnergyHediffTerminalMoveSpeed</defName>
+    <!-- <hediffClass>HediffWithComps</hediffClass> -->
+    <label>测试</label>
+    <description>测试</description>
+    <!-- <maxSeverity>1.0</maxSeverity> -->
+    <!-- <comps>
+      <li Class="Polarisbloc.HediffCompProperties_Cartridge" />
+    </comps> -->
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+        <painFactor>0.9</painFactor>
+        <restFallFactor>0.9</restFallFactor>
+        <!-- <partEfficiencyOffset>0.15</partEfficiencyOffset> -->
+        <statOffsets>
+          <MoveSpeed>3.5</MoveSpeed>
+          <MeleeHitChance>1</MeleeHitChance>
+          <ShootingAccuracyPawn>1</ShootingAccuracyPawn>
+          <AimingDelayFactor>-0.1</AimingDelayFactor>
+          <MedicalTendQuality>0.2</MedicalTendQuality>
+          <SocialImpact>0.1</SocialImpact>
+        </statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+</Defs>

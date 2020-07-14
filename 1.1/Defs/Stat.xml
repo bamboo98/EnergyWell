@@ -2,13 +2,13 @@
 <Defs>
 
   <StatCategoryDef>
-    <defName>zzPower_stat</defName>
-    <label>护盾参数</label>
+    <defName>VoidEnergy</defName>
+    <label>幽能</label>
     <displayOrder>70</displayOrder>
   </StatCategoryDef>
 
-	<StatDef Name="zzBaseMiscStat_Power" Abstract="True">
-		<category>zzPower_stat</category>
+	<StatDef Name="VoidEnergyStatBase" Abstract="True">
+		<category>VoidEnergy</category>
 		<defaultBaseValue>0</defaultBaseValue>
 		<toStringStyle>FloatOne</toStringStyle>
 		<showIfUndefined>false</showIfUndefined>
@@ -16,63 +16,72 @@
 	</StatDef>
 
 
-	<StatDef ParentName="zzBaseMiscStat_Power">
-		<defName>zzPower_VoidEnergyGet</defName>
-		<label>幽能收集率</label>
-		<description>幽能井每秒钟可以收集多少个单位的幽能</description>
-		<defaultBaseValue>0</defaultBaseValue>
-		<minValue>0</minValue>
-		<toStringStyle>FloatOne</toStringStyle>
-    	<displayPriorityInCategory>230</displayPriorityInCategory>
-	</StatDef>
-
-	<StatDef ParentName="zzBaseMiscStat_Power">
-		<defName>zzPower_VoidEnergyCache</defName>
-		<label>幽能储量</label>
-		<description>幽能井内可以安全储存的幽能上限\n幽能储量超过安全上限时,幽能井会向外辐射高能粒子,并快速升温\n长时间超出安全上限时,有自燃和爆炸的可能</description>
-		<defaultBaseValue>0</defaultBaseValue>
-		<minValue>0</minValue>
-		<toStringStyle>FloatOne</toStringStyle>
-    	<displayPriorityInCategory>230</displayPriorityInCategory>
-	</StatDef>
-
-	<StatDef ParentName="zzBaseMiscStat_Power">
-		<defName>zzPower_VoidEnergyTransport</defName>
-		<label>幽能传输率</label>
-		<description>幽能网络每秒可以传输的最大幽能数量</description>
-		<defaultBaseValue>0</defaultBaseValue>
-		<minValue>0</minValue>
-		<toStringStyle>FloatOne</toStringStyle>
-    	<displayPriorityInCategory>230</displayPriorityInCategory>
-	</StatDef>
-
-	<StatDef ParentName="zzBaseMiscStat_Power">
-		<defName>zzPower_VoidEnergyNeed</defName>
-		<label>幽能需求</label>
-		<description>装置每秒消耗的幽能数量</description>
-		<defaultBaseValue>0</defaultBaseValue>
-		<minValue>0</minValue>
-		<toStringStyle>FloatOne</toStringStyle>
-    	<displayPriorityInCategory>230</displayPriorityInCategory>
-	</StatDef>
-
-	<StatDef ParentName="zzBaseMiscStat_Power">
-		<defName>zzPower_VoidEnergyConvert</defName>
-		<label>电能转化率</label>
-		<description>幽能反应堆将幽能转化为电能时的效率</description>
+	<StatDef ParentName="VoidEnergyStatBase">
+		<defName>VoidEnergyCacheMax</defName>
+		<label>缓存上限</label>
+		<description>可以安全储存的幽能上限</description>
 		<defaultBaseValue>0</defaultBaseValue>
 		<minValue>0</minValue>
 		<toStringStyle>PercentZero</toStringStyle>
     	<displayPriorityInCategory>230</displayPriorityInCategory>
 	</StatDef>
 
-	<StatDef ParentName="zzBaseMiscStat_Power">
-		<defName>zzPower_VoidEnergyUse</defName>
-		<label>电能缓存上限</label>
-		<description>幽能反应堆可以缓存的电能上限\n超出上限的电能会被释放到空气中并提高周围温度,有引起雷击的可能</description>
+	<StatDef ParentName="VoidEnergyStatBase">
+		<defName>VoidEnergyRecharge</defName>
+		<label>回充速率</label>
+		<description>每秒钟可以从幽能网络中获取的幽能</description>
 		<defaultBaseValue>0</defaultBaseValue>
 		<minValue>0</minValue>
-		<toStringStyle>Integer</toStringStyle>
+		<toStringStyle>PercentZero</toStringStyle>
+    	<displayPriorityInCategory>230</displayPriorityInCategory>
+	</StatDef>
+
+	<StatDef ParentName="VoidEnergyStatBase">
+		<defName>VoidEnergyShieldMax</defName>
+		<label>护盾上限</label>
+		<description>幽能护盾可以承受的冲击量上限</description>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<toStringStyle>FloatOne</toStringStyle>
+    	<displayPriorityInCategory>230</displayPriorityInCategory>
+	</StatDef>
+
+	<StatDef ParentName="VoidEnergyStatBase">
+		<defName>VoidEnergyShieldRecharge</defName>
+		<label>护盾回充速率</label>
+		<description>幽能护盾每秒可以回复的能量</description>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<toStringStyle>FloatOne</toStringStyle>
+    	<displayPriorityInCategory>230</displayPriorityInCategory>
+	</StatDef>
+
+	<StatDef ParentName="VoidEnergyStatBase">
+		<defName>VoidEnergyShieldConvertRate</defName>
+		<label>护盾转化率</label>
+		<description>幽能转化为护盾能量的比例</description>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<toStringStyle>PercentZero</toStringStyle>
+    	<displayPriorityInCategory>230</displayPriorityInCategory>
+	</StatDef>
+
+	<StatDef ParentName="VoidEnergyStatBase">
+		<defName>VoidEnergyShieldStrength</defName>
+		<label>护盾韧性</label>
+		<description>护盾韧性越高,在受到伤害时受到的冲击量就越小,在护盾被击破后也可以降低佩戴者受到的伤害</description>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<toStringStyle>PercentZero</toStringStyle>
+    	<displayPriorityInCategory>230</displayPriorityInCategory>
+	</StatDef>
+	<StatDef ParentName="VoidEnergyStatBase">
+		<defName>VoidEnergyCostPerSec</defName>
+		<label>自维持消耗</label>
+		<description>维持基础功能时每秒需要消耗的幽能,如果存储幽能不足则基础功能不生效</description>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<toStringStyle>PercentZero</toStringStyle>
     	<displayPriorityInCategory>230</displayPriorityInCategory>
 	</StatDef>
 

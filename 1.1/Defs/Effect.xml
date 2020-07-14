@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<ThingDef Name="EnergyWellActiving" ParentName="EtherealThingBase">
+		<thingClass>zhuzi.AdvancedEnergy.EnergyWell.Things.EnergyWellActiving</thingClass>
+		<defName>EnergyWellActiving</defName>
+		<label>EnergyWellActiving</label>
+		<tickerType>Normal</tickerType>
+		<drawerType>RealtimeOnly</drawerType>
+		<drawOffscreen>true</drawOffscreen>
+		<seeThroughFog>true</seeThroughFog>
+		<comps>
+			<li Class="CompProperties_AffectsSky">
+				<skyColors>
+					<sky>(128, 75, 157)</sky>
+					<shadow>(151, 125, 185)</shadow>
+					<overlay>(255, 255, 255)</overlay>
+					<saturation>1.3</saturation>
+				</skyColors>
+			</li>
+			<li Class="CompProperties_OrbitalBeam">
+				<width>8</width>
+				<color>(151, 125, 185, 242)</color>
+				<sound>OrbitalBeam</sound>
+			</li>
+		</comps>
+	</ThingDef>
+</Defs>

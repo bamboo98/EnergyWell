@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <ThingDef Name="VoidNetTerminal_Base" ParentName="ApparelBase">
+        <thingClass>zhuzi.AdvancedEnergy.EnergyWell.Things.VoidNetTerminal</thingClass>
+        <defName>VoidNetTerminal_Base</defName>
+        <label>幽能无线终端-基础型</label>
+        <description>基础型个人幽能无线终端,功能仅限于从本地图幽能网络中获取能量并供给其他装备使用\n基本无防护作用</description>
+        <techLevel>Spacer</techLevel>
+        <recipeMaker>
+            <!-- <unfinishedThingDef>UnfinishedTest_BELT</unfinishedThingDef> -->
+            <!-- <researchPrerequisite>SmokepopBelt</researchPrerequisite> -->
+            <recipeUsers>
+                <li>TableMachining</li>
+            </recipeUsers>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <!-- <skillRequirements>
+        <Crafting>3</Crafting>
+      </skillRequirements> -->
+        </recipeMaker>
+        <costList>
+            <!-- <ComponentIndustrial>1</ComponentIndustrial> -->
+            <Steel>20</Steel>
+            <!-- <Chemfuel>40</Chemfuel> -->
+        </costList>
+        <graphicData>
+            <texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <tickerType>Normal</tickerType>
+        <statBases>
+            <WorkToMake>1200</WorkToMake>
+            <Mass>0.3</Mass>
+            <Flammability>0</Flammability>
+            <EquipDelay>0</EquipDelay>
+            
+            <VoidEnergyCacheMax>1</VoidEnergyCacheMax>
+            <VoidEnergyRecharge>0.03</VoidEnergyRecharge>
+
+        </statBases>
+        <thingCategories>
+            <li>Apparel</li>
+        </thingCategories>
+        <apparel>
+            <careIfWornByCorpse>false</careIfWornByCorpse>
+            <bodyPartGroups>
+                <li>Waist</li>
+            </bodyPartGroups>
+            <layers>
+                <li>Belt</li>
+            </layers>
+            <tags>
+                <li>BeltDefensePop</li>
+            </tags>
+        </apparel>
+    </ThingDef>
+
+    <ThingDef ParentName="VoidNetTerminal_Base">
+        <defName>VoidNetTerminal_Normal</defName>
+        <label>幽能无线终端-量产型</label>
+        <description>量产型个人幽能无线终端,从本地图幽能网络中获取能量并供给其他装备使用\n拥有最低限度的幽能护盾</description>
+        
+        <recipeMaker>
+            <!-- <unfinishedThingDef>UnfinishedTest_BELT</unfinishedThingDef> -->
+            <!-- <researchPrerequisite>SmokepopBelt</researchPrerequisite> -->
+            <recipeUsers>
+                <li>TableMachining</li>
+            </recipeUsers>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <!-- <skillRequirements>
+        <Crafting>3</Crafting>
+      </skillRequirements> -->
+        </recipeMaker>
+        <costList>
+            <!-- <ComponentIndustrial>1</ComponentIndustrial> -->
+            <Steel>20</Steel>
+            <!-- <Chemfuel>40</Chemfuel> -->
+        </costList>
+        <graphicData>
+            <texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <statBases>
+            <WorkToMake>1200</WorkToMake>
+            <Mass>0.3</Mass>
+            <Flammability>0</Flammability>
+            <EquipDelay>0</EquipDelay>
+            
+            <VoidEnergyCacheMax>1.5</VoidEnergyCacheMax>
+            <VoidEnergyRecharge>0.05</VoidEnergyRecharge>
+            <VoidEnergyShieldMax>100</VoidEnergyShieldMax>
+            <VoidEnergyShieldRecharge>1.5</VoidEnergyShieldRecharge>
+            <VoidEnergyShieldConvertRate>20</VoidEnergyShieldConvertRate>
+            <VoidEnergyShieldStrength>1</VoidEnergyShieldStrength>
+            <VoidEnergyCostPerSec>0.001</VoidEnergyCostPerSec>
+
+        </statBases>
+    </ThingDef>
+
+
+    <ThingDef ParentName="VoidNetTerminal_Base">
+        <defName>VoidNetTerminal_Recharge</defName>
+        <label>幽能无线终端-快充型</label>
+        <description>快充型个人幽能无线终端,以能量缓存上限和护盾上限为代价换取了快速充能功能\n拥有最低限度的幽能护盾</description>
+        
+        <recipeMaker>
+            <!-- <unfinishedThingDef>UnfinishedTest_BELT</unfinishedThingDef> -->
+            <!-- <researchPrerequisite>SmokepopBelt</researchPrerequisite> -->
+            <recipeUsers>
+                <li>TableMachining</li>
+            </recipeUsers>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <!-- <skillRequirements>
+        <Crafting>3</Crafting>
+      </skillRequirements> -->
+        </recipeMaker>
+        <costList>
+            <!-- <ComponentIndustrial>1</ComponentIndustrial> -->
+            <Steel>20</Steel>
+            <!-- <Chemfuel>40</Chemfuel> -->
+        </costList>
+        <graphicData>
+            <texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <statBases>
+            <WorkToMake>1200</WorkToMake>
+            <Mass>0.3</Mass>
+            <Flammability>0</Flammability>
+            <EquipDelay>0</EquipDelay>
+            
+            <VoidEnergyCacheMax>1</VoidEnergyCacheMax>
+            <VoidEnergyRecharge>0.15</VoidEnergyRecharge>
+            <VoidEnergyShieldMax>80</VoidEnergyShieldMax>
+            <VoidEnergyShieldRecharge>3</VoidEnergyShieldRecharge>
+            <VoidEnergyShieldConvertRate>15</VoidEnergyShieldConvertRate>
+            <VoidEnergyShieldStrength>1</VoidEnergyShieldStrength>
+            <VoidEnergyCostPerSec>0.001</VoidEnergyCostPerSec>
+
+        </statBases>
+    </ThingDef>
+
+
+    <ThingDef ParentName="VoidNetTerminal_Base">
+        <defName>VoidNetTerminal_Elite</defName>
+        <label>幽能无线终端-精英型</label>
+        <description>精英型个人幽能无线终端,缓存容量较高,可以为武器提供长时间能量供给,但是充能速度很慢\n拥有一般水准的幽能护盾</description>
+        
+        <recipeMaker>
+            <!-- <unfinishedThingDef>UnfinishedTest_BELT</unfinishedThingDef> -->
+            <!-- <researchPrerequisite>SmokepopBelt</researchPrerequisite> -->
+            <recipeUsers>
+                <li>TableMachining</li>
+            </recipeUsers>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <!-- <skillRequirements>
+        <Crafting>3</Crafting>
+      </skillRequirements> -->
+        </recipeMaker>
+        <costList>
+            <!-- <ComponentIndustrial>1</ComponentIndustrial> -->
+            <Steel>20</Steel>
+            <!-- <Chemfuel>40</Chemfuel> -->
+        </costList>
+        <graphicData>
+            <texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <statBases>
+            <WorkToMake>1200</WorkToMake>
+            <Mass>0.3</Mass>
+            <Flammability>0</Flammability>
+            <EquipDelay>0</EquipDelay>
+            
+            <VoidEnergyCacheMax>8</VoidEnergyCacheMax>
+            <VoidEnergyRecharge>0.05</VoidEnergyRecharge>
+            <VoidEnergyShieldMax>180</VoidEnergyShieldMax>
+            <VoidEnergyShieldRecharge>6</VoidEnergyShieldRecharge>
+            <VoidEnergyShieldConvertRate>30</VoidEnergyShieldConvertRate>
+            <VoidEnergyShieldStrength>1.2</VoidEnergyShieldStrength>
+            <VoidEnergyCostPerSec>0.001</VoidEnergyCostPerSec>
+
+        </statBases>
+    </ThingDef>
+
+    <ThingDef ParentName="VoidNetTerminal_Base">
+        <defName>VoidNetTerminal_Defence</defName>
+        <label>幽能无线终端-铁壁型</label>
+        <description>铁壁型个人幽能无线终端,专注于保护佩戴者的型号,具有很高的护盾转化率和回复速度,但是能量缓存不高,不适合长时间给武器供能</description>
+        
+        <recipeMaker>
+            <!-- <unfinishedThingDef>UnfinishedTest_BELT</unfinishedThingDef> -->
+            <!-- <researchPrerequisite>SmokepopBelt</researchPrerequisite> -->
+            <recipeUsers>
+                <li>TableMachining</li>
+            </recipeUsers>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <!-- <skillRequirements>
+        <Crafting>3</Crafting>
+      </skillRequirements> -->
+        </recipeMaker>
+        <costList>
+            <!-- <ComponentIndustrial>1</ComponentIndustrial> -->
+            <Steel>20</Steel>
+            <!-- <Chemfuel>40</Chemfuel> -->
+        </costList>
+        <graphicData>
+            <texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <statBases>
+            <WorkToMake>1200</WorkToMake>
+            <Mass>0.3</Mass>
+            <Flammability>0</Flammability>
+            <EquipDelay>0</EquipDelay>
+            
+            <VoidEnergyCacheMax>2</VoidEnergyCacheMax>
+            <VoidEnergyRecharge>0.05</VoidEnergyRecharge>
+            <VoidEnergyShieldMax>400</VoidEnergyShieldMax>
+            <VoidEnergyShieldRecharge>10</VoidEnergyShieldRecharge>
+            <VoidEnergyShieldConvertRate>100</VoidEnergyShieldConvertRate>
+            <VoidEnergyShieldStrength>1.5</VoidEnergyShieldStrength>
+            <VoidEnergyCostPerSec>0.001</VoidEnergyCostPerSec>
+
+        </statBases>
+    </ThingDef>
+
+    <ThingDef ParentName="VoidNetTerminal_Base">
+        <defName>VoidNetTerminal_Scout</defName>
+        <label>幽能无线终端-斥候型</label>
+        <description>斥候型个人幽能无线终端,利用幽能立场可以大幅加快佩戴者的移动速度\n幽能储量和防护能力一般\n该型号会持续消耗少量幽能,请确保幽能供给充足</description>
+        
+        <recipeMaker>
+            <!-- <unfinishedThingDef>UnfinishedTest_BELT</unfinishedThingDef> -->
+            <!-- <researchPrerequisite>SmokepopBelt</researchPrerequisite> -->
+            <recipeUsers>
+                <li>TableMachining</li>
+            </recipeUsers>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <!-- <skillRequirements>
+        <Crafting>3</Crafting>
+      </skillRequirements> -->
+        </recipeMaker>
+        <costList>
+            <!-- <ComponentIndustrial>1</ComponentIndustrial> -->
+            <Steel>20</Steel>
+            <!-- <Chemfuel>40</Chemfuel> -->
+        </costList>
+        <graphicData>
+            <texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <statBases>
+            <WorkToMake>1200</WorkToMake>
+            <Mass>0.3</Mass>
+            <Flammability>0</Flammability>
+            <EquipDelay>0</EquipDelay>
+            
+            <VoidEnergyCacheMax>2</VoidEnergyCacheMax>
+            <VoidEnergyRecharge>0.08</VoidEnergyRecharge>
+            <VoidEnergyShieldMax>400</VoidEnergyShieldMax>
+            <VoidEnergyShieldRecharge>10</VoidEnergyShieldRecharge>
+            <VoidEnergyShieldConvertRate>100</VoidEnergyShieldConvertRate>
+            <VoidEnergyShieldStrength>1.5</VoidEnergyShieldStrength>
+            <VoidEnergyCostPerSec>0.03</VoidEnergyCostPerSec>
+        </statBases>
+    </ThingDef>
+</Defs>

@@ -9,22 +9,38 @@ using UnityEngine;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 {
+    //因为可能会大量建筑,避免消耗太多运算量,不继承Base了
     class VoidNetAutoRepair:ThingComp
     {
 
-        public float RepairRatePerSec = 0.01f;// *血量上限/转换率=消耗幽能
-        public float VoidEnergyConvertRate = 500f;
-
-
         private MapVoidEnergyNet VoidNet;
-        private int MaxHitPoints;
-        private bool TwiceCheck;
+        private Prop.VoidNetAutoRepairProp prop;
 
 
-        //存档field
+
+        private float RepairRatePerSec = 0.01f;// *血量上限/转换率=消耗幽能
+        private float VoidEnergyConvertRate = 500f;
+
+        //save
         private bool repairing = false;
         private int lastRepairTick = -100;
         private float remainder = 0f;
+
+        //private
+        private int MaxHitPoints;
+        private bool TwiceCheck;
+
+        public override void Initialize(CompProperties props)
+        {
+            base.Initialize(props);
+            prop = (Prop.VoidNetAutoRepairProp)props;
+
+            RepairRatePerSec = prop.RepairRatePerSec;
+            VoidEnergyConvertRate = prop.VoidEnergyConvertRate;
+
+
+        }
+
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
@@ -43,7 +59,10 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             base.PostPostApplyDamage(dinfo, totalDamageDealt);
             if (repairing || MaxHitPoints == 0) return;
             repairing = true;
-            lastRepairTick = Find.TickManager.TicksGame;
+            if(Find.TickManager.TicksGame- lastRepairTick<250)
+                TryRepair();
+            else
+                lastRepairTick = Find.TickManager.TicksGame;
         }
 
         private void TryRepair()
@@ -62,7 +81,6 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 int gt = Find.TickManager.TicksGame;
 
                 float needHeal = Mathf.Min((float)MaxHitPoints * RepairRatePerSec * (gt - lastRepairTick).TicksToSeconds(), (float)(MaxHitPoints - cur) - remainder);
-
                 float heal = VoidEnergyConvertRate *
                     VoidNet.GetEnergy(needHeal / VoidEnergyConvertRate) + remainder;//别忘了加上零头
 

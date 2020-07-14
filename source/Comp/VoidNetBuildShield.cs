@@ -10,21 +10,19 @@ using Verse.Sound;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 {
-    public class VoidNetBuildShield:ThingComp
+    public class VoidNetBuildShield:VoidNetBuildCompBase
     {
-
-
-        private VoidNetPort VoidNet;
+        private Prop.VoidNetBuildShieldProp prop;
 
         private float shieldMax = 200f;
         private float shieldRecharge = 5f;
         private float shieldConvertRate = 0.023f;
         private float shieldDamagedRate = 1f;
         private int shieldInitTick = 600;
+        private float drawSizeScale = 1f;
 
         //save
-        private float energyCur = 200f;
-        private float shieldCur = 200;
+        private float shieldCur = 0;
         private int shieldInit = 600;
         //private int 
 
@@ -51,52 +49,11 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             }
         }
 
-        public override void CompTick()
-        {
-            base.CompTick();
-
-            //给护盾充能
-            if (!VoidNet.IsSavingEnergy && shieldMax > 0 && shieldRecharge > 0)
-            {
-                if (shieldInit-- > 0)
-                {
-                    if (!VoidNet.CostEnergy(shieldRecharge / 60f * shieldConvertRate / 3f))
-                    {
-                        shieldInit = shieldInitTick;
-                    }
-                }
-                else
-                {
-                    float need = Mathf.Min(shieldRecharge / 60f, shieldMax - shieldCur) * shieldConvertRate;
-                    if (need > 0 && VoidNet.CostEnergy(need))
-                    {
-                        shieldCur += shieldRecharge / 60f;
-                    }
-                }
-            }
-        }
-
-        public override void PostExposeData()
-        {
-            Scribe_Values.Look(ref energyCur, "energyCur", 0f);
-            Scribe_Values.Look(ref shieldCur, "shieldCur", 0f);
-            Scribe_Values.Look(ref shieldInit, "shieldInit", 600);
-            Scribe_Values.Look(ref lastKeepDisplayTick, "lastKeepDisplayTick");
-            base.PostExposeData();
-        }
-
-
-        public override void PostSpawnSetup(bool respawningAfterLoad)
-        {
-            VoidNet = parent.TryGetComp<VoidNetPort>();
-
-            base.PostSpawnSetup(respawningAfterLoad);
-        }
 
         private Vector3 impactAngleVect;
         private int lastKeepDisplayTick = -9999;
         private int lastAbsorbDamageTick = -9999;
-        private int KeepDisplayingTicks = 1000;
+        private readonly int KeepDisplayingTicks = 1000;
         private bool ShouldDisplay
         {
             get
@@ -104,29 +61,51 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 return (Find.TickManager.TicksGame < lastKeepDisplayTick + KeepDisplayingTicks);
             }
         }
-
-        public override void PostDraw()
+        public override void Initialize(CompProperties props)
         {
-            base.PostDraw();
-            if (shieldMax > 0 && shieldInit <= 0 && ShouldDisplay)
+            base.Initialize(props);
+            prop = (Prop.VoidNetBuildShieldProp)props;
+
+            shieldMax = prop.shieldMax;
+            shieldRecharge = prop.shieldRecharge;
+            shieldConvertRate = prop.shieldConvertRate;
+            shieldDamagedRate = prop.shieldDamagedRate;
+            shieldInitTick = prop.shieldInitTick;
+            drawSizeScale = prop.drawSizeScale;
+
+
+        }
+
+
+        public override void CompTick()
+        {
+            base.CompTick();
+            if (!netPort.PowerOn)
             {
-                float num = Mathf.Lerp(1.2f, 1.55f, shieldCur / shieldMax);
-                Vector3 vector = parent.DrawPos;
-                vector.y = AltitudeLayer.MoteOverhead.AltitudeFor();
-                int num2 = Find.TickManager.TicksGame - lastAbsorbDamageTick;
-                if (num2 < 8)
+                return;
+            }
+            //给护盾充能
+            if (!netPort.IsSavingEnergy && shieldMax > 0 && shieldRecharge > 0)
+            {
+                if (shieldInit-- > 0)
                 {
-                    float num3 = (float)(8 - num2) / 8f * 0.05f;
-                    vector += this.impactAngleVect * num3;
-                    num -= num3;
+                    if (!netPort.CostEnergy(shieldRecharge / 60f * shieldConvertRate / 3f))
+                    {
+                        shieldInit = shieldInitTick;
+                    }
                 }
-                float angle = (float)Rand.Range(0, 360);
-                Vector3 s = new Vector3(num, 1f, num);
-                Matrix4x4 matrix = default(Matrix4x4);
-                matrix.SetTRS(vector, Quaternion.AngleAxis(angle, Vector3.up), s);
-                Graphics.DrawMesh(MeshPool.plane10, matrix, Resources.Materials.BubbleMat, 0);
+                else
+                {
+                    float need = Mathf.Min(shieldRecharge / 60f, shieldMax - shieldCur) * shieldConvertRate;
+                    if (need > 0 && netPort.CostEnergy(need))
+                    {
+                        shieldCur += shieldRecharge / 60f;
+                    }
+                }
             }
         }
+
+
         public override void PostPreApplyDamage(DamageInfo dinfo, out bool absorbed)
         {
             base.PostPreApplyDamage(dinfo, out absorbed);
@@ -161,6 +140,36 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             }
         }
 
+
+        public override void PostDraw()
+        {
+            base.PostDraw();
+            if (shieldMax > 0 && shieldInit <= 0 && ShouldDisplay)
+            {
+                float num = Mathf.Lerp(1.2f, 1.55f, shieldCur / shieldMax);
+                Vector3 vector = parent.DrawPos;
+                vector.y = AltitudeLayer.MoteOverhead.AltitudeFor();
+                int num2 = Find.TickManager.TicksGame - lastAbsorbDamageTick;
+                if (num2 < 8)
+                {
+                    float num3 = (float)(8 - num2) / 8f * 0.05f;
+                    vector += this.impactAngleVect * num3;
+                    num -= num3;
+                }
+                float angle = (float)Rand.Range(0, 360);
+                Vector3 s = new Vector3(num * drawSizeScale, 1f, num * drawSizeScale);
+                Matrix4x4 matrix = default;
+                matrix.SetTRS(vector, Quaternion.AngleAxis(angle, Vector3.up), s);
+                Graphics.DrawMesh(MeshPool.plane10, matrix, Resources.Materials.BubbleMat, 0);
+            }
+        }
+        public override void PostExposeData()
+        {
+            Scribe_Values.Look(ref shieldCur, "shieldCur", 0f);
+            Scribe_Values.Look(ref shieldInit, "shieldInit", 600);
+            Scribe_Values.Look(ref lastKeepDisplayTick, "lastKeepDisplayTick");
+            base.PostExposeData();
+        }
 
 
     }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<GizMos_CompsEnergyCost>接收幽能{0}单位/秒</GizMos_CompsEnergyCost>
+	<GizMos_CompsEnergyCost>待机幽能消耗{0}单位/秒</GizMos_CompsEnergyCost>
+
+
+	<GizMos_ActiveWellDesc>激活幽能井,开始收集幽能,激活时需要消耗{0}Wd电力</GizMos_ActiveWellDesc>
+	<GizMos_ProduceEnergyPerSec>幽能产出: {0}单位/秒</GizMos_ProduceEnergyPerSec>
+
+	<VoidEnergyCostString>消耗幽能: {0}单位/秒</VoidEnergyCostString>
+
+</LanguageData>

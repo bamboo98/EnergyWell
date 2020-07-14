@@ -38,8 +38,33 @@
         <comps>
             <li Class="CompProperties_Forbiddable"/>
             <li Class="CompProperties_Flickable"/>
-            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetPortProp"/>
-            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetBuildShieldProp"/>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetPortProp">
+                <!-- 幽能缓存上限 -->
+                <energyCacheMax>15</energyCacheMax>
+                <!-- 每秒从网络中获取的幽能 -->
+                <energyRechargePerSec>0.1</energyRechargePerSec>
+                <!-- 待机功耗 -->
+                <energyCostPerSec>0.005</energyCostPerSec>
+                <!-- 初始化耗时 -->
+                <initTicks>180</initTicks>
+            </li>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetBuildShieldProp">
+                <!-- 待机功耗 -->
+                <!-- 护盾的能耗分为常驻的待机能耗和充能能耗两部分,充能能耗=shieldRecharge*shieldConvertRate -->
+                <energyCostPerSec>0.005</energyCostPerSec>
+                <!-- 护盾上限 -->
+                <shieldMax>250</shieldMax>
+                <!-- 每秒回冲值（非百分比） -->
+                <shieldRecharge>5</shieldRecharge>
+                <!-- 回冲每点能量消耗的幽能 -->
+                <shieldConvertRate>0.026</shieldConvertRate>
+                <!-- 受到伤害转化为对护盾冲击的比例 -->
+                <shieldDamagedRate>1</shieldDamagedRate>
+                <!-- 初始化耗时 -->
+                <shieldInitTick>300</shieldInitTick>
+                <!-- 护盾范围绘制大小，护盾只保护建筑本身，这个值只影响图像绘制大小 -->
+                <drawSizeScale>1.2</drawSizeScale>
+            </li>
         </comps>
         <passability>PassThroughOnly</passability>
         <pathCost>50</pathCost>
@@ -152,6 +177,7 @@
             <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetTurretEquipmentPortProp">
             </li>
             <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponShootModeProp">
+                <enableFullAuto>false</enableFullAuto>
             </li>
 
         </comps>

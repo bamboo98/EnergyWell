@@ -13,5 +13,12 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop
         {
             compClass = typeof(VoidNetWeaponShootMode);
         }
+        public bool enableFullAuto = false;
+        public float baseEnergyCost = 0.2f;
+        public float baseAmount = 1f;
+        public float baseWarmupTime = 1f;
+        public float baseCooldown = 0;
+        public int baseTicksBetweenBurstShots = 6;
+        public float baseAccuracy = 1f;
     }
 }

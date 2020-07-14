@@ -11,8 +11,11 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
     class VoidEnergyConverter: zzLib.Comp.CompStatPower
     {
         private VoidNetPort compVoidNetPort;
+        private Prop.VoidEnergyConverterProp prop;
 
-        private float convertRate = 10000000;
+        private float convertRate = 100000;
+
+        //private
         private float energyCost = 0;
         protected override float PowerConsumption
         {
@@ -20,6 +23,14 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             {
                 return -convertRate*energyCost;
             }
+        }
+
+        public override void Initialize(CompProperties props)
+        {
+            base.Initialize(props);
+            prop = (Prop.VoidEnergyConverterProp)props;
+
+            convertRate = prop.convertRate;
         }
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
@@ -59,9 +70,9 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             }
             else
             {
-                if(energyCost != compVoidNetPort.EnergyCost)
+                if (energyCost != compVoidNetPort.EnergyCostPerTick * 60f) 
                 {
-                    energyCost = compVoidNetPort.EnergyCost;
+                    energyCost = compVoidNetPort.EnergyCostPerTick * 60f;
                     SetUpPowerVars();
                 }
             }
@@ -69,7 +80,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 
         public override void PostExposeData()
         {
-            Scribe_Values.Look(ref convertRate, "convertRate", 10000000);
+            Scribe_Values.Look(ref convertRate, "convertRate", 100000);
             Scribe_Values.Look(ref energyCost, "energyCost", 0);
             base.PostExposeData();
         }

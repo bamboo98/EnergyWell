@@ -77,19 +77,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI\JobDriver_OperateVoidNetDeepDrill.cs" />
+    <Compile Include="AI\WorkGiver_VoidNetDeepDrill.cs" />
+    <Compile Include="Builds\VoidEnergyThermostat.cs" />
+    <Compile Include="Comp\Prop\VoidNetTempControllerProp.cs" />
+    <Compile Include="Comp\VoidNetTempController.cs" />
+    <Compile Include="Things\EnergyWellActiving.cs" />
     <Compile Include="Builds\VoidNetTurret.cs" />
     <Compile Include="Comp\EnergyWell.cs" />
     <Compile Include="Comp\GameComp_VoidNet.cs" />
+    <Compile Include="Comp\Hediff\VoidEnergyHediffTerminalMoveSpeed.cs" />
     <Compile Include="Comp\Prop\EnergyWellProp.cs" />
+    <Compile Include="Comp\Prop\VoidEnergyConverterProp.cs" />
     <Compile Include="Comp\Prop\VoidNetAutoRepairProp.cs" />
+    <Compile Include="Comp\Prop\VoidNetBuildCompBaseProp.cs" />
     <Compile Include="Comp\Prop\VoidNetBuildShieldProp.cs" />
+    <Compile Include="Comp\Prop\VoidNetDeepDrillProp.cs" />
     <Compile Include="Comp\Prop\VoidNetPortProp.cs" />
     <Compile Include="Comp\Prop\VoidNetTowerProp.cs" />
     <Compile Include="Comp\Prop\VoidNetWeaponPortProp.cs" />
     <Compile Include="Comp\Prop\VoidNetWeaponShootModeProp.cs" />
     <Compile Include="Comp\VoidEnergyConverter.cs" />
     <Compile Include="Comp\VoidNetAutoRepair.cs" />
+    <Compile Include="Comp\VoidNetBuildCompBase.cs" />
     <Compile Include="Comp\VoidNetBuildShield.cs" />
+    <Compile Include="Comp\VoidNetDeepDrill.cs" />
     <Compile Include="Comp\VoidNetPort.cs" />
     <Compile Include="Comp\VoidNetTower.cs" />
     <Compile Include="Comp\VoidNetTurretWeaponPort.cs" />

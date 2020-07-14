@@ -12,8 +12,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
 
         public static float? warmupTime_Before;
         public static float? warmupTime_Target;
-        public static int? ticksBetweenBurstShots_Before;
-        public static int? ticksBetweenBurstShots_Target;
+        public static int? ticksBetweenBurstShots;
 
         public static float? adjustedAccuracyFactor;
         public static float NextAdjustedAccuracyFactor
@@ -56,18 +55,33 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
             }
         }
         /// <summary>
-        /// 没实装,因为只能修改下一发子弹的
+        /// 修改下一发子弹的射出延迟(多于2发子弹时需要每发子弹都改)
         /// </summary>
         public static int NextTicksBetweenBurstShots
         {
             set
             {
-                ticksBetweenBurstShots_Target = value;
+                ticksBetweenBurstShots = value;
             }
         }
     }
 
 
+    [HarmonyPatch(typeof(StatWorker), "ShouldShowFor")]
+    internal static class StatWorker_Patch
+    {
+        [HarmonyPrefix]
+        [HarmonyPatch("ShouldShowFor")]
+        public static bool ShouldShowFor_Prefix(StatWorker __instance, StatRequest req, ref bool __result, ref StatDef ___stat)
+        {
+            if (___stat.category == Resources.StatCategoryDefs.VoidEnergy && req.Thing.def.thingClass==typeof(Things.VoidNetTerminal))
+            {
+                __result = true;
+                return false;
+            }
+            return true;
+        }
+    }
 
 
     [HarmonyPatch(typeof(Pawn_EquipmentTracker))]
@@ -284,21 +298,78 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
             }
             return true;
         }
-        //[HarmonyPostfix]
-        //[HarmonyPatch("TryCastNextBurstShot")]
-        //public static void TryCastNextBurstShot_Postfix(Verb __instance, ref int ___burstShotsLeft)
-        //{
 
-        //    if (ticksBetweenBurstShots_Before != null)
-        //    {
-        //        __instance.verbProps.ticksBetweenBurstShots = (int)ticksBetweenBurstShots_Before;
-        //        ticksBetweenBurstShots_Before = null;
-        //    }
-        //}
+
+        [HarmonyPostfix]
+        [HarmonyPatch("TryCastNextBurstShot")]
+        public static void TryCastNextBurstShot_Postfix(Verb __instance, ref int ___burstShotsLeft)
+        {
+            if (Methons.ticksBetweenBurstShots != null)
+            {
+                Methons.ticksBetweenBurstShots = null;
+            }
+        }
 
 
     }
 
+    [HarmonyPatch(typeof(Stance_Cooldown))]
+    internal class Stance_Cooldown_Patch
+    {
+        [HarmonyPrefix]
+        [HarmonyPatch(MethodType.Constructor)]
+        [HarmonyPatch(new Type[] { typeof(int), typeof(LocalTargetInfo),typeof(Verb) })]
+        public static bool Stance_Cooldown_Prefix(ref int ticks)
+        {
+            if (Methons.ticksBetweenBurstShots != null)
+            {
+                ticks = (int)Methons.ticksBetweenBurstShots + 1;
+                Methons.ticksBetweenBurstShots = null;
+            }
+            return true;
+        }
 
+    }
+
+    [HarmonyPatch(typeof(CompGlower))]
+
+    internal class CompGlower_Patch
+    {
+        [HarmonyPostfix]
+        [HarmonyPatch("ShouldBeLitNow",MethodType.Getter)]
+
+        public static void ShouldBeLitNow_Postfix(ref bool __result, CompGlower __instance)
+        {
+            if (__result)
+                return;
+
+            if (!__instance.parent.Spawned)
+            {
+                return;
+            }
+            if (!FlickUtility.WantsToBeOn(__instance.parent))
+            {
+                return;
+            }
+            Comp.VoidNetPort compPowerTrader = __instance.parent.TryGetComp<Comp.VoidNetPort>();
+            if (compPowerTrader != null && !compPowerTrader.PowerOn)
+            {
+                __result = true;
+                return;
+            }
+            CompRefuelable compRefuelable = __instance.parent.TryGetComp<CompRefuelable>();
+            if (compRefuelable != null && !compRefuelable.HasFuel)
+            {
+                return;
+            }
+            CompSendSignalOnCountdown compSendSignalOnCountdown = __instance.parent.TryGetComp<CompSendSignalOnCountdown>();
+            if (compSendSignalOnCountdown != null && compSendSignalOnCountdown.ticksLeft <= 0)
+            {
+                return;
+            }
+            return;
+        }
+
+    }
 
 }

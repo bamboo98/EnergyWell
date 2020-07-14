@@ -13,30 +13,11 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
 {
     public class VoidNetTerminal: Apparel
     {
-
-        private float energyCacheMax = 4f;
-        private float energyRecharge = 0.1f;
-
-        private bool worldConnect = false;
+        
 
         private List<ThingComp> onlineComp = new List<ThingComp>();
+        private Comp.WorldVoidEnergyNet worldNet;
 
-        private float shieldMax = 200f;
-        private float shieldRecharge = 5f;
-        private float shieldConvertRate = 0.023f;
-        private float shieldDamagedRate = 1f;
-        private int shieldInitTick = 600;
-
-
-
-
-
-
-        //save
-        private float energyCur = 0f;
-        private float shieldCur = 0;
-        private int shieldInit = 600;
-        public float savingRate = 0.25f;
 
 
         public bool IsSavingEnergy
@@ -99,7 +80,6 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
             }
         }
 
-        private Comp.WorldVoidEnergyNet worldNet;
         private Comp.WorldVoidEnergyNet WorldNet
         {
             get
@@ -111,6 +91,46 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
                 return worldNet;
             }
         }
+
+        private float shieldMax = 200f;
+        private float shieldRecharge = 5f;
+        private float shieldConvertRate = 43f;
+        private float shieldDamagedRate = 1f;
+        private float shieldInitSec = 10f;
+
+
+
+
+        private float energyCacheMax = 4f;
+        private float energyRecharge = 0.1f;
+        private float energyCostPerSec = 0f;
+
+        private bool worldConnect = false;
+        private float terminalInitSec = 2f;
+
+
+        //save
+        private float energyCur = 0f;
+        private float shieldCur = 0;
+        private int shieldInit = 600;
+        public float savingRate = 0.25f;
+        private int terminalInit = 120;
+
+
+        public override void PostMake()
+        {
+            base.PostMake();
+            energyCacheMax = this.GetStatValue(StatDefs.VoidEnergyCacheMax);
+            energyRecharge = this.GetStatValue(StatDefs.VoidEnergyRecharge);
+            shieldMax = this.GetStatValue(StatDefs.VoidEnergyShieldMax);
+            shieldRecharge = this.GetStatValue(StatDefs.VoidEnergyShieldRecharge);
+            shieldConvertRate = this.GetStatValue(StatDefs.VoidEnergyShieldConvertRate);
+            shieldDamagedRate = this.GetStatValue(StatDefs.VoidEnergyShieldStrength);
+            energyCostPerSec = this.GetStatValue(StatDefs.VoidEnergyCostPerSec);
+        }
+
+
+
 
         public virtual bool CanCostEnergy(float count)
         {
@@ -179,6 +199,16 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
                 return wearer.Spawned && !wearer.Dead && !wearer.Downed && (wearer.InAggroMentalState || wearer.Drafted || (wearer.Faction.HostileTo(Faction.OfPlayer) && !wearer.IsPrisoner) || Find.TickManager.TicksGame < lastKeepDisplayTick + KeepDisplayingTicks);
             }
         }
+        
+        private static readonly MaterialPropertyBlock PropBlock = new MaterialPropertyBlock();
+
+        float oriH = Rand.Value;
+        float oriS = Rand.Range(0.4f,1f);
+        float oriV = 1f;// Rand.Value;
+        float tarH = Rand.Value;
+        float tarS = Rand.Range(0.4f, 1f);
+        float tarV = 1f;// Rand.Value;
+        float changeProcess = 0f;
 
         public override void DrawWornExtras()
         {
@@ -195,24 +225,45 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
                     num -= num3;
                 }
                 float angle = (float)Rand.Range(0, 360);
+                PropBlock.SetColor(ShaderPropertyIDs.Color, 
+                    Color.HSVToRGB(
+                        oriH + (tarH - oriH) * changeProcess, 
+                        oriS + (tarS - oriS) * changeProcess, 
+                        oriV + (tarV - oriV) * changeProcess
+                        ));
+                changeProcess += 0.016f;
+                if (changeProcess >= 1f)
+                {
+                    oriH = tarH;
+                    oriS = tarS;
+                    oriV = tarV;
+                    tarH = Rand.Value;
+                    tarS = Rand.Range(0.4f, 1f);
+                    tarV = 1f;// Rand.Value;
+                    changeProcess -= 1f;
+                }
+
                 Vector3 s = new Vector3(num, 1f, num);
-                Matrix4x4 matrix = default(Matrix4x4);
+                Matrix4x4 matrix = default;
                 matrix.SetTRS(vector, Quaternion.AngleAxis(angle, Vector3.up), s);
-                Graphics.DrawMesh(MeshPool.plane10, matrix, Resources.Materials.BubbleMat, 0);
+                Graphics.DrawMesh(MeshPool.plane10, matrix, Resources.Materials.BubbleMat, 0,null,0, PropBlock);
             }
         }
         public override bool CheckPreAbsorbDamage(DamageInfo dinfo)
         {
             if (ShieldMax <= 0 || shieldInit > 0) 
             {
+                //受到伤害时重置启动倒计时
+                shieldInit = shieldInitSec.SecondsToTicks();
                 return false;
             }
-            float impact = dinfo.Amount * shieldDamagedRate;
+            dinfo.SetAmount(dinfo.Amount / shieldDamagedRate);
+            float impact = dinfo.Amount;
             if (impact> shieldCur)
             {
                 dinfo.SetAmount(-shieldCur);
                 shieldCur = 0;
-                shieldInit = shieldInitTick;
+                shieldInit = shieldInitSec.SecondsToTicks();
                 //剩余护盾相对冲击量越高,抵挡最后一次伤害的概率就越高
                 return Rand.Chance(shieldCur/impact);
             }
@@ -236,6 +287,31 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
             return true;
         }
 
+        private Pawn oldWearer;
+
+        private Hediff VoidEnergyHediffTerminalMoveSpeed;
+        public virtual void PostPostTerminalOff()
+        {
+            if (def == ThingDefs.VoidNetTerminal_Scout)
+            {
+                if (VoidEnergyHediffTerminalMoveSpeed != null && oldWearer!=null && !oldWearer.Destroyed)
+                    oldWearer.health.RemoveHediff(VoidEnergyHediffTerminalMoveSpeed);
+                VoidEnergyHediffTerminalMoveSpeed = null;
+            }
+            oldWearer = null;
+        }
+        public virtual void PostPostTerminalOn()
+        {
+            if (def == ThingDefs.VoidNetTerminal_Scout)
+            {
+                if (VoidEnergyHediffTerminalMoveSpeed != null && oldWearer!= null && !oldWearer.Destroyed)
+                    oldWearer.health.RemoveHediff(VoidEnergyHediffTerminalMoveSpeed);
+                VoidEnergyHediffTerminalMoveSpeed = HediffMaker.MakeHediff(HediffDefs.VoidEnergyHediffTerminalMoveSpeed, Wearer, null);
+                Wearer.health.AddHediff(VoidEnergyHediffTerminalMoveSpeed, null, null, null);
+            }
+            oldWearer = Wearer;
+        }
+
 
         public override void Tick()
         {
@@ -246,34 +322,59 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
                 {
                     OfflineAll();
                 }
+                shieldCur = 0;
                 energyCur = 0;
+                shieldInit = shieldInitSec.SecondsToTicks();
+                terminalInit = terminalInitSec.SecondsToTicks();
+                PostPostTerminalOff();
                 return;
             }
+            oldWearer = Wearer;
+            bool rechargeShield = true;
+
+            if (energyCostPerSec > 0 && !CostEnergy(energyCostPerSec / 60f))
+            {//报告离线
+                if (terminalInit <= 0)
+                {
+                    PostPostTerminalOff();
+                }
+                //离线
+                terminalInit = terminalInitSec.SecondsToTicks();
+            }
+            else if (terminalInit-- == 0)
+            {//报告上线
+                PostPostTerminalOn();
+            }
+            else if (terminalInit > 0)
+                //正在启动,不进行护盾充能
+                rechargeShield = false;
+
+
             float need;
-            //给护盾充能
-            if (shieldMax>0 && shieldRecharge > 0)
+
+            if (rechargeShield)
             {
-                if (shieldInit-- > 0)
+                //给护盾充能
+                if (shieldMax>0 && shieldRecharge > 0)
                 {
-                    if (!CostEnergy(shieldRecharge / 60f * shieldConvertRate / 3f))
+                    if (shieldInit-- > 0)
                     {
-                        shieldInit = shieldInitTick;
+                        if (!CostEnergy(shieldRecharge / 60f / shieldConvertRate / 3f))
+                        {
+                            shieldInit = shieldInitSec.SecondsToTicks();
+                        }
                     }
-                }
-                else if (savingRate < energyCur / energyCacheMax)
-                {
-                    need = Mathf.Min(shieldRecharge/60f,shieldMax - shieldCur)*shieldConvertRate;
-                    if (need > 0 && CostEnergy(need))
+                    else if (savingRate < energyCur / energyCacheMax)
                     {
-                        shieldCur += shieldRecharge / 60f;
+                        need = Mathf.Min(shieldRecharge/60f,shieldMax - shieldCur)/shieldConvertRate;
+                        if (need > 0 && CostEnergy(need))
+                        {
+                            shieldCur += shieldRecharge / 60f;
+                        }
                     }
                 }
             }
-            if (DebugSettings.godMode)
-            {
-                energyCur = energyCacheMax;
-                return;
-            }
+
 
             //给自己充能
             Comp.MapVoidEnergyNet mapNet = MapNet;
@@ -300,6 +401,16 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
                     terminal = this
                 };
             }
+            if (Prefs.DevMode)
+                yield return new Command_Action
+                {
+                    defaultLabel = "Full",
+                    defaultDesc = "立刻满充能",
+                    action = delegate ()
+                    {
+                        energyCur = energyCacheMax;
+                    }
+                };
             if (Wearer.equipment.Primary!=null)
             {
                 Comp.VoidNetWeaponShootMode comp=Wearer.equipment.Primary.TryGetComp<Comp.VoidNetWeaponShootMode>();
@@ -314,11 +425,14 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
 
             yield break;
         }
-
-
+        
         public override void Notify_Equipped(Pawn pawn)
         {
 
+            shieldCur = 0;
+            energyCur = 0;
+            shieldInit = shieldInitSec.SecondsToTicks();
+            terminalInit = terminalInitSec.SecondsToTicks();
             base.Notify_Equipped(pawn);
         }
 
@@ -328,6 +442,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
             {
                 OfflineAll();
             }
+            PostPostTerminalOff();
             base.DeSpawn(mode);
         }
 
@@ -337,19 +452,37 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
             {
                 OfflineAll();
             }
+            PostPostTerminalOff();
             base.Destroy(mode);
         }
 
+
         public override void ExposeData()
         {
+            Scribe_Values.Look(ref energyCacheMax, "energyCacheMax", 4f);
+            Scribe_Values.Look(ref energyRecharge, "energyRecharge", 0.1f);
+            Scribe_Values.Look(ref shieldMax, "shieldMax", 200f);
+            Scribe_Values.Look(ref shieldRecharge, "shieldRecharge", 5f);
+            Scribe_Values.Look(ref shieldConvertRate, "shieldConvertRate", 43f);
+            Scribe_Values.Look(ref shieldDamagedRate, "shieldDamagedRate", 1f);
+            Scribe_Values.Look(ref shieldInitSec, "shieldInitSec", 10f);
+            Scribe_Values.Look(ref terminalInit, "terminalInit");
+
             Scribe_Values.Look(ref energyCur, "energyCur", 0f);
             Scribe_Values.Look(ref shieldCur, "shieldCur", 0f);
             Scribe_Values.Look(ref shieldInit, "shieldInit", 600);
             Scribe_Values.Look(ref lastKeepDisplayTick, "lastKeepDisplayTick");
-            Scribe_Values.Look(ref savingRate, "savingRate",0.25f);
+            Scribe_Values.Look(ref savingRate, "savingRate", 0.25f);
+
+            Scribe_References.Look(ref VoidEnergyHediffTerminalMoveSpeed, "VoidEnergyHediffTerminalMoveSpeed", false);
+            Scribe_References.Look(ref oldWearer, "oldWearer", false);
+
+            //zzLib.Log.Message(Scribe.mode.ToString());
+            //zzLib.Log.Message("hediff: " + VoidEnergyHediffTerminalMoveSpeed==null?"null":VoidEnergyHediffTerminalMoveSpeed.ToStringSafe());
+            //zzLib.Log.Message("oldWearer: " + oldWearer==null?"null":oldWearer.ToStringSafe());
+
             base.ExposeData();
         }
-
     }
 
     [StaticConstructorOnStartup]
@@ -456,7 +589,6 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
                     {
                         Vector2 mousePosition = Event.current.mousePosition;
                         terminal.savingRate = (mousePosition.x - (rect5.x + 3f)) / (rect5.width - 8f);
-                        zzLib.Log.Message("savingRate: " + terminal.savingRate);
                         SoundDefOf.DragSlider.PlayOneShotOnCamera(null);
                     }
                     TooltipHandler.TipRegion(rect5, "ToolTip_SetPersionalTerminalSavingRate".Translate((terminal.savingRate*100f).ToString("f0")));
