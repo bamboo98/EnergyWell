@@ -52,9 +52,10 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             {
                 if (prop.byProduct != null && Rand.Chance(prop.byProductChance))
                 {
-                    Thing thing = ThingMaker.MakeThing(prop.byProduct[0]);
+                    Thing thing = ThingMaker.MakeThing(prop.byProduct.RandomElement());
                     GenPlace.TryPlaceThing(thing, usedBy.PositionHeld, usedBy.MapHeld, ThingPlaceMode.Direct, null, null, default(Rot4));
                     Messages.Message("GetByProduct".Translate(thing.Label), new LookTargets(thing), MessageTypeDefOf.PositiveEvent, true);
+                    return;
                 }
 
                 Messages.Message("GetNothing".Translate(), MessageTypeDefOf.PositiveEvent, true);
@@ -66,7 +67,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 FinishInstantly(prop.research, usedBy);
                 if (prop.byProduct != null)
                 {
-                    Thing thing = ThingMaker.MakeThing(prop.byProduct.RandomElement());
+                    Thing thing = ThingMaker.MakeThing(prop.byProduct[0]);
                     GenPlace.TryPlaceThing(thing, usedBy.PositionHeld, usedBy.MapHeld, ThingPlaceMode.Direct, null, null, default(Rot4));
                     Messages.Message("GetByProduct".Translate(thing.Label), new LookTargets(thing), MessageTypeDefOf.PositiveEvent, true);
                 }
