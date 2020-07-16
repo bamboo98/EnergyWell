@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+	<Operation Class="PatchOperationAdd">
+
+		<!-- 稀有品商 1/2概率刷出生活垃圾 -->
+		<xpath>Defs/TraderKindDef[defName = "Orbital_Exotic"]/stockGenerators</xpath>
+		<value>
+			<li Class="StockGenerator_SingleDef">
+				<thingDef>VoidEnergyBeginning_Key</thingDef>
+				<price>Exorbitant</price>
+				<countRange>
+					<min>-2</min>
+					<max>3</max>
+				</countRange>
+			</li>
+		</value>
+
+	</Operation>
+
+
+</Patch>

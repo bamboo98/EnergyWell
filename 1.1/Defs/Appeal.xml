@@ -6,35 +6,17 @@
         <label>幽能无线终端-基础型</label>
         <description>基础型个人幽能无线终端,功能仅限于从本地图幽能网络中获取能量并供给其他装备使用\n基本无防护作用</description>
         <techLevel>Spacer</techLevel>
-        <recipeMaker>
-            <!-- <unfinishedThingDef>UnfinishedTest_BELT</unfinishedThingDef> -->
-            <!-- <researchPrerequisite>SmokepopBelt</researchPrerequisite> -->
-            <recipeUsers>
-                <li>TableMachining</li>
-            </recipeUsers>
-            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
-            <workSkill>Crafting</workSkill>
-            <effectWorking>Smith</effectWorking>
-            <soundWorking>Recipe_Smith</soundWorking>
-            <!-- <skillRequirements>
-        <Crafting>3</Crafting>
-      </skillRequirements> -->
-        </recipeMaker>
-        <costList>
-            <!-- <ComponentIndustrial>1</ComponentIndustrial> -->
-            <Steel>20</Steel>
-            <!-- <Chemfuel>40</Chemfuel> -->
-        </costList>
+        
         <graphicData>
             <texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
             <graphicClass>Graphic_Single</graphicClass>
         </graphicData>
         <tickerType>Normal</tickerType>
         <statBases>
-            <WorkToMake>1200</WorkToMake>
+            <WorkToMake>7200</WorkToMake>
             <Mass>0.3</Mass>
             <Flammability>0</Flammability>
-            <EquipDelay>0</EquipDelay>
+            <EquipDelay>2</EquipDelay>
             
             <VoidEnergyCacheMax>1</VoidEnergyCacheMax>
             <VoidEnergyRecharge>0.03</VoidEnergyRecharge>
@@ -55,6 +37,28 @@
                 <li>BeltDefensePop</li>
             </tags>
         </apparel>
+
+        <costList>
+            <Plasteel>300</Plasteel>
+            <Silver>15</Silver>
+            <VoidEnergyComponent>2</VoidEnergyComponent>
+        </costList>
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyAppealBase</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>7</Crafting>
+                <!-- <Intellectual>3</Intellectual> -->
+            </skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <workAmount>7200</workAmount> 
+            <!-- <unfinishedThingDef>UnfinishedComponent</unfinishedThingDef> -->
+        </recipeMaker>
     </ThingDef>
 
     <ThingDef ParentName="VoidNetTerminal_Base">
@@ -62,34 +66,16 @@
         <label>幽能无线终端-量产型</label>
         <description>量产型个人幽能无线终端,从本地图幽能网络中获取能量并供给其他装备使用\n拥有最低限度的幽能护盾</description>
         
-        <recipeMaker>
-            <!-- <unfinishedThingDef>UnfinishedTest_BELT</unfinishedThingDef> -->
-            <!-- <researchPrerequisite>SmokepopBelt</researchPrerequisite> -->
-            <recipeUsers>
-                <li>TableMachining</li>
-            </recipeUsers>
-            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
-            <workSkill>Crafting</workSkill>
-            <effectWorking>Smith</effectWorking>
-            <soundWorking>Recipe_Smith</soundWorking>
-            <!-- <skillRequirements>
-        <Crafting>3</Crafting>
-      </skillRequirements> -->
-        </recipeMaker>
-        <costList>
-            <!-- <ComponentIndustrial>1</ComponentIndustrial> -->
-            <Steel>20</Steel>
-            <!-- <Chemfuel>40</Chemfuel> -->
-        </costList>
+
         <graphicData>
             <texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
             <graphicClass>Graphic_Single</graphicClass>
         </graphicData>
         <statBases>
-            <WorkToMake>1200</WorkToMake>
+            <WorkToMake>14400</WorkToMake>
             <Mass>0.3</Mass>
             <Flammability>0</Flammability>
-            <EquipDelay>0</EquipDelay>
+            <EquipDelay>2</EquipDelay>
             
             <VoidEnergyCacheMax>1.5</VoidEnergyCacheMax>
             <VoidEnergyRecharge>0.05</VoidEnergyRecharge>
@@ -100,6 +86,28 @@
             <VoidEnergyCostPerSec>0.001</VoidEnergyCostPerSec>
 
         </statBases>
+        
+        <costList>
+            <Plasteel>300</Plasteel>
+            <Silver>25</Silver>
+            <VoidEnergyAdvancedComponent>1</VoidEnergyAdvancedComponent>
+        </costList>
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyAppealBase</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>8</Crafting>
+                <Intellectual>4</Intellectual>
+            </skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <workAmount>14400</workAmount> 
+            <!-- <unfinishedThingDef>UnfinishedComponent</unfinishedThingDef> -->
+        </recipeMaker>
     </ThingDef>
 
 
@@ -108,34 +116,15 @@
         <label>幽能无线终端-快充型</label>
         <description>快充型个人幽能无线终端,以能量缓存上限和护盾上限为代价换取了快速充能功能\n拥有最低限度的幽能护盾</description>
         
-        <recipeMaker>
-            <!-- <unfinishedThingDef>UnfinishedTest_BELT</unfinishedThingDef> -->
-            <!-- <researchPrerequisite>SmokepopBelt</researchPrerequisite> -->
-            <recipeUsers>
-                <li>TableMachining</li>
-            </recipeUsers>
-            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
-            <workSkill>Crafting</workSkill>
-            <effectWorking>Smith</effectWorking>
-            <soundWorking>Recipe_Smith</soundWorking>
-            <!-- <skillRequirements>
-        <Crafting>3</Crafting>
-      </skillRequirements> -->
-        </recipeMaker>
-        <costList>
-            <!-- <ComponentIndustrial>1</ComponentIndustrial> -->
-            <Steel>20</Steel>
-            <!-- <Chemfuel>40</Chemfuel> -->
-        </costList>
         <graphicData>
             <texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
             <graphicClass>Graphic_Single</graphicClass>
         </graphicData>
         <statBases>
-            <WorkToMake>1200</WorkToMake>
+            <WorkToMake>14400</WorkToMake>
             <Mass>0.3</Mass>
             <Flammability>0</Flammability>
-            <EquipDelay>0</EquipDelay>
+            <EquipDelay>2</EquipDelay>
             
             <VoidEnergyCacheMax>1</VoidEnergyCacheMax>
             <VoidEnergyRecharge>0.15</VoidEnergyRecharge>
@@ -146,6 +135,28 @@
             <VoidEnergyCostPerSec>0.001</VoidEnergyCostPerSec>
 
         </statBases>
+
+        <costList>
+            <Plasteel>250</Plasteel>
+            <Gold>10</Gold>
+            <VoidEnergyAdvancedComponent>1</VoidEnergyAdvancedComponent>
+        </costList>
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyAppealNormal</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>8</Crafting>
+                <Intellectual>4</Intellectual>
+            </skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <workAmount>14400</workAmount> 
+            <!-- <unfinishedThingDef>UnfinishedComponent</unfinishedThingDef> -->
+        </recipeMaker>
     </ThingDef>
 
 
@@ -154,34 +165,15 @@
         <label>幽能无线终端-精英型</label>
         <description>精英型个人幽能无线终端,缓存容量较高,可以为武器提供长时间能量供给,但是充能速度很慢\n拥有一般水准的幽能护盾</description>
         
-        <recipeMaker>
-            <!-- <unfinishedThingDef>UnfinishedTest_BELT</unfinishedThingDef> -->
-            <!-- <researchPrerequisite>SmokepopBelt</researchPrerequisite> -->
-            <recipeUsers>
-                <li>TableMachining</li>
-            </recipeUsers>
-            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
-            <workSkill>Crafting</workSkill>
-            <effectWorking>Smith</effectWorking>
-            <soundWorking>Recipe_Smith</soundWorking>
-            <!-- <skillRequirements>
-        <Crafting>3</Crafting>
-      </skillRequirements> -->
-        </recipeMaker>
-        <costList>
-            <!-- <ComponentIndustrial>1</ComponentIndustrial> -->
-            <Steel>20</Steel>
-            <!-- <Chemfuel>40</Chemfuel> -->
-        </costList>
         <graphicData>
             <texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
             <graphicClass>Graphic_Single</graphicClass>
         </graphicData>
         <statBases>
-            <WorkToMake>1200</WorkToMake>
+            <WorkToMake>25500</WorkToMake>
             <Mass>0.3</Mass>
             <Flammability>0</Flammability>
-            <EquipDelay>0</EquipDelay>
+            <EquipDelay>3</EquipDelay>
             
             <VoidEnergyCacheMax>8</VoidEnergyCacheMax>
             <VoidEnergyRecharge>0.05</VoidEnergyRecharge>
@@ -192,6 +184,29 @@
             <VoidEnergyCostPerSec>0.001</VoidEnergyCostPerSec>
 
         </statBases>
+
+        <costList>
+            <Plasteel>200</Plasteel>
+            <Gold>15</Gold>
+            <Silver>40</Silver>
+            <VoidEnergyAdvancedComponent>2</VoidEnergyAdvancedComponent>
+        </costList>
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyAppealNormal</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>10</Crafting>
+                <Intellectual>6</Intellectual>
+            </skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <workAmount>25500</workAmount> 
+            <!-- <unfinishedThingDef>UnfinishedComponent</unfinishedThingDef> -->
+        </recipeMaker>
     </ThingDef>
 
     <ThingDef ParentName="VoidNetTerminal_Base">
@@ -199,34 +214,16 @@
         <label>幽能无线终端-铁壁型</label>
         <description>铁壁型个人幽能无线终端,专注于保护佩戴者的型号,具有很高的护盾转化率和回复速度,但是能量缓存不高,不适合长时间给武器供能</description>
         
-        <recipeMaker>
-            <!-- <unfinishedThingDef>UnfinishedTest_BELT</unfinishedThingDef> -->
-            <!-- <researchPrerequisite>SmokepopBelt</researchPrerequisite> -->
-            <recipeUsers>
-                <li>TableMachining</li>
-            </recipeUsers>
-            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
-            <workSkill>Crafting</workSkill>
-            <effectWorking>Smith</effectWorking>
-            <soundWorking>Recipe_Smith</soundWorking>
-            <!-- <skillRequirements>
-        <Crafting>3</Crafting>
-      </skillRequirements> -->
-        </recipeMaker>
-        <costList>
-            <!-- <ComponentIndustrial>1</ComponentIndustrial> -->
-            <Steel>20</Steel>
-            <!-- <Chemfuel>40</Chemfuel> -->
-        </costList>
+        
         <graphicData>
             <texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
             <graphicClass>Graphic_Single</graphicClass>
         </graphicData>
         <statBases>
-            <WorkToMake>1200</WorkToMake>
+            <WorkToMake>25500</WorkToMake>
             <Mass>0.3</Mass>
             <Flammability>0</Flammability>
-            <EquipDelay>0</EquipDelay>
+            <EquipDelay>5</EquipDelay>
             
             <VoidEnergyCacheMax>2</VoidEnergyCacheMax>
             <VoidEnergyRecharge>0.05</VoidEnergyRecharge>
@@ -237,6 +234,29 @@
             <VoidEnergyCostPerSec>0.001</VoidEnergyCostPerSec>
 
         </statBases>
+
+        <costList>
+            <Plasteel>500</Plasteel>
+            <Gold>5</Gold>
+            <Silver>15</Silver>
+            <VoidEnergyAdvancedComponent>2</VoidEnergyAdvancedComponent>
+        </costList>
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyAppealNormal</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>10</Crafting>
+                <Intellectual>6</Intellectual>
+            </skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <workAmount>25500</workAmount> 
+            <!-- <unfinishedThingDef>UnfinishedComponent</unfinishedThingDef> -->
+        </recipeMaker>
     </ThingDef>
 
     <ThingDef ParentName="VoidNetTerminal_Base">
@@ -244,31 +264,12 @@
         <label>幽能无线终端-斥候型</label>
         <description>斥候型个人幽能无线终端,利用幽能立场可以大幅加快佩戴者的移动速度\n幽能储量和防护能力一般\n该型号会持续消耗少量幽能,请确保幽能供给充足</description>
         
-        <recipeMaker>
-            <!-- <unfinishedThingDef>UnfinishedTest_BELT</unfinishedThingDef> -->
-            <!-- <researchPrerequisite>SmokepopBelt</researchPrerequisite> -->
-            <recipeUsers>
-                <li>TableMachining</li>
-            </recipeUsers>
-            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
-            <workSkill>Crafting</workSkill>
-            <effectWorking>Smith</effectWorking>
-            <soundWorking>Recipe_Smith</soundWorking>
-            <!-- <skillRequirements>
-        <Crafting>3</Crafting>
-      </skillRequirements> -->
-        </recipeMaker>
-        <costList>
-            <!-- <ComponentIndustrial>1</ComponentIndustrial> -->
-            <Steel>20</Steel>
-            <!-- <Chemfuel>40</Chemfuel> -->
-        </costList>
         <graphicData>
             <texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
             <graphicClass>Graphic_Single</graphicClass>
         </graphicData>
         <statBases>
-            <WorkToMake>1200</WorkToMake>
+            <WorkToMake>25500</WorkToMake>
             <Mass>0.3</Mass>
             <Flammability>0</Flammability>
             <EquipDelay>0</EquipDelay>
@@ -281,5 +282,29 @@
             <VoidEnergyShieldStrength>1.5</VoidEnergyShieldStrength>
             <VoidEnergyCostPerSec>0.03</VoidEnergyCostPerSec>
         </statBases>
+
+        <costList>
+            <Plasteel>150</Plasteel>
+            <Gold>8</Gold>
+            <Silver>50</Silver>
+            <VoidEnergyAdvancedComponent>3</VoidEnergyAdvancedComponent>
+            <VoidEnergyFocusCrystal>1</VoidEnergyFocusCrystal>
+        </costList>
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyAppealNormal</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>12</Crafting>
+                <Intellectual>6</Intellectual>
+            </skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <workAmount>25500</workAmount> 
+            <!-- <unfinishedThingDef>UnfinishedComponent</unfinishedThingDef> -->
+        </recipeMaker>
     </ThingDef>
 </Defs>

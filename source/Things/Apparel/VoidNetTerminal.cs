@@ -355,7 +355,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
             if (rechargeShield)
             {
                 //给护盾充能
-                if (shieldMax>0 && shieldRecharge > 0)
+                if (shieldMax>0 && shieldRecharge > 0 && savingRate < energyCur / energyCacheMax)
                 {
                     if (shieldInit-- > 0)
                     {
@@ -364,7 +364,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Things
                             shieldInit = shieldInitSec.SecondsToTicks();
                         }
                     }
-                    else if (savingRate < energyCur / energyCacheMax)
+                    else
                     {
                         need = Mathf.Min(shieldRecharge/60f,shieldMax - shieldCur)/shieldConvertRate;
                         if (need > 0 && CostEnergy(need))

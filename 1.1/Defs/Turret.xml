@@ -29,7 +29,7 @@
         <statBases>
             <MaxHitPoints>100</MaxHitPoints>
             <Flammability>0</Flammability>
-            <WorkToBuild>1800</WorkToBuild>
+            <WorkToBuild>7200</WorkToBuild>
             <Mass>8</Mass>
             <Beauty>0</Beauty>
             <ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
@@ -73,11 +73,17 @@
         <stuffCategories>
             <li>Metallic</li>
         </stuffCategories>
-        <costStuffCount>30</costStuffCount>
+
+
+        <costStuffCount>150</costStuffCount>
         <costList>
-            <Steel>70</Steel>
-            <ComponentIndustrial>3</ComponentIndustrial>
+            <VoidEnergyFocusCrystal>1</VoidEnergyFocusCrystal>
+            <VoidEnergyComponent>5</VoidEnergyComponent>
+            <Plasteel>150</Plasteel>
+            <Gold>15</Gold>
         </costList>
+
+
         <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
         <designationCategory>Security</designationCategory>
         <!-- <constructionSkillPrerequisite>5</constructionSkillPrerequisite> -->
@@ -101,7 +107,7 @@
     
     <ThingDef ParentName="BaseHumanMakeableGun">
         <defName>VoidEnergyRifle_Turret</defName>
-        <label>幽能步枪-基础型</label>
+        <label>幽能步枪-炮塔型</label>
         <description>可以将幽能转换为粗糙的能量弹射出,精度不佳,但破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
         <techLevel>Spacer</techLevel>
         <graphicData>
@@ -118,18 +124,18 @@
             <AccuracyLong>0.25</AccuracyLong>
             <RangedWeapon_Cooldown>1.2</RangedWeapon_Cooldown>
         </statBases>
-        <recipeMaker>
-            <!-- <researchPrerequisite>ChargedShot</researchPrerequisite> -->
-            <!-- <skillRequirements>
+        <recipeMaker Inherit="False">
+            <!-- <researchPrerequisite>ChargedShot</researchPrerequisite>
+            <skillRequirements>
                 <Crafting>7</Crafting>
-            </skillRequirements> -->
+            </skillRequirements>
             <recipeUsers Inherit="False">
                 <li>FabricationBench</li>
-            </recipeUsers>
+            </recipeUsers> -->
         </recipeMaker>
         <costList>
             <Plasteel>50</Plasteel>
-            <!-- <ComponentSpacer>2</ComponentSpacer> -->
+            <ComponentSpacer>2</ComponentSpacer>
         </costList>
         <thingSetMakerTags>
             <li>RewardStandardLowFreq</li>

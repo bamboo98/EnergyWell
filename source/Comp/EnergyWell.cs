@@ -7,7 +7,7 @@ using System.Text;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 {
-    public class EnergyWell :ThingComp
+    public class EnergyWell : ThingComp
     {
 
         private Prop.EnergyWellProp prop;
@@ -22,7 +22,9 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         private float produceEnergyPerSec = 0.1f;
         private float heatAccumulationRate = 1f;
         private float activePower = 18000f;
+        private float thermalConductivity = 1f;
 
+        private float parentArea = 4f;
 
         public float ProduceEnergy
         {
@@ -37,7 +39,9 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 if (heatStorage <= 150)
                     return produceEnergyPerSec / 60f * (Mathf.Pow((heatStorage - 100f) / 40f, 3f) + 4.90625f);
                 if (heatStorage <= 200)
-                    return produceEnergyPerSec / 60f * (Mathf.Pow((heatStorage - 150f) / 40f, 3f) + 8.859375f);
+                    return produceEnergyPerSec / 60f * (Mathf.Pow((heatStorage - 150f) / 40f, 3f) + 6.859375f);
+                if (heatStorage < 225)
+                    return produceEnergyPerSec / 60f * (8.8125f - (heatStorage - 200f) * 0.3525f);
                 return 0f;
             }
         }
@@ -49,6 +53,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         private float heatStorage = 0;
         private bool active = false;
         private bool outSide = false;
+
+        private float remainderSec = 0;
 
 
 
@@ -82,24 +88,36 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             energyStorageMax = prop.energyStorageMax;
             produceEnergyPerSec = prop.produceEnergyPerSec;
             heatAccumulationRate = prop.heatAccumulationRate;
-
+            thermalConductivity = prop.thermalConductivity;
+            parentArea = parent.def.size.Area;
         }
 
 
         //节省计算量,产能在MapComponentTick里计算,过热在RareTick里计算
-        public bool TryGetEnergy(float want,ref float MapCache,ref float totalWant)
+        public bool TryGetEnergy(float want, ref float MapCache, ref float totalWant)
         {
+            bool disallowProduct = false;
+            bool disallowOutPut = false;
             if (outSide)
             {
-                energyStorage = 0;
-                return false;
+                energyStorage *= 0.999f;//每tick流失0.1%储量
+                disallowProduct = true;//禁用产能
+                //return false;
             }
-            if (heatStorage > 200f)
+            if ((heatStorage > 400f || !powerTrader.PowerOn) && active)
             {
-                return false;
+                disallowProduct = true;
+                disallowOutPut = true;//禁用能量输出
+                active = false;
+                powerTrader.powerOutputInt = 0;
+                powerTrader.PowerOn = false;
+                energyStorage = 0;
+                //return false;
             }
+
             //先产能
-            if (active && powerTrader.PowerOn) { 
+            if (!disallowProduct && active)
+            {
                 float targetStorage = energyStorage + ProduceEnergy;
                 if (targetStorage > energyStorageMax)
                 {
@@ -107,15 +125,9 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 }
                 energyStorage = targetStorage;
             }
-            else if(active)
-            {
-                active = false;
-            }
-            else
-            {
-                powerTrader.powerOutputInt = 0;
-                powerTrader.PowerOn = false;
-            }
+
+            if (disallowOutPut)
+                return false;
             if (want == 0) return true;
             //提取能量
             if (energyStorage >= want)
@@ -164,7 +176,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             {
                 CompPowerBattery compPowerBattery = powerTrader.PowerNet.batteryComps[i];
                 float num = Math.Min(val, compPowerBattery.StoredEnergy);
-                num -= num;
+                val -= num;
                 compPowerBattery.DrawPower(num);
             }
             return true;
@@ -193,37 +205,77 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         private bool disableExplosionMessage = false;
         private bool disableOverHeatMessage = false;
 
+        private float HeatDissipationCoefficient = 0f;
+
+
         public override void CompTickRare()
         {
             base.CompTickRare();
+
+            HeatDissipationCoefficient = parentArea * 0.1f;
+            foreach (IntVec3 cell in GenAdj.CellsAdjacent8Way(parent))
+            {
+                float sum = 0;
+                if (cell.GetCover(parent.Map) != null)
+                {
+                    sum = cell.GetCover(parent.Map).def.fillPercent;
+                }
+                HeatDissipationCoefficient += (1f - sum) * 0.2f;
+            }
+            //HeatDissipationCoefficient /= parent.def.size.x * parent.def.size.z;
+
             outSide = parent.GetRoom().UsesOutdoorTemperature;
-            if (outSide)
-            {
-                heatStorage *= 0.9f;
-            }
+            //if (outSide)
+            //{
+            //    heatStorage *= 0.9f;
+            //}
 
-            if (energyStorage / energyStorageMax > 0.5)
-            {
-                if (heatStorage > 200f)
-                    heatStorage += heatAccumulationRate * Mathf.Min(2f, produceEnergyPerSec * (Mathf.Pow((heatStorage - 150f) / 40f, 3f) + 8.859375f));
-                else
-                    heatStorage += heatAccumulationRate * ProduceEnergy * 60f;
-            }
-            else
-            {
-                heatStorage = Mathf.Max(0, heatStorage - 1f);
-            }
-            //过热惩罚
-            if (heatStorage > parent.AmbientTemperature && !outSide)
-            {
-                float dltHeat = GenTemperature.ControlTemperatureTempChange(parent.Position, parent.Map, (heatStorage-parent.AmbientTemperature)*0.5f, 1000f);
-                parent.GetRoomGroup().Temperature += dltHeat;
-                heatStorage -= dltHeat *0.5f;//Mathf.Max(0, (heatStorage - parent.AmbientTemperature) * 0.2f);
-                heatStorage = Mathf.Max(0, heatStorage);
-                //zzLib.Log.Message("环境" + parent.AmbientTemperature + " 热量" + heatStorage + " 环境升温" + dltHeat);
-            }
+            //if (energyStorage / energyStorageMax > 0.5)
+            //{
 
-            if(heatStorage>250f && Rand.Chance(0.1f))
+            //精确一点,分多次计算
+            float roomTemperature = parent.AmbientTemperature;
+            for (remainderSec += 4.16666667f; remainderSec >= 1f; remainderSec--)
+            {
+                if (active)
+                {
+                    if (heatStorage > 200f)//0.15是之前产能公式在200~201的导数
+                        heatStorage += (heatAccumulationRate * ((heatStorage - 200f) * 0.15f + 8.8125f) * produceEnergyPerSec) / parentArea;
+                    else
+                        heatStorage += (heatAccumulationRate * ProduceEnergy * 60f) / parentArea;
+                }
+
+                //}
+                //else
+                //{
+                //    heatStorage = Mathf.Max(0, heatStorage - 1f);
+                //}
+                //热交换
+                if (heatStorage > roomTemperature)
+                {
+                    //交换的热量=温差*导热系数*散热面积
+                    float dltHeat = (heatStorage - roomTemperature) * HeatDissipationCoefficient * thermalConductivity;
+
+                    //自身降低的温度=热量/面积
+                    heatStorage -= dltHeat / parentArea;
+                    //外部提高的温度(其实也是热量/面积),直接把热量丢到房间里去就行了
+                    parent.GetRoomGroup()?.PushHeat(heatStorage);
+
+                    //float dltHeat = GenTemperature.ControlTemperatureTempChange(parent.Position, parent.Map, (heatStorage-parent.AmbientTemperature)*0.5f, 1000f);
+                    //RoomGroup rg = parent.GetRoomGroup();
+                    //rg.Temperature += dltHeat;
+
+                    //heatStorage -= dltHeat *0.5f *(float)rg.CellCount/9f;//Mathf.Max(0, (heatStorage - parent.AmbientTemperature) * 0.2f);
+                    //不低于环境温度
+                    heatStorage = Mathf.Max(roomTemperature, heatStorage, 0);
+                    //zzLib.Log.Message("环境" + parent.AmbientTemperature + " 热量" + heatStorage + " 环境升温" + dltHeat);
+                }
+
+            }
+            
+
+            //过热
+            if (heatStorage > 250f && Rand.Chance(0.1f))
             {
                 GenExplosion.DoExplosion(parent.Position, parent.Map, 3.9f, DamageDefOf.Bomb, null, 25, -1f, null, null, null, null, null, 0f, 1, false, null, 0f, 1, 0f, false, null, null);
 
@@ -233,7 +285,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                     disableExplosionMessage = true;
                 }
             }
-            if (heatStorage > 200 && !disableOverHeatMessage)
+            if (heatStorage > 225 && !disableOverHeatMessage)
             {
                 Messages.Message("幽能井过热,产出停止", new LookTargets(parent), MessageTypeDefOf.NegativeEvent);
                 disableOverHeatMessage = true;
@@ -246,9 +298,11 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         }
 
 
+
+
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
-            if(!active)
+            if (!active)
                 yield return new Command_Action
                 {
                     defaultLabel = "激活幽能井",
@@ -265,7 +319,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                         }
                         else
                         {
-                            Messages.Message("电网内储能不足",MessageTypeDefOf.SilentInput);
+                            Messages.Message("电网内储能不足", MessageTypeDefOf.SilentInput);
                         }
                     }
                 };
@@ -323,16 +377,17 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             {
                 str.AppendLine("幽能井需要置于室内的屋顶下");
             }
-            else if(heatStorage > 200f)
+            else if (heatStorage > 225f)
             {
                 str.AppendLine("幽能井过热!请保持环境温度足够低来让幽能井散热");
             }
             else
             {
-                str.AppendLine("GizMos_ProduceEnergyPerSec".Translate((ProduceEnergy*60f).ToString("f3")));
+                str.AppendLine("GizMos_ProduceEnergyPerSec".Translate((ProduceEnergy * 60f).ToString("f3")));
             }
             str.AppendLine("幽能储量: " + energyStorage.ToString("f1") + " / " + energyStorageMax.ToString("f2"));
-            str.Append("热能: " + heatStorage.ToString("f0"));
+            str.AppendLine("热能: " + heatStorage.ToString("f2"));
+            str.Append("HeatDissipationCoefficient".Translate((HeatDissipationCoefficient * 100f).ToString("f0")));
 
             return str.ToString().Trim();
         }
@@ -342,6 +397,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             base.PostExposeData();
             Scribe_Values.Look(ref energyStorage, "energyStorage", 0f);
             Scribe_Values.Look(ref heatStorage, "heatStorage", 0);
+            Scribe_Values.Look(ref remainderSec, "remainderSec", 0);
             Scribe_Values.Look(ref active, "active", false);
             Scribe_Values.Look(ref outSide, "outSide", false);
 

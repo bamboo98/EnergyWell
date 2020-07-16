@@ -22,8 +22,20 @@
 		<description>可以安全储存的幽能上限</description>
 		<defaultBaseValue>0</defaultBaseValue>
 		<minValue>0</minValue>
-		<toStringStyle>PercentZero</toStringStyle>
-    	<displayPriorityInCategory>230</displayPriorityInCategory>
+		<toStringStyle>FloatTwoOrThree</toStringStyle>
+    	<displayPriorityInCategory>550</displayPriorityInCategory>
+		<formatString>{0} 单位</formatString>
+		<parts>
+			<li Class="StatPart_Quality">
+				<factorAwful>0.5</factorAwful>
+				<factorPoor>0.75</factorPoor>
+				<factorNormal>1</factorNormal>
+				<factorGood>1.1</factorGood>
+				<factorExcellent>1.2</factorExcellent>
+				<factorMasterwork>1.3</factorMasterwork>
+				<factorLegendary>1.5</factorLegendary>
+			</li>
+		</parts>
 	</StatDef>
 
 	<StatDef ParentName="VoidEnergyStatBase">
@@ -32,8 +44,20 @@
 		<description>每秒钟可以从幽能网络中获取的幽能</description>
 		<defaultBaseValue>0</defaultBaseValue>
 		<minValue>0</minValue>
-		<toStringStyle>PercentZero</toStringStyle>
-    	<displayPriorityInCategory>230</displayPriorityInCategory>
+		<toStringStyle>FloatTwoOrThree</toStringStyle>
+    	<displayPriorityInCategory>540</displayPriorityInCategory>
+		<formatString>{0} 单位/秒</formatString>
+		<parts>
+			<li Class="StatPart_Quality">
+				<factorAwful>0.5</factorAwful>
+				<factorPoor>0.75</factorPoor>
+				<factorNormal>1</factorNormal>
+				<factorGood>1.1</factorGood>
+				<factorExcellent>1.2</factorExcellent>
+				<factorMasterwork>1.3</factorMasterwork>
+				<factorLegendary>1.5</factorLegendary>
+			</li>
+		</parts>
 	</StatDef>
 
 	<StatDef ParentName="VoidEnergyStatBase">
@@ -43,7 +67,19 @@
 		<defaultBaseValue>0</defaultBaseValue>
 		<minValue>0</minValue>
 		<toStringStyle>FloatOne</toStringStyle>
-    	<displayPriorityInCategory>230</displayPriorityInCategory>
+    	<displayPriorityInCategory>450</displayPriorityInCategory>
+		<!-- <formatString>{0} 单位</formatString> -->
+		<parts>
+			<li Class="StatPart_Quality">
+				<factorAwful>0.5</factorAwful>
+				<factorPoor>0.75</factorPoor>
+				<factorNormal>1</factorNormal>
+				<factorGood>1.1</factorGood>
+				<factorExcellent>1.2</factorExcellent>
+				<factorMasterwork>1.3</factorMasterwork>
+				<factorLegendary>1.5</factorLegendary>
+			</li>
+		</parts>
 	</StatDef>
 
 	<StatDef ParentName="VoidEnergyStatBase">
@@ -53,7 +89,19 @@
 		<defaultBaseValue>0</defaultBaseValue>
 		<minValue>0</minValue>
 		<toStringStyle>FloatOne</toStringStyle>
-    	<displayPriorityInCategory>230</displayPriorityInCategory>
+    	<displayPriorityInCategory>440</displayPriorityInCategory>
+		<formatString>{0} /秒</formatString>
+		<parts>
+			<li Class="StatPart_Quality">
+				<factorAwful>0.5</factorAwful>
+				<factorPoor>0.75</factorPoor>
+				<factorNormal>1</factorNormal>
+				<factorGood>1.1</factorGood>
+				<factorExcellent>1.2</factorExcellent>
+				<factorMasterwork>1.3</factorMasterwork>
+				<factorLegendary>1.5</factorLegendary>
+			</li>
+		</parts>
 	</StatDef>
 
 	<StatDef ParentName="VoidEnergyStatBase">
@@ -63,7 +111,19 @@
 		<defaultBaseValue>0</defaultBaseValue>
 		<minValue>0</minValue>
 		<toStringStyle>PercentZero</toStringStyle>
-    	<displayPriorityInCategory>230</displayPriorityInCategory>
+    	<displayPriorityInCategory>430</displayPriorityInCategory>
+		<!-- <formatString>每单位幽能={0}护盾</formatString> -->
+		<parts>
+			<li Class="StatPart_Quality">
+				<factorAwful>0.8</factorAwful>
+				<factorPoor>0.9</factorPoor>
+				<factorNormal>1</factorNormal>
+				<factorGood>1.05</factorGood>
+				<factorExcellent>1.1</factorExcellent>
+				<factorMasterwork>1.15</factorMasterwork>
+				<factorLegendary>1.25</factorLegendary>
+			</li>
+		</parts>
 	</StatDef>
 
 	<StatDef ParentName="VoidEnergyStatBase">
@@ -73,7 +133,7 @@
 		<defaultBaseValue>0</defaultBaseValue>
 		<minValue>0</minValue>
 		<toStringStyle>PercentZero</toStringStyle>
-    	<displayPriorityInCategory>230</displayPriorityInCategory>
+    	<displayPriorityInCategory>420</displayPriorityInCategory>
 	</StatDef>
 	<StatDef ParentName="VoidEnergyStatBase">
 		<defName>VoidEnergyCostPerSec</defName>
@@ -81,8 +141,9 @@
 		<description>维持基础功能时每秒需要消耗的幽能,如果存储幽能不足则基础功能不生效</description>
 		<defaultBaseValue>0</defaultBaseValue>
 		<minValue>0</minValue>
-		<toStringStyle>PercentZero</toStringStyle>
-    	<displayPriorityInCategory>230</displayPriorityInCategory>
+		<toStringStyle>FloatTwoOrThree</toStringStyle>
+    	<displayPriorityInCategory>530</displayPriorityInCategory>
+		<formatString>{0} 单位/秒</formatString>
 	</StatDef>
 
 

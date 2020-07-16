@@ -152,6 +152,20 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 
                 });
         }
+        private float produceEnergyPerSec
+        {
+            get
+            {
+                float sum = 0;
+
+                foreach (EnergyWell item in Wells)
+                {
+                    sum += item.ProduceEnergy * 60f;
+                }
+
+                return sum;
+            }
+        }
         public string GetBurdenStr()
         {
             if (EnergyCacheMax == 0)
@@ -163,8 +177,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 storage += item.EnergyStorage;
                 storageMax += item.EnergyStorageMax;
             }
-            return "\n世界网络负载: " + (energyNeedTotal / EnergyCacheMax * 100f).ToString("f0") + "%\n" +
-                "世界幽能储量: " + (storage / storageMax * 100f).ToString("f0") + "%";
+            return "\n世界幽能产能: " + produceEnergyPerSec.ToString("f3") + "单位/秒" +
+                "\n传输负载/储量: " + (energyNeedTotal / EnergyCacheMax * 100f).ToString("f0") + "% / " + storage.ToString("f2") + "(" + storageMax.ToString("f2") + ")单位";
         }
 
         public override void ExposeData()
@@ -421,7 +435,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 storageMax += item.EnergyStorageMax;
             }
             return "\n本地幽能产能: " + produceEnergyPerSec.ToString("f3") + "单位/秒" +
-                "\n传输负载/储量: " + (energyNeedTotal / EnergyCacheMax * 100f).ToString("f0") + "% / " + (storage / storageMax * 100f).ToString("f0") + "%";
+                "\n传输负载/储量: " + (energyNeedTotal / EnergyCacheMax * 100f).ToString("f0") + "% / " + storage.ToString("f2") + "("+  storageMax.ToString("f2") + ")单位";
         }
 
 

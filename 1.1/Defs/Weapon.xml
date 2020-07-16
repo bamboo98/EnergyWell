@@ -1,11 +1,111 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-	<ThingDef ParentName="BaseHumanMakeableGun">
+
+	<ThingDef Abstract="True" Name="VoidEnergyGunBase">
+		<thingClass>ThingWithComps</thingClass>
+		<!-- 技术级别 -->
+		<techLevel>Spacer</techLevel>
+		<!-- 分类 -->
+		<category>Item</category>
+		<!-- 可熔炼 -->
+		<smeltable>true</smeltable>
+		<!-- GUI相关 -->
+		<drawGUIOverlay>true</drawGUIOverlay>
+		<altitudeLayer>Item</altitudeLayer>
+		<alwaysHaulable>true</alwaysHaulable>
+		<!-- tick -->
+		<tickerType>Never</tickerType>
+		<!-- 主武器(非植入物) -->
+		<equipmentType>Primary</equipmentType>
+		<!-- 使用血量机制 -->
+		<useHitPoints>true</useHitPoints>
+		<!-- 路径AI相关 -->
+		<pathCost>10</pathCost>
+		<!-- 可选择 -->
+		<selectable>true</selectable>
+
+		<statBases>
+			<!-- 血量 -->
+			<MaxHitPoints>100</MaxHitPoints>
+			<!-- 可燃性 -->
+			<Flammability>0</Flammability>
+			<!-- 老化率 -->
+			<DeteriorationRate>2</DeteriorationRate>
+			<!-- 美观 -->
+			<Beauty>0</Beauty>
+			<!-- 出售价格乘数 -->
+			<SellPriceFactor>0.20</SellPriceFactor>
+		</statBases>
+		<comps>
+			<!-- 可禁用 -->
+			<li Class="CompProperties_Forbiddable"/>
+			<!-- 可装备 -->
+			<li>
+				<compClass>CompEquippable</compClass>
+			</li>
+			<!-- 艺术品 -->
+			<li Class="CompProperties_Art">
+				<nameMaker>NamerArtWeaponGun</nameMaker>
+				<descriptionMaker>ArtDescription_WeaponGun</descriptionMaker>
+				<minQualityForArtistic>Excellent</minQualityForArtistic>
+			</li>
+			<!-- 制作质量 -->
+			<li>
+				<compClass>CompQuality</compClass>
+			</li>
+			<!-- 生物编码 -->
+			<li Class="CompProperties_BiocodableWeapon"/>
+			<!-- 幽能武器终端 -->
+			<li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetWeaponPortProp">
+			</li>
+		</comps>
+		<!-- 渲染相关 -->
+		<graphicData>
+			<!-- 在地上时随机旋转角度 -->
+			<onGroundRandomRotateAngle>35</onGroundRandomRotateAngle>
+		</graphicData>
+		<!-- 物品分类 -->
+		<thingCategories>
+			<li>WeaponsRanged</li>
+		</thingCategories>
+		<!-- UI-TAB,左下角的 -->
+		<inspectorTabs>
+			<li>ITab_Art</li>
+		</inspectorTabs>
+		<!-- 制作 -->
+		<recipeMaker>
+			<!-- 全局工作速度 -->
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<!-- 手工 -->
+			<workSkill>Crafting</workSkill>
+			<!-- 制作时视觉效果 -->
+			<effectWorking>Smith</effectWorking>
+			<!-- 声音效果 -->
+			<soundWorking>Recipe_Smith</soundWorking>
+			<!-- 在哪制作 -->
+			<recipeUsers>
+				<!-- 机械加工台 -->
+				<!-- <li>TableMachining</li> -->
+				<!-- 精密装配 -->
+				<li>FabricationBench</li>
+			</recipeUsers>
+			<!-- 未完成的thing -->
+			<unfinishedThingDef>UnfinishedGun</unfinishedThingDef>
+			<!-- 要求前置科技 -->
+			<!-- <researchPrerequisite>Gunsmithing</researchPrerequisite> -->
+		</recipeMaker>
+		<!-- 武器标签 -->
+		<weaponTags>
+			<li>Gun</li>
+		</weaponTags>
+	</ThingDef>
+
+
+	<ThingDef ParentName="VoidEnergyGunBase">
 		<defName>VoidEnergyRifle</defName>
 		<label>幽能步枪-基础型</label>
 		<description>可以将幽能转换为粗糙的能量弹射出,精度不佳,但破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
-		<techLevel>Spacer</techLevel>
 		<graphicData>
 			<texPath>Things/Item/Equipment/WeaponRanged/ChargeRifle</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -14,7 +114,7 @@
 		<statBases>
 			<WorkToMake>45000</WorkToMake>
 			<!-- 枪重 -->
-			<Mass>4.3</Mass>
+			<Mass>3.8</Mass>
 			<!-- 精度 -->
 			<AccuracyTouch>0.5</AccuracyTouch>
 			<AccuracyShort>0.5</AccuracyShort>
@@ -23,19 +123,24 @@
 			<!-- 被覆盖,无效 -->
 			<RangedWeapon_Cooldown>1.6</RangedWeapon_Cooldown>
 		</statBases>
-		<recipeMaker>
-			<!-- <researchPrerequisite>ChargedShot</researchPrerequisite> -->
-			<!-- <skillRequirements>
-                <Crafting>7</Crafting>
-            </skillRequirements> -->
+
+        <costList>
+            <VoidEnergyFocusCrystal>1</VoidEnergyFocusCrystal>
+            <VoidEnergyComponent>2</VoidEnergyComponent>
+            <Plasteel>150</Plasteel>
+            <Gold>15</Gold>
+        </costList>
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyWeapon</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>8</Crafting>
+                <Intellectual>6</Intellectual>
+            </skillRequirements>
 			<recipeUsers Inherit="False">
 				<li>FabricationBench</li>
 			</recipeUsers>
-		</recipeMaker>
-		<costList>
-			<Plasteel>50</Plasteel>
-			<!-- <ComponentSpacer>2</ComponentSpacer> -->
-		</costList>
+        </recipeMaker>
+
 		<thingSetMakerTags>
 			<li>RewardStandardLowFreq</li>
 			<li>RewardStandardQualitySuper</li>
@@ -104,7 +209,7 @@
 		</comps>
 	</ThingDef>
 
-	<ThingDef ParentName="BaseHumanMakeableGun">
+	<ThingDef ParentName="VoidEnergyGunBase">
 		<defName>VoidEnergyPistol</defName>
 		<label>幽能手枪-基础型</label>
 		<description>可以将幽能转换为粗糙的能量弹射出,精度不佳,但破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
@@ -115,7 +220,7 @@
 		</graphicData>
 		<soundInteract>Interact_ChargeRifle</soundInteract>
 		<statBases>
-			<WorkToMake>45000</WorkToMake>
+			<WorkToMake>25000</WorkToMake>
 			<Mass>2.05</Mass>
 			<AccuracyTouch>0.7</AccuracyTouch>
 			<AccuracyShort>0.5</AccuracyShort>
@@ -123,19 +228,22 @@
 			<AccuracyLong>0.25</AccuracyLong>
 			<RangedWeapon_Cooldown>1.2</RangedWeapon_Cooldown>
 		</statBases>
-		<recipeMaker>
-			<!-- <researchPrerequisite>ChargedShot</researchPrerequisite> -->
-			<!-- <skillRequirements>
-                <Crafting>7</Crafting>
-            </skillRequirements> -->
+        <costList>
+            <VoidEnergyFocusCrystal>1</VoidEnergyFocusCrystal>
+            <VoidEnergyComponent>1</VoidEnergyComponent>
+            <Plasteel>75</Plasteel>
+            <Gold>8</Gold>
+        </costList>
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyWeapon</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>6</Crafting>
+                <Intellectual>5</Intellectual>
+            </skillRequirements>
 			<recipeUsers Inherit="False">
 				<li>FabricationBench</li>
 			</recipeUsers>
-		</recipeMaker>
-		<costList>
-			<Plasteel>50</Plasteel>
-			<!-- <ComponentSpacer>2</ComponentSpacer> -->
-		</costList>
+        </recipeMaker>
 		<thingSetMakerTags>
 			<li>RewardStandardLowFreq</li>
 			<li>RewardStandardQualitySuper</li>
@@ -199,7 +307,7 @@
 		</comps>
 	</ThingDef>
 
-	<ThingDef ParentName="BaseHumanMakeableGun">
+	<ThingDef ParentName="VoidEnergyGunBase">
 		<defName>VoidEnergyMachineGun</defName>
 		<label>幽能轻机枪</label>
 		<description>可以在短时间内倾泻大量幽能子弹\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
@@ -210,7 +318,7 @@
 		</graphicData>
 		<soundInteract>Interact_ChargeRifle</soundInteract>
 		<statBases>
-			<WorkToMake>45000</WorkToMake>
+			<WorkToMake>65000</WorkToMake>
 			<!-- 枪重 -->
 			<Mass>4.3</Mass>
 			<!-- 精度 -->
@@ -221,19 +329,23 @@
 			<!-- 被覆盖,无效 -->
 			<RangedWeapon_Cooldown>1.6</RangedWeapon_Cooldown>
 		</statBases>
-		<recipeMaker>
-			<!-- <researchPrerequisite>ChargedShot</researchPrerequisite> -->
-			<!-- <skillRequirements>
-                <Crafting>7</Crafting>
-            </skillRequirements> -->
+		
+        <costList>
+            <VoidEnergyFocusCrystal>1</VoidEnergyFocusCrystal>
+            <VoidEnergyAdvancedComponent>2</VoidEnergyAdvancedComponent>
+            <Plasteel>300</Plasteel>
+            <Gold>25</Gold>
+        </costList>
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyWeaponLv2</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>12</Crafting>
+                <Intellectual>8</Intellectual>
+            </skillRequirements>
 			<recipeUsers Inherit="False">
 				<li>FabricationBench</li>
 			</recipeUsers>
-		</recipeMaker>
-		<costList>
-			<Plasteel>50</Plasteel>
-			<!-- <ComponentSpacer>2</ComponentSpacer> -->
-		</costList>
+        </recipeMaker>
 		<thingSetMakerTags>
 			<li>RewardStandardLowFreq</li>
 			<li>RewardStandardQualitySuper</li>
@@ -301,7 +413,7 @@
 
 		</comps>
 	</ThingDef>
-	<ThingDef ParentName="BaseHumanMakeableGun">
+	<ThingDef ParentName="VoidEnergyGunBase">
 		<defName>VoidEnergySniper</defName>
 		<label>幽能狙击枪-基础型</label>
 		<description>可以将幽能转换为粗糙的能量弹射出,精度不佳,但破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
@@ -312,7 +424,7 @@
 		</graphicData>
 		<soundInteract>Interact_ChargeRifle</soundInteract>
 		<statBases>
-			<WorkToMake>45000</WorkToMake>
+			<WorkToMake>55000</WorkToMake>
 			<Mass>4.1</Mass>
 			<AccuracyTouch>0.35</AccuracyTouch>
 			<AccuracyShort>0.6</AccuracyShort>
@@ -320,19 +432,24 @@
 			<AccuracyLong>0.5</AccuracyLong>
 			<RangedWeapon_Cooldown>1.8</RangedWeapon_Cooldown>
 		</statBases>
-		<recipeMaker>
-			<!-- <researchPrerequisite>ChargedShot</researchPrerequisite> -->
-			<!-- <skillRequirements>
-                <Crafting>7</Crafting>
-            </skillRequirements> -->
+		
+        <costList>
+            <VoidEnergyFocusCrystal>1</VoidEnergyFocusCrystal>
+            <VoidEnergyAdvancedComponent>1</VoidEnergyAdvancedComponent>
+            <Plasteel>175</Plasteel>
+            <Gold>15</Gold>
+        </costList>
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyWeaponLv2</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>10</Crafting>
+                <Intellectual>7</Intellectual>
+            </skillRequirements>
 			<recipeUsers Inherit="False">
 				<li>FabricationBench</li>
 			</recipeUsers>
-		</recipeMaker>
-		<costList>
-			<Plasteel>50</Plasteel>
-			<!-- <ComponentSpacer>2</ComponentSpacer> -->
-		</costList>
+        </recipeMaker>
+
 		<thingSetMakerTags>
 			<li>RewardStandardLowFreq</li>
 			<li>RewardStandardQualitySuper</li>
@@ -396,7 +513,7 @@
 		</comps>
 	</ThingDef>
 
-	<ThingDef ParentName="BaseHumanMakeableGun">
+	<ThingDef ParentName="VoidEnergyGunBase">
 		<defName>VoidEnergySniper_Advance</defName>
 		<label>幽能精准狙击枪</label>
 		<description>可以将幽能转换为的能量弹射出,破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
@@ -407,7 +524,7 @@
 		</graphicData>
 		<soundInteract>Interact_ChargeRifle</soundInteract>
 		<statBases>
-			<WorkToMake>45000</WorkToMake>
+			<WorkToMake>80000</WorkToMake>
 			<Mass>4.1</Mass>
 			<AccuracyTouch>0.35</AccuracyTouch>
 			<AccuracyShort>0.8</AccuracyShort>
@@ -415,19 +532,24 @@
 			<AccuracyLong>0.85</AccuracyLong>
 			<RangedWeapon_Cooldown>1.8</RangedWeapon_Cooldown>
 		</statBases>
-		<recipeMaker>
-			<!-- <researchPrerequisite>ChargedShot</researchPrerequisite> -->
-			<!-- <skillRequirements>
-                <Crafting>7</Crafting>
-            </skillRequirements> -->
+		
+        <costList>
+            <VoidEnergyFocusCrystal>2</VoidEnergyFocusCrystal>
+            <VoidEnergyAdvancedComponent>3</VoidEnergyAdvancedComponent>
+            <Plasteel>300</Plasteel>
+            <Gold>30</Gold>
+        </costList>
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyWeaponLv2</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>14</Crafting>
+                <Intellectual>10</Intellectual>
+            </skillRequirements>
 			<recipeUsers Inherit="False">
 				<li>FabricationBench</li>
 			</recipeUsers>
-		</recipeMaker>
-		<costList>
-			<Plasteel>50</Plasteel>
-			<!-- <ComponentSpacer>2</ComponentSpacer> -->
-		</costList>
+        </recipeMaker>
+
 		<thingSetMakerTags>
 			<li>RewardStandardLowFreq</li>
 			<li>RewardStandardQualitySuper</li>

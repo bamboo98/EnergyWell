@@ -19,5 +19,6 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop
         public float heatAccumulationRate = 1f;
         public float activePower = 10000f;
         public float permanentPower = 1000f;
+        public float thermalConductivity = 1f;
     }
 }

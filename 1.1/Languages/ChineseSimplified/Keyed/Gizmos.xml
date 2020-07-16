@@ -10,4 +10,6 @@
 
 	<VoidEnergyCostString>消耗幽能: {0}单位/秒</VoidEnergyCostString>
 
+	<HeatDissipationCoefficient>散热能力: {0}%</HeatDissipationCoefficient>
+
 </LanguageData>

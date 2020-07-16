@@ -30,9 +30,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell
 namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 {
 
-    class VoidNetWeaponShootMode:ThingComp
+    class VoidNetWeaponShootMode : ThingComp
     {
-        private VerbProperties verbProperties;
 
         private Prop.VoidNetWeaponShootModeProp prop;
 
@@ -49,21 +48,6 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         private int baseTicksBetweenBurstShots = 6;
         private float baseAccuracy = 1f;
 
-        private float Base_WarmupTime
-        {
-            get
-            {
-                if (verbProperties == null)
-                {
-                    foreach (VerbProperties item in parent.def.Verbs)
-                    {
-                        if (item.verbClass == typeof(Verbs.VoidNetWeapon_Lanuch))
-                            verbProperties = item;
-                    }
-                }
-                return verbProperties.warmupTime;
-            }
-        }
 
 
         /// <summary>
@@ -73,16 +57,34 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         {
             get
             {
-                switch (WeaponShootMode)
+                QualityCategory qc;
+                if (parent.TryGetQuality(out qc))
                 {
-                    case ShootMode.OneShoot:
-                        return 1;
-                    case ShootMode.ThreeShoot:
-                        return 3;
-                    case ShootMode.FullAuto:
-                        return 5;
-                    default:
-                        return 1;
+                    switch (WeaponShootMode)
+                    {
+                        case ShootMode.OneShoot:
+                            return 1;
+                        case ShootMode.ThreeShoot://传奇多一发
+                            return 3 + (qc == QualityCategory.Legendary ? +1 : 0);
+                        case ShootMode.FullAuto:
+                            return 5;
+                        default:
+                            return 1;
+                    }
+                }
+                else
+                {
+                    switch (WeaponShootMode)
+                    {
+                        case ShootMode.OneShoot:
+                            return 1;
+                        case ShootMode.ThreeShoot:
+                            return 3 ;
+                        case ShootMode.FullAuto:
+                            return 5;
+                        default:
+                            return 1;
+                    }
                 }
             }
         }
@@ -91,16 +93,62 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         {
             get
             {
-                switch (WeaponShootMode)
+                QualityCategory qc;
+                if (parent.TryGetQuality(out qc))
                 {
-                    case ShootMode.OneShoot:
-                        return baseEnergyCost * 2.25f;
-                    case ShootMode.ThreeShoot:
-                        return baseEnergyCost * 1f;
-                    case ShootMode.FullAuto:
-                        return baseEnergyCost * 0.65f;
-                    default:
-                        return baseEnergyCost;
+                    float factor;
+                    switch (qc)
+                    {
+                        case QualityCategory.Awful:
+                            factor = 1.4f;
+                            break;
+                        case QualityCategory.Poor:
+                            factor = 1.2f;
+                            break;
+                        case QualityCategory.Normal:
+                            factor = 1f;
+                            break;
+                        case QualityCategory.Good:
+                            factor = 0.95f;
+                            break;
+                        case QualityCategory.Excellent:
+                            factor = 0.9f;
+                            break;
+                        case QualityCategory.Masterwork:
+                            factor = 0.85f;
+                            break;
+                        case QualityCategory.Legendary:
+                            factor = 0.75f;
+                            break;
+                        default:
+                            factor = 1f;
+                            break;
+                    }
+                    switch (WeaponShootMode)
+                    {
+                        case ShootMode.OneShoot:
+                            return baseEnergyCost * 2.25f * factor;
+                        case ShootMode.ThreeShoot:
+                            return baseEnergyCost * 1f * factor;
+                        case ShootMode.FullAuto:
+                            return baseEnergyCost * 0.65f * factor;
+                        default:
+                            return baseEnergyCost;
+                    }
+                }
+                else
+                {
+                    switch (WeaponShootMode)
+                    {
+                        case ShootMode.OneShoot:
+                            return baseEnergyCost * 2.25f;
+                        case ShootMode.ThreeShoot:
+                            return baseEnergyCost * 1f;
+                        case ShootMode.FullAuto:
+                            return baseEnergyCost * 0.65f;
+                        default:
+                            return baseEnergyCost;
+                    }
                 }
             }
         }
@@ -127,20 +175,70 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         /// <returns></returns>
         public virtual bool PostPreStartShoot()
         {
-            switch (WeaponShootMode)
+            QualityCategory qc;
+            if (parent.TryGetQuality(out qc))
             {
-                case ShootMode.OneShoot:
-                    Patch.Methons.NextWarmupTime = baseWarmupTime * 1.3f;
+                float factor;
+                switch (qc)
+                {
+                    case QualityCategory.Awful:
+                        factor = 1.4f;
+                        break;
+                    case QualityCategory.Poor:
+                        factor = 1.2f;
+                        break;
+                    case QualityCategory.Normal:
+                        factor = 1f;
+                        break;
+                    case QualityCategory.Good:
+                        factor = 0.9f;
+                        break;
+                    case QualityCategory.Excellent:
+                        factor = 0.8f;
+                        break;
+                    case QualityCategory.Masterwork:
+                        factor = 0.7f;
+                        break;
+                    case QualityCategory.Legendary:
+                        factor = 0.6f;
+                        break;
+                    default:
+                        factor = 1f;
+                        break;
+                }
+                switch (WeaponShootMode)
+                {
+                    case ShootMode.OneShoot:
+                        Patch.Methons.NextWarmupTime = baseWarmupTime * 1.3f * factor;
 
-                    break;
-                case ShootMode.ThreeShoot:
-                    Patch.Methons.NextWarmupTime = baseWarmupTime;
-                    break;
-                case ShootMode.FullAuto:
-                    Patch.Methons.NextWarmupTime = 0;
-                    break;
-                default:
-                    break;
+                        break;
+                    case ShootMode.ThreeShoot:
+                        Patch.Methons.NextWarmupTime = baseWarmupTime * factor;
+                        break;
+                    case ShootMode.FullAuto:
+                        Patch.Methons.NextWarmupTime = 0;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (WeaponShootMode)
+                {
+                    case ShootMode.OneShoot:
+                        Patch.Methons.NextWarmupTime = baseWarmupTime * 1.3f;
+
+                        break;
+                    case ShootMode.ThreeShoot:
+                        Patch.Methons.NextWarmupTime = baseWarmupTime;
+                        break;
+                    case ShootMode.FullAuto:
+                        Patch.Methons.NextWarmupTime = 0;
+                        break;
+                    default:
+                        break;
+                }
             }
             return true;
         }
@@ -159,7 +257,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 
                     break;
                 case ShootMode.ThreeShoot:
-                    Patch.Methons.NextTicksBetweenBurstShots = Mathf.RoundToInt((float)baseTicksBetweenBurstShots*1.5f);
+                    Patch.Methons.NextTicksBetweenBurstShots = Mathf.RoundToInt((float)baseTicksBetweenBurstShots * 1.5f);
                     break;
                 case ShootMode.FullAuto:
                     Patch.Methons.NextTicksBetweenBurstShots = baseTicksBetweenBurstShots;
@@ -176,21 +274,70 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         /// </summary>
         public virtual void PostPreLastShoot()
         {
-
-            switch (WeaponShootMode)
+            QualityCategory qc;
+            if (parent.TryGetQuality(out qc))
             {
-                case ShootMode.OneShoot:
-                    Patch.Methons.NextRangedWeapon_Cooldown = baseCooldown * 1.3f;
+                float factor;
+                switch (qc)
+                {
+                    case QualityCategory.Awful:
+                        factor = 1.4f;
+                        break;
+                    case QualityCategory.Poor:
+                        factor = 1.2f;
+                        break;
+                    case QualityCategory.Normal:
+                        factor = 1f;
+                        break;
+                    case QualityCategory.Good:
+                        factor = 0.9f;
+                        break;
+                    case QualityCategory.Excellent:
+                        factor = 0.8f;
+                        break;
+                    case QualityCategory.Masterwork:
+                        factor = 0.7f;
+                        break;
+                    case QualityCategory.Legendary:
+                        factor = 0.6f;
+                        break;
+                    default:
+                        factor = 1f;
+                        break;
+                }
+                switch (WeaponShootMode)
+                {
+                    case ShootMode.OneShoot:
+                        Patch.Methons.NextRangedWeapon_Cooldown = baseCooldown * 1.3f * factor;
 
-                    break;
-                case ShootMode.ThreeShoot:
-                    Patch.Methons.NextRangedWeapon_Cooldown = baseCooldown;
-                    break;
-                case ShootMode.FullAuto:
-                    Patch.Methons.NextRangedWeapon_Cooldown = 0;
-                    break;
-                default:
-                    break;
+                        break;
+                    case ShootMode.ThreeShoot:
+                        Patch.Methons.NextRangedWeapon_Cooldown = baseCooldown * factor;
+                        break;
+                    case ShootMode.FullAuto:
+                        Patch.Methons.NextRangedWeapon_Cooldown = 0;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (WeaponShootMode)
+                {
+                    case ShootMode.OneShoot:
+                        Patch.Methons.NextRangedWeapon_Cooldown = baseCooldown * 1.3f;
+
+                        break;
+                    case ShootMode.ThreeShoot:
+                        Patch.Methons.NextRangedWeapon_Cooldown = baseCooldown;
+                        break;
+                    case ShootMode.FullAuto:
+                        Patch.Methons.NextRangedWeapon_Cooldown = 0;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -201,30 +348,89 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         /// <returns></returns>
         public virtual bool PostPreEachShoot(Verb verb)
         {
-            //Patch.Methons.NextAdjustedAccuracyFactor
-            switch (WeaponShootMode)
+            QualityCategory qc;
+            if (parent.TryGetQuality(out qc))
             {
-                case ShootMode.OneShoot:
-                    Patch.Methons.NextAdjustedAccuracyFactor = 1.35f * baseAccuracy - 1f;
-                    break;
-                case ShootMode.ThreeShoot:
-                    Patch.Methons.NextAdjustedAccuracyFactor = 1f * baseAccuracy - 1f; ;
-                    break;
-                case ShootMode.FullAuto:
-                    int gt = Find.TickManager.TicksGame;
-                    if (gt - lastShootTick < baseTicksBetweenBurstShots * 3) 
-                    {
-                        Patch.Methons.NextAdjustedAccuracyFactor = 0.4f * baseAccuracy + (continuous++ * 0.01f) - 1f;
-                    }
-                    else
-                    {
-                        Patch.Methons.NextAdjustedAccuracyFactor = 0.4f * baseAccuracy - 1f;
-                        continuous = 0;
-                    }
-                    lastShootTick = gt;
-                    break;
-                default:
-                    break;
+                float factor;
+                switch (qc)
+                {
+                    case QualityCategory.Awful:
+                        factor = 0.7f;
+                        break;
+                    case QualityCategory.Poor:
+                        factor = 0.85f;
+                        break;
+                    case QualityCategory.Normal:
+                        factor = 1f;
+                        break;
+                    case QualityCategory.Good:
+                        factor = 1.1f;
+                        break;
+                    case QualityCategory.Excellent:
+                        factor = 1.2f;
+                        break;
+                    case QualityCategory.Masterwork:
+                        factor = 1.3f;
+                        break;
+                    case QualityCategory.Legendary:
+                        factor = 1.5f;
+                        break;
+                    default:
+                        factor = 1f;
+                        break;
+                }
+                switch (WeaponShootMode)
+                {
+                    case ShootMode.OneShoot:
+                        Patch.Methons.NextAdjustedAccuracyFactor = 1.35f * baseAccuracy* factor - 1f;
+                        break;
+                    case ShootMode.ThreeShoot:
+                        Patch.Methons.NextAdjustedAccuracyFactor = 1f * baseAccuracy* factor - 1f; ;
+                        break;
+                    case ShootMode.FullAuto:
+                        int gt = Find.TickManager.TicksGame;
+                        if (gt - lastShootTick < baseTicksBetweenBurstShots * 3)
+                        {
+                            Patch.Methons.NextAdjustedAccuracyFactor = 0.4f * baseAccuracy* factor + (continuous++ * 0.01f) - 1f;
+                        }
+                        else
+                        {
+                            Patch.Methons.NextAdjustedAccuracyFactor = 0.4f * baseAccuracy * factor - 1f;
+                            continuous = 0;
+                        }
+                        lastShootTick = gt;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+
+                switch (WeaponShootMode)
+                {
+                    case ShootMode.OneShoot:
+                        Patch.Methons.NextAdjustedAccuracyFactor = 1.35f * baseAccuracy - 1f;
+                        break;
+                    case ShootMode.ThreeShoot:
+                        Patch.Methons.NextAdjustedAccuracyFactor = 1f * baseAccuracy - 1f; ;
+                        break;
+                    case ShootMode.FullAuto:
+                        int gt = Find.TickManager.TicksGame;
+                        if (gt - lastShootTick < baseTicksBetweenBurstShots * 3)
+                        {
+                            Patch.Methons.NextAdjustedAccuracyFactor = 0.4f * baseAccuracy + (continuous++ * 0.01f) - 1f;
+                        }
+                        else
+                        {
+                            Patch.Methons.NextAdjustedAccuracyFactor = 0.4f * baseAccuracy - 1f;
+                            continuous = 0;
+                        }
+                        lastShootTick = gt;
+                        break;
+                    default:
+                        break;
+                }
             }
             return true;
         }
@@ -242,19 +448,70 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             }
             if (weaponDamageMultiplier == null)
                 return;
-            switch (WeaponShootMode)
+
+            QualityCategory qc;
+            if (parent.TryGetQuality(out qc))
             {
-                case ShootMode.OneShoot:
-                    weaponDamageMultiplier.SetValue(projectile, (float)weaponDamageMultiplier.GetValue(projectile) * 2f * baseAmount);
-                    break;
-                case ShootMode.ThreeShoot:
-                    weaponDamageMultiplier.SetValue(projectile, (float)weaponDamageMultiplier.GetValue(projectile) * 1f * baseAmount);
-                    break;
-                case ShootMode.FullAuto:
-                    weaponDamageMultiplier.SetValue(projectile, (float)weaponDamageMultiplier.GetValue(projectile) * 0.5f * baseAmount);
-                    break;
-                default:
-                    break;
+                float factor;
+                switch (qc)
+                {
+                    case QualityCategory.Awful:
+                        factor = 0.7f;
+                        break;
+                    case QualityCategory.Poor:
+                        factor = 0.85f;
+                        break;
+                    case QualityCategory.Normal:
+                        factor = 1f;
+                        break;
+                    case QualityCategory.Good:
+                        factor = 1.1f;
+                        break;
+                    case QualityCategory.Excellent:
+                        factor = 1.2f;
+                        break;
+                    case QualityCategory.Masterwork:
+                        factor = 1.3f;
+                        break;
+                    case QualityCategory.Legendary:
+                        factor = 1.5f;
+                        break;
+                    default:
+                        factor = 1f;
+                        break;
+                }
+                switch (WeaponShootMode)
+                {
+                    case ShootMode.OneShoot:
+                        weaponDamageMultiplier.SetValue(projectile, (float)weaponDamageMultiplier.GetValue(projectile)* factor * 2f * baseAmount);
+                        break;
+                    case ShootMode.ThreeShoot:
+                        weaponDamageMultiplier.SetValue(projectile, (float)weaponDamageMultiplier.GetValue(projectile)* factor * 1f * baseAmount);
+                        break;
+                    case ShootMode.FullAuto:
+                        weaponDamageMultiplier.SetValue(projectile, (float)weaponDamageMultiplier.GetValue(projectile)* factor * 0.5f * baseAmount);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+
+                switch (WeaponShootMode)
+                {
+                    case ShootMode.OneShoot:
+                        weaponDamageMultiplier.SetValue(projectile, (float)weaponDamageMultiplier.GetValue(projectile) * 2f * baseAmount);
+                        break;
+                    case ShootMode.ThreeShoot:
+                        weaponDamageMultiplier.SetValue(projectile, (float)weaponDamageMultiplier.GetValue(projectile) * 1f * baseAmount);
+                        break;
+                    case ShootMode.FullAuto:
+                        weaponDamageMultiplier.SetValue(projectile, (float)weaponDamageMultiplier.GetValue(projectile) * 0.5f * baseAmount);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -268,8 +525,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                     {
                         defaultLabel = "OneShoot",
                         defaultDesc = "当前: 单发模式\n瞄准时间+30%,伤害+100%,耗能+125%,后摇+30%,精度+35%\n点击切换到三连发",
-                        icon= Texture2Ds.Icon_OneShoot,
-                        
+                        icon = Texture2Ds.Icon_OneShoot,
+
                         action = delegate ()
                         {
                             WeaponShootMode = ShootMode.ThreeShoot;
@@ -277,7 +534,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                     };
                     break;
                 case ShootMode.ThreeShoot:
-                    if(enableFullAuto)
+                    if (enableFullAuto)
                         yield return new Command_Action
                         {
                             defaultLabel = "ThreeShoot",

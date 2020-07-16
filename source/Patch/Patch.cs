@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using HarmonyLib;
 using RimWorld;
 using Verse;
+using UnityEngine;
 
 namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
 {
@@ -74,7 +76,10 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
         [HarmonyPatch("ShouldShowFor")]
         public static bool ShouldShowFor_Prefix(StatWorker __instance, StatRequest req, ref bool __result, ref StatDef ___stat)
         {
-            if (___stat.category == Resources.StatCategoryDefs.VoidEnergy && req.Thing.def.thingClass==typeof(Things.VoidNetTerminal))
+            if (___stat == null || req == null )
+                return true;
+            ThingDef def = req.Def as ThingDef;
+            if (def!=null && ___stat.category == Resources.StatCategoryDefs.VoidEnergy && def.thingClass == typeof(Things.VoidNetTerminal))
             {
                 __result = true;
                 return false;
@@ -89,8 +94,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
     {
         [HarmonyPostfix]
         [HarmonyPatch("TryDropEquipment")]
-        public static void TryDropEquipment_Postfix(Pawn_EquipmentTracker __instance, ref bool __result, 
-            ThingWithComps eq,ref ThingWithComps resultingEq, IntVec3 pos, bool forbid = true)
+        public static void TryDropEquipment_Postfix(Pawn_EquipmentTracker __instance, ref bool __result,
+            ThingWithComps eq, ref ThingWithComps resultingEq, IntVec3 pos, bool forbid = true)
         {
             if (!__result)
             {
@@ -98,8 +103,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
             }
             Comp.VoidNetEquipmentPort cp1 = eq.TryGetComp<Comp.VoidNetEquipmentPort>();
             Comp.VoidNetEquipmentPort cp2 = resultingEq.TryGetComp<Comp.VoidNetEquipmentPort>();
-            
-            if(cp1!=null && cp2 != null)
+
+            if (cp1 != null && cp2 != null)
             {
                 cp1.Notify_Dropped(__instance.pawn);
 
@@ -185,8 +190,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
     {
         [HarmonyPrefix]
         [HarmonyPatch("AllowsPlacing")]
-        
-        public static bool PlaceWorker_ShowTurretRadius_Prefix(ref AcceptanceReport __result ,BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
+
+        public static bool PlaceWorker_ShowTurretRadius_Prefix(ref AcceptanceReport __result, BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
         {
             __result = true;
 
@@ -229,7 +234,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
             {
                 return true;
             }
-            bool flag=true;
+            bool flag = true;
             if (!cp.TryStartCastOn(__instance, castTarg, destTarg, surpriseAttack, canHitNonTargetPawns))
             {
                 flag = false;
@@ -278,7 +283,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
         [HarmonyPatch("TryCastNextBurstShot")]
         //子弹射出间隔时间改这个__instance.verbProps.ticksBetweenBurstShots,改完要在postfix里改回去
         //射击后僵直改__instance.EquipmentSource的StatDefOf.RangedWeapon_Cooldown,改完要在postfix里改回去
-        public static bool TryCastNextBurstShot_Prefix(Verb __instance,ref int ___burstShotsLeft)
+        public static bool TryCastNextBurstShot_Prefix(Verb __instance, ref int ___burstShotsLeft)
         {
             if (__instance.EquipmentSource == null)
                 return true;
@@ -318,7 +323,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
     {
         [HarmonyPrefix]
         [HarmonyPatch(MethodType.Constructor)]
-        [HarmonyPatch(new Type[] { typeof(int), typeof(LocalTargetInfo),typeof(Verb) })]
+        [HarmonyPatch(new Type[] { typeof(int), typeof(LocalTargetInfo), typeof(Verb) })]
         public static bool Stance_Cooldown_Prefix(ref int ticks)
         {
             if (Methons.ticksBetweenBurstShots != null)
@@ -336,7 +341,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
     internal class CompGlower_Patch
     {
         [HarmonyPostfix]
-        [HarmonyPatch("ShouldBeLitNow",MethodType.Getter)]
+        [HarmonyPatch("ShouldBeLitNow", MethodType.Getter)]
 
         public static void ShouldBeLitNow_Postfix(ref bool __result, CompGlower __instance)
         {
@@ -371,5 +376,67 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Patch
         }
 
     }
+
+    [HarmonyPatch(typeof(ResearchProjectDef))]
+    internal class ResearchProjectDef_Patch
+    {
+        [HarmonyPrefix]
+        [HarmonyPatch("CanBeResearchedAt")]
+        public static bool CanBeResearchedAt_Prefix(ref bool __result, ResearchProjectDef __instance, Building_ResearchBench bench, bool ignoreResearchBenchPowerStatus)
+        {
+            //不是幽能工作台不处理
+            if (bench.def != Resources.ThingDefs.VoidEnergyResearchBench)
+            {
+                return true;
+            }
+            //只允许幽能研究台研究幽能科技
+            if (__instance.requiredResearchBuilding != null && bench.def != __instance.requiredResearchBuilding)
+            {
+                __result = false;
+                return false;
+            }
+            Comp.VoidNetPort comp = bench.GetComp<Comp.VoidNetPort>();
+            if (comp != null && !comp.PowerOn)
+            {
+                __result = false;
+                return false;
+            }
+
+            if (!__instance.requiredResearchFacilities.NullOrEmpty())
+            {
+                CompAffectedByFacilities affectedByFacilities = bench.TryGetComp<CompAffectedByFacilities>();
+                if (affectedByFacilities == null)
+                {
+                    __result = false;
+                    return false;
+                }
+                List<Thing> linkedFacilitiesListForReading = affectedByFacilities.LinkedFacilitiesListForReading;
+                foreach (ThingDef item in __instance.requiredResearchFacilities)
+                {
+                    if (linkedFacilitiesListForReading.Find((Thing x) => x.def == item && affectedByFacilities.IsFacilityActive(x)) == null)
+                    {
+                        __result = false;
+                        return false;
+                    }
+
+                }
+            }
+            __result = true;
+            return false;
+
+        }
+    }
+
+    //[HarmonyPatch(typeof(GUIUtility))]
+    //internal class GUIUtility_Patch
+    //{
+    //    [HarmonyPrefix]
+    //    [HarmonyPatch("CheckOnGUI")]
+
+    //    public static bool CheckOnGUI_Prefix()
+    //    {
+    //        return false;
+    //    }
+    //}
 
 }

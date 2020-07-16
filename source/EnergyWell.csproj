@@ -80,6 +80,7 @@
     <Compile Include="AI\JobDriver_OperateVoidNetDeepDrill.cs" />
     <Compile Include="AI\WorkGiver_VoidNetDeepDrill.cs" />
     <Compile Include="Builds\VoidEnergyThermostat.cs" />
+    <Compile Include="Comp\Comp_UseVoidEnergyBeginning_Key.cs" />
     <Compile Include="Comp\Prop\VoidNetTempControllerProp.cs" />
     <Compile Include="Comp\VoidNetTempController.cs" />
     <Compile Include="Things\EnergyWellActiving.cs" />

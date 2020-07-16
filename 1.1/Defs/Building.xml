@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
+	<DesignationCategoryDef>
+		<defName>VoidEnergyTech</defName>
+		<label>希灵科技</label>
+		<description>希灵科技</description>
+		<order>12</order>
+		<specialDesignatorClasses>
+			<li>Designator_Cancel</li>
+			<li>Designator_Deconstruct</li>
+		</specialDesignatorClasses>
+	</DesignationCategoryDef>
+
     <ThingDef ParentName="BuildingBase">
         <defName>SecondaryVoidEnergyWell</defName>
         <label>次级幽能井</label>
@@ -22,23 +33,19 @@
         <fillPercent>1.0</fillPercent>
         <rotatable>false</rotatable>
         <statBases>
-            <MaxHitPoints>1000</MaxHitPoints>
-            <WorkToBuild>1</WorkToBuild>
+            <MaxHitPoints>500</MaxHitPoints>
+            <WorkToBuild>3000</WorkToBuild>
             <Flammability>0</Flammability>
             <Beauty>0</Beauty>
         </statBases>
         <tickerType>Rare</tickerType>
         <canOverlapZones>false</canOverlapZones>
         <size>(2,2)</size>
-        <costList>
-            <Steel>100</Steel>
-            <ComponentIndustrial>3</ComponentIndustrial>
-        </costList>
         <comps>
             <li Class="CompProperties_Flickable" />
             <li Class="CompProperties_Glower">
                 <glowRadius>10</glowRadius>
-                <glowColor>(131,236,255,0)</glowColor>
+                <glowColor>(60,130,255,0)</glowColor>
             </li>
             <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.EnergyWellProp">
                 <!-- 缓存的幽能上限 -->
@@ -46,7 +53,9 @@
                 <!-- 每秒生产的幽能数量 -->
                 <produceEnergyPerSec>0.15</produceEnergyPerSec>
                 <!-- 过热速率 -->
-                <heatAccumulationRate>2.5</heatAccumulationRate>
+                <heatAccumulationRate>10</heatAccumulationRate>
+                <!-- 向外导热系数 -->
+                <thermalConductivity>0.04</thermalConductivity>
             </li>
             <li Class="CompProperties_Power">
                 <compClass>CompPowerTrader</compClass>
@@ -54,9 +63,19 @@
             </li>
         </comps>
         <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
-        <designationCategory>Power</designationCategory>
         <constructEffect>ConstructMetal</constructEffect>
 
+        <designationCategory>VoidEnergyTech</designationCategory>
+        <researchPrerequisites>
+            <li>VoidEnergyBeginning</li>
+        </researchPrerequisites>
+        <costList>
+            <Plasteel>150</Plasteel>
+            <Steel>300</Steel>
+            <Gold>75</Gold>
+            <VoidEnergyAdvancedComponent>6</VoidEnergyAdvancedComponent>
+            <VoidEnergyWellCore>1</VoidEnergyWellCore>
+        </costList>
     </ThingDef>
 
 
@@ -81,18 +100,14 @@
         <fillPercent>1.0</fillPercent>
         <rotatable>false</rotatable>
         <statBases>
-            <MaxHitPoints>1000</MaxHitPoints>
-            <WorkToBuild>1</WorkToBuild>
+            <MaxHitPoints>200</MaxHitPoints>
+            <WorkToBuild>1000</WorkToBuild>
             <Flammability>0</Flammability>
             <Beauty>0</Beauty>
         </statBases>
-        <tickerType>Normal</tickerType>
+        <tickerType>Never</tickerType>
         <canOverlapZones>false</canOverlapZones>
         <size>(2,2)</size>
-        <costList>
-            <Steel>100</Steel>
-            <ComponentIndustrial>3</ComponentIndustrial>
-        </costList>
         <comps>
             <li Class="CompProperties_Flickable" />
             <li Class="CompProperties_Glower">
@@ -101,16 +116,91 @@
             </li>
             <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetTowerProp">
                 <!-- 每秒可以传输多少幽能到网络中 -->
-                <energyTransportPerSec>1</energyTransportPerSec>
+                <energyTransportPerSec>0.25</energyTransportPerSec>
                 <!-- 是否连通宇宙节点 -->
                 <transportToWorld>false</transportToWorld>
+            </li>
+            <li Class="CompProperties_Power">
+                <compClass>CompPowerTrader</compClass>
+                <basePowerConsumption>600</basePowerConsumption>
             </li>
 
         </comps>
         <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
-        <designationCategory>Power</designationCategory>
         <constructEffect>ConstructMetal</constructEffect>
 
+        <designationCategory>VoidEnergyTech</designationCategory>
+        <researchPrerequisites>
+            <li>VoidEnergyBeginning</li>
+        </researchPrerequisites>
+        <costList>
+            <Steel>150</Steel>
+            <Silver>300</Silver>
+            <VoidEnergyComponent>2</VoidEnergyComponent>
+        </costList>
+    </ThingDef>
+
+    
+    <ThingDef ParentName="BuildingBase">
+        <defName>VoidNetTowerPlus</defName>
+        <label>幽能方尖碑Plus</label>
+        <description>Produces power by consuming chemfuel. Must be periodically refueled by hand.</description>
+        <thingClass>Building</thingClass>
+        <graphicData>
+            <texPath>Build_VoidEnergyTower</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(2,2)</drawSize>
+            <shadowData>
+                <volume>(1.93,1,1.69)</volume>
+                <offset>(-0.03,0,-0.1)</offset>
+            </shadowData>
+        </graphicData>
+        <altitudeLayer>Building</altitudeLayer>
+        <passability>PassThroughOnly</passability>
+        <pathCost>150</pathCost>
+        <blockWind>true</blockWind>
+        <fillPercent>1.0</fillPercent>
+        <rotatable>false</rotatable>
+        <statBases>
+            <MaxHitPoints>500</MaxHitPoints>
+            <WorkToBuild>2500</WorkToBuild>
+            <Flammability>0</Flammability>
+            <Beauty>0</Beauty>
+        </statBases>
+        <tickerType>Never</tickerType>
+        <canOverlapZones>false</canOverlapZones>
+        <size>(2,2)</size>
+        <comps>
+            <li Class="CompProperties_Flickable" />
+            <li Class="CompProperties_Glower">
+                <glowRadius>10</glowRadius>
+                <glowColor>(131,236,255,0)</glowColor>
+            </li>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetTowerProp">
+                <!-- 每秒可以传输多少幽能到网络中 -->
+                <energyTransportPerSec>0.5</energyTransportPerSec>
+                <!-- 是否连通宇宙节点 -->
+                <transportToWorld>true</transportToWorld>
+            </li>
+            <li Class="CompProperties_Power">
+                <compClass>CompPowerTrader</compClass>
+                <basePowerConsumption>3600</basePowerConsumption>
+            </li>
+
+        </comps>
+        <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+        <constructEffect>ConstructMetal</constructEffect>
+
+        <designationCategory>VoidEnergyTech</designationCategory>
+        <researchPrerequisites>
+            <li>VoidEnergyWorldTransport</li>
+        </researchPrerequisites>
+        <costList>
+            <Steel>250</Steel>
+            <Silver>500</Silver>
+            <VoidEnergyAdvancedComponent>1</VoidEnergyAdvancedComponent>
+            <VoidEnergyFocusCrystal>1</VoidEnergyFocusCrystal>
+        </costList>
     </ThingDef>
 
     <ThingDef ParentName="BuildingBase">
@@ -135,17 +225,13 @@
         <rotatable>false</rotatable>
         <statBases>
             <MaxHitPoints>1000</MaxHitPoints>
-            <WorkToBuild>1</WorkToBuild>
+            <WorkToBuild>3000</WorkToBuild>
             <Flammability>0</Flammability>
             <Beauty>0</Beauty>
         </statBases>
         <tickerType>Normal</tickerType>
         <canOverlapZones>false</canOverlapZones>
         <size>(2,2)</size>
-        <costList>
-            <Steel>100</Steel>
-            <ComponentIndustrial>3</ComponentIndustrial>
-        </costList>
         <comps>
             <li Class="CompProperties_Flickable" />
             <li Class="CompProperties_Glower">
@@ -171,9 +257,18 @@
 
         </comps>
         <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
-        <designationCategory>Power</designationCategory>
         <constructEffect>ConstructMetal</constructEffect>
 
+        <designationCategory>VoidEnergyTech</designationCategory>
+        <researchPrerequisites>
+            <li>VoidEnergyConverter</li>
+        </researchPrerequisites>
+        <costList>
+            <Steel>300</Steel>
+            <Silver>200</Silver>
+            <Gold>50</Gold>
+            <VoidEnergyComponent>3</VoidEnergyComponent>
+        </costList>
     </ThingDef>
 
     <ThingDef ParentName="BuildingBase">
@@ -203,12 +298,11 @@
         </graphicData>
         <uiIconPath>Things/Building/Linked/WallSmooth_MenuIcon</uiIconPath>
         <statBases>
-            <MaxHitPoints>1000</MaxHitPoints>
-            <WorkToBuild>1</WorkToBuild>
+            <MaxHitPoints>500</MaxHitPoints>
+            <WorkToBuild>1000</WorkToBuild>
             <Flammability>0</Flammability>
             <MeditationFocusStrength>0.22</MeditationFocusStrength>
         </statBases>
-        <costStuffCount>1</costStuffCount>
 
         <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
         <altitudeLayer>Building</altitudeLayer>
@@ -225,14 +319,10 @@
         <useStuffTerrainAffordance>true</useStuffTerrainAffordance>
         <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
         <holdsRoof>true</holdsRoof>
-        <designationCategory>Structure</designationCategory>
         <staticSunShadowHeight>1.0</staticSunShadowHeight>
         <blockLight>true</blockLight>
         <canOverlapZones>false</canOverlapZones>
         <fertility>0</fertility>
-        <stuffCategories>
-            <li>Metallic</li>
-        </stuffCategories>
         <building>
             <isInert>true</isInert>
             <ai_chillDestination>false</ai_chillDestination>
@@ -257,7 +347,20 @@
                 <multiplier>0.3</multiplier>
             </li>
         </damageMultipliers>
-        <designationHotKey>Misc3</designationHotKey>
+
+        <designationCategory>VoidEnergyTech</designationCategory>
+        <researchPrerequisites>
+            <li>VoidEnergyReapair</li>
+        </researchPrerequisites>
+        <costList>
+            <Plasteel>5</Plasteel>
+            <Gold>1</Gold>
+            <VoidEnergyComponent>1</VoidEnergyComponent>
+        </costList>
+        <costStuffCount>15</costStuffCount>
+        <stuffCategories>
+            <li>Metallic</li>
+        </stuffCategories>
     </ThingDef>
 
     <ThingDef ParentName="BuildingBase">
@@ -281,7 +384,6 @@
         <fillPercent>0.5</fillPercent>
         <hasInteractionCell>true</hasInteractionCell>
         <interactionCellOffset>(0,0,-1)</interactionCellOffset>
-        <designationCategory>Production</designationCategory>
         <!-- <designationHotKey>Misc12</designationHotKey> -->
         <specialDisplayRadius>2.6</specialDisplayRadius>        <!-- 21 closest cells, must be in sync with CompDeepDrill -->
         <rotatable>true</rotatable>
@@ -300,10 +402,6 @@
         <thingCategories>
             <li>BuildingsProduction</li>
         </thingCategories>
-        <costList>
-            <Steel>100</Steel>
-            <ComponentIndustrial>2</ComponentIndustrial>
-        </costList>
         <placeWorkers>
             <li>PlaceWorker_DeepDrill</li>
             <li>PlaceWorker_PreventInteractionSpotOverlap</li>
@@ -314,7 +412,7 @@
     </researchPrerequisites> -->
         <statBases>
             <MaxHitPoints>300</MaxHitPoints>
-            <WorkToBuild>10000</WorkToBuild>
+            <WorkToBuild>7200</WorkToBuild>
             <Flammability>0.5</Flammability>
             <Beauty>-25</Beauty>
             <Mass>35</Mass>
@@ -336,7 +434,7 @@
                 <!-- 待机功耗 -->
                 <energyCostPerSec>0.05</energyCostPerSec>
                 <!-- 挖掘工作量 -->
-                <WorkPerPortionBase>1000</WorkPerPortionBase>
+                <WorkPerPortionBase>2500</WorkPerPortionBase>
             </li>
             <!-- <li Class="CompProperties_Power">
         <compClass>CompPowerTrader</compClass>
@@ -345,6 +443,17 @@
             <!-- <li Class="CompProperties_DeepDrill" /> -->
             <!-- <li Class="CompProperties_CreatesInfestations" /> -->
         </comps>
+
+        <designationCategory>VoidEnergyTech</designationCategory>
+        <researchPrerequisites>
+            <li>VoidEnergyFocus</li>
+        </researchPrerequisites>
+        <costList>
+            <Plasteel>150</Plasteel>
+            <Gold>100</Gold>
+            <VoidEnergyComponent>3</VoidEnergyComponent>
+            <VoidEnergyAdvancedComponent>1</VoidEnergyAdvancedComponent>
+        </costList>
     </ThingDef>
 
     <ThingDef ParentName="BuildingBase">
@@ -376,16 +485,12 @@
             <li>BuildingsTemperature</li>
         </thingCategories>
         <statBases>
-            <WorkToBuild>1000</WorkToBuild>
+            <WorkToBuild>3600</WorkToBuild>
             <MaxHitPoints>100</MaxHitPoints>
             <Mass>6</Mass>
             <Flammability>0</Flammability>
         </statBases>
         <tickerType>Rare</tickerType>
-        <costList>
-            <Steel>50</Steel>
-            <ComponentIndustrial>4</ComponentIndustrial>
-        </costList>
         <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
         <placeWorkers>
             <li>zhuzi.AdvancedEnergy.EnergyWell.Builds.PlaceWorker_VoidEnergyThermostat</li>
@@ -399,7 +504,6 @@
             </li>
             <!--<li Class="CompProperties_Glower"><glowRadius>3</glowRadius><glowColor>(255,150,100,0)</glowColor></li>-->
         </comps>
-        <designationCategory>Temperature</designationCategory>
         <!-- <researchPrerequisites>
             <li>PolarisThermostat</li>
         </researchPrerequisites> -->
@@ -409,42 +513,49 @@
         </building>
         <canOverlapZones>true</canOverlapZones>
         <clearBuildingArea>false</clearBuildingArea>
+        
+        <designationCategory>VoidEnergyTech</designationCategory>
+        <researchPrerequisites>
+            <li>VoidEnergyTemperature</li>
+        </researchPrerequisites>
+        <costList>
+            <Steel>150</Steel>
+            <Silver>150</Silver>
+            <VoidEnergyComponent>1</VoidEnergyComponent>
+        </costList>
     </ThingDef>
-    
-  <ThingDef ParentName="LampBase">
-    <defName>VoidNetSunLamp</defName>
-    <label>幽能太阳灯</label>
-    <description>An industrial lamp which lights an area brightly enough to grow crops, but consumes a huge amount of power. Automatically turns itself off at night.</description>
-    <thingClass>Building_SunLamp</thingClass>
-    <graphicData>
-      <texPath>Things/Building/Production/LampSun</texPath>
-    </graphicData>
-    <blockWind>true</blockWind>
-    <tickerType>Rare</tickerType>
-    <statBases>
-      <WorkToBuild>330</WorkToBuild>
-      <Mass>4.5</Mass>
-    </statBases>
-    <costList>
-      <Steel>40</Steel>
-    </costList>
-    <comps>
-      <li Class="CompProperties_Glower">
-        <overlightRadius>7.0</overlightRadius>
-        <glowRadius>14</glowRadius>
-        <glowColor>(140,0,140,0)</glowColor>
-      </li>
-      <!-- <li Class="CompProperties_Power">
+
+    <ThingDef ParentName="LampBase">
+        <defName>VoidNetSunLamp</defName>
+        <label>幽能太阳灯</label>
+        <description>An industrial lamp which lights an area brightly enough to grow crops, but consumes a huge amount of power. Automatically turns itself off at night.</description>
+        <thingClass>Building_SunLamp</thingClass>
+        <graphicData>
+            <texPath>Things/Building/Production/LampSun</texPath>
+        </graphicData>
+        <blockWind>true</blockWind>
+        <tickerType>Rare</tickerType>
+        <statBases>
+            <WorkToBuild>330</WorkToBuild>
+            <Mass>4.5</Mass>
+        </statBases>
+        <comps>
+            <li Class="CompProperties_Glower">
+                <overlightRadius>7.0</overlightRadius>
+                <glowRadius>14</glowRadius>
+                <glowColor>(140,0,140,0)</glowColor>
+            </li>
+            <!-- <li Class="CompProperties_Power">
         <compClass>CompPowerTrader</compClass>
         <shortCircuitInRain>true</shortCircuitInRain>
         <basePowerConsumption>2900</basePowerConsumption>
       </li> -->
-      <li Class="CompProperties_Schedule">
-        <!-- Match plant growing times -->
-        <startTime>0.25</startTime>
-        <endTime>0.8</endTime>
-        <offMessage>Off for plant resting period</offMessage>
-      </li>
+            <li Class="CompProperties_Schedule">
+                <!-- Match plant growing times -->
+                <startTime>0.25</startTime>
+                <endTime>0.8</endTime>
+                <offMessage>Off for plant resting period</offMessage>
+            </li>
             <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetPortProp">
                 <!-- 幽能缓存上限 -->
                 <energyCacheMax>30</energyCacheMax>
@@ -455,14 +566,98 @@
                 <!-- 初始化耗时 -->
                 <initTicks>60</initTicks>
             </li>
-      <!-- <li Class="CompProperties_HeatPusher">
+            <!-- <li Class="CompProperties_HeatPusher">
         <compClass>CompHeatPusherPowered</compClass>
         <heatPerSecond>3</heatPerSecond>
       </li> -->
-    </comps>
-    <!-- Determined by trial and error
+        </comps>
+        <!-- Determined by trial and error
     This value isn't perfect because these radii use different algorithms
     but it matches in this case-->
-    <specialDisplayRadius>5.8</specialDisplayRadius>
-  </ThingDef>
+        <specialDisplayRadius>5.8</specialDisplayRadius>
+        
+        <designationCategory>VoidEnergyTech</designationCategory>
+        <researchPrerequisites>
+            <li>VoidEnergyTemperature</li>
+        </researchPrerequisites>
+        <costList>
+            <Steel>150</Steel>
+            <VoidEnergyComponent>1</VoidEnergyComponent>
+        </costList>
+    </ThingDef>
+
+
+    <ThingDef ParentName="BenchBase">
+        <defName>VoidEnergyResearchBench</defName>
+        <label>幽能研究台</label>
+        <description>用于研究幽能的工作台</description>
+        <thingClass>Building_ResearchBench</thingClass>
+        <size>(5,2)</size>
+        <minifiedDef />
+        <thingCategories Inherit="false" />
+        <graphicData>
+            <texPath>Things/Building/Production/ResearchBenchHiTech</texPath>
+            <graphicClass>Graphic_Multi</graphicClass>
+            <shaderType>CutoutComplex</shaderType>
+            <drawSize>(7,4)</drawSize>
+            <damageData>
+                <cornerTL>Damage/Corner</cornerTL>
+                <cornerTR>Damage/Corner</cornerTR>
+                <cornerBL>Damage/Corner</cornerBL>
+                <cornerBR>Damage/Corner</cornerBR>
+            </damageData>
+        </graphicData>
+        <castEdgeShadows>true</castEdgeShadows>
+        <staticSunShadowHeight>0.20</staticSunShadowHeight>
+        <altitudeLayer>Building</altitudeLayer>
+        <passability>PassThroughOnly</passability>
+        <pathCost>70</pathCost>
+        <statBases>
+            <MaxHitPoints>300</MaxHitPoints>
+            <WorkToBuild>3600</WorkToBuild>
+            <Flammability>0</Flammability>
+            <ResearchSpeedFactor>1.25</ResearchSpeedFactor>
+        </statBases>
+        <tickerType>Rare</tickerType>
+        <comps>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.Prop.VoidNetPortProp">
+                <!-- 幽能缓存上限 -->
+                <energyCacheMax>5</energyCacheMax>
+                <!-- 每秒从网络中获取的幽能 -->
+                <energyRechargePerSec>0.025</energyRechargePerSec>
+                <!-- 待机功耗 -->
+                <energyCostPerSec>0.02</energyCostPerSec>
+                <!-- 初始化耗时 -->
+                <initTicks>60</initTicks>
+            </li>
+            <li Class="CompProperties_Flickable"/>
+            <li Class="CompProperties_AffectedByFacilities">
+                <linkableFacilities>
+                    <li>MultiAnalyzer</li>
+                </linkableFacilities>
+            </li>
+        </comps>
+        <fillPercent>0.5</fillPercent>
+        <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+        <hasInteractionCell>true</hasInteractionCell>
+        <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+        <surfaceType>Item</surfaceType>
+        <designationHotKey>Misc4</designationHotKey>
+        <constructionSkillPrerequisite>6</constructionSkillPrerequisite>
+        <placeWorkers>
+            <li>PlaceWorker_ShowFacilitiesConnections</li>
+            <li>PlaceWorker_PreventInteractionSpotOverlap</li>
+        </placeWorkers>
+        
+        <designationCategory>VoidEnergyTech</designationCategory>
+        <researchPrerequisites>
+            <li>VoidEnergyBeginning</li>
+        </researchPrerequisites>
+        <costList>
+            <Steel>250</Steel>
+            <VoidEnergyComponent>3</VoidEnergyComponent>
+        </costList>
+    </ThingDef>
+
+
 </Defs>

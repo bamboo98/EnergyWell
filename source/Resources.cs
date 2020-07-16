@@ -39,6 +39,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Resources
         public static ThingDef VoidNetDeepDrill;
         public static ThingDef VoidNetTerminal_Scout;
         public static ThingDef EnergyWellActiving;
+
+        public static ThingDef VoidEnergyResearchBench;
     }
 
     [DefOf]
@@ -89,5 +91,6 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Resources
     {
         public static HediffDef VoidEnergyHediffTerminalMoveSpeed;
     }
+
 
 }

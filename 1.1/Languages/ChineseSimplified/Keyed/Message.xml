@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<GetByProduct>从垃圾堆中翻出了...{0}</GetByProduct>
+    <GetNothing>啥也没得到</GetNothing>
+    <GetResearchTechExp>从垃圾堆中翻出了几张手稿，获得{0}研究进度{1}点</GetResearchTechExp>
+</LanguageData>

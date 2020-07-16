@@ -273,7 +273,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             if ((ShowMode & ShowInfoMode.InspectString) != ShowInfoMode.InspectString) return "";
             StringBuilder str = new StringBuilder();
             if (!PowerOn)
-                str.AppendLine("启动进度: " +((float)(initTicks-initCountdown)/(float)initTicks*100).ToString("f1")+"%");
+                str.AppendLine("启动进度: " +(Mathf.Min(1,(float)(initTicks-initCountdown)/(float)initTicks)*100).ToString("f1")+"%");
             else
                 str.AppendLine("幽能缓存: " + energyCache.ToString("f1") + "/" + energyCacheMax.ToString("f2"));
             str.Append("幽能需求: " + (CompsEnergyCost * 60f).ToString("f3") + "/秒");

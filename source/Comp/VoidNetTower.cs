@@ -20,16 +20,30 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
     {
         public MapVoidEnergyNet MapNetNode;
         public WorldVoidEnergyNet WorldNetNode;
+
+        private CompPowerTrader powerTrader;
+        private CompFlickable flickable;
+
         private Prop.VoidNetTowerProp prop;
+        
 
         private float energyTransportPerSec = 1f;
         private bool transportToWorld = false;
+
+
+        public bool PowerOn
+        {
+            get
+            {
+                return (powerTrader == null || powerTrader.PowerOn) && (flickable == null || flickable.SwitchIsOn);
+            }
+        }
 
         public float EnergyTransportPerSec
         {
             get
             {
-                return energyTransportPerSec;
+                return PowerOn ? energyTransportPerSec : 0f;
             }
         }
         public bool TurnOn
@@ -47,6 +61,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         public override void Initialize(CompProperties props)
         {
             base.Initialize(props);
+            powerTrader = parent.TryGetComp<CompPowerTrader>();
+            flickable = parent.TryGetComp<CompFlickable>();
             prop = (Prop.VoidNetTowerProp)props;
 
             energyTransportPerSec = prop.energyTransportPerSec;
@@ -89,7 +105,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         public override string CompInspectStringExtra()
         {
             StringBuilder str = new StringBuilder();
-            str.Append("幽能传输率: " + energyTransportPerSec.ToString("f1") + " 单位/秒");
+            str.Append("幽能传输率: " + EnergyTransportPerSec.ToString("f2") + " 单位/秒");
                 //str.AppendLine("\n地图缓存: " + MapNetNode.EnergyCache.ToString("f3") + " / " + MapNetNode.EnergyCacheMax.ToString("f3"));
                 //str.AppendLine("世界缓存: " + WorldNetNode.EnergyCache.ToString("f3") + " / " + WorldNetNode.EnergyCacheMax.ToString("f3"));
                 str.Append(MapNetNode.GetBurdenStr());

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingCategoryDef>
+    <defName>VoidEnergyManufactured</defName>
+    <label>幽能材料</label>
+    <parent>Manufactured</parent>
+    <resourceReadoutRoot>true</resourceReadoutRoot>
+    <iconPath>Icon_OneShoot</iconPath>
+  </ThingCategoryDef>
+
+  
+    <ThingDef ParentName="ResourceBase" Name="VoidEnergyManufacturedBase" Abstract="True">
+        <statBases>
+            <Flammability>0</Flammability>
+            <Beauty>0</Beauty>
+        </statBases>
+        <stackLimit>75</stackLimit>
+        <useHitPoints>false</useHitPoints>
+        <thingCategories>
+            <li>VoidEnergyManufactured</li>
+        </thingCategories>
+        
+        <!-- <recipeMaker>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Tailor</soundWorking>
+            <recipeUsers>
+                <li>Yokai_Kanatoko</li>
+            </recipeUsers>
+            <researchPrerequisite>YokaiAlchemyBasic</researchPrerequisite>
+             <unfinishedThingDef>UnfinishedApparel</unfinishedThingDef>
+        </recipeMaker> -->
+    </ThingDef>
+
+    <ThingDef ParentName="VoidEnergyManufacturedBase">
+        <defName>VoidEnergyWellCore</defName>
+        <label>幽能核心</label>
+        <description>从希灵仆从军的生活垃圾中捡到的神秘晶体
+在电场作用下可以持续产生次级幽能
+建造幽能井的核心材料</description>
+        <graphicData>
+            <texPath>Thing_VoidEnergyWellCore</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <statBases>
+            <MarketValue>5000</MarketValue>
+            <Mass>0.03</Mass>
+        </statBases>
+        <stackLimit>1</stackLimit>
+        
+        <!-- <costList>
+            <Yokai_Fragment>20</Yokai_Fragment>
+        </costList>
+        <recipeMaker>
+            <researchPrerequisite>YokaiAlchemyMiddle</researchPrerequisite>
+        </recipeMaker> -->
+        
+    </ThingDef>
+
+    <ThingDef ParentName="VoidEnergyManufacturedBase">
+        <defName>VoidEnergyComponent</defName>
+        <label>幽能零部件</label>
+        <description>制作基础幽能装置所需要的零部件</description>
+        <graphicData>
+            <texPath>Thing_VoidEnergyComponent</texPath>
+            <graphicClass>Graphic_StackCount</graphicClass>
+        </graphicData>
+        <statBases>
+            <!-- <MarketValue>150</MarketValue> -->
+            <Mass>0.4</Mass>
+            <WorkToMake>3600</WorkToMake>
+        </statBases>
+
+        <costList>
+            <ComponentIndustrial>3</ComponentIndustrial>
+            <Jade>6</Jade>
+        </costList>
+
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyBeginning</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>5</Crafting>
+                <Intellectual>3</Intellectual>
+            </skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+            <!-- <workSpeedStat>SmithingSpeed</workSpeedStat> -->
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Machining</soundWorking>
+            <unfinishedThingDef>UnfinishedComponent</unfinishedThingDef>   
+            <workAmount>3600</workAmount>  
+        </recipeMaker>
+        
+    </ThingDef>
+
+    <ThingDef ParentName="VoidEnergyManufacturedBase">
+        <defName>VoidEnergyAdvancedComponent</defName>
+        <label>高级幽能零部件</label>
+        <description>制作高级幽能装置所需要的零部件</description>
+        <graphicData>
+            <texPath>Thing_VoidEnergyAdvancedComponent</texPath>
+            <graphicClass>Graphic_StackCount</graphicClass>
+        </graphicData>
+        <statBases>
+            <!-- <MarketValue>600</MarketValue> -->
+            <Mass>0.8</Mass>
+            <WorkToMake>14400</WorkToMake>
+        </statBases>
+        
+        <costList>
+            <ComponentSpacer>2</ComponentSpacer>
+            <VoidEnergyComponent>5</VoidEnergyComponent>
+            <Gold>5</Gold>
+        </costList>
+        
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyBeginning</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>8</Crafting>
+                <Intellectual>6</Intellectual>
+            </skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+            <!-- <workSpeedStat>SmithingSpeed</workSpeedStat> -->
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Machining</soundWorking>
+            <unfinishedThingDef>UnfinishedComponent</unfinishedThingDef>   
+            <workAmount>14400</workAmount>  
+        </recipeMaker>
+
+    </ThingDef>
+
+    <ThingDef ParentName="VoidEnergyManufacturedBase">
+        <defName>VoidEnergyFocusCrystal</defName>
+        <label>聚焦晶体</label>
+        <description>可以将幽能聚焦的晶体,通常用于制式幽能武器的制作</description>
+        <graphicData>
+            <texPath>Thing_VoidEnergyFocusCrystal</texPath>
+            <graphicClass>Graphic_StackCount</graphicClass>
+        </graphicData>
+        <statBases>
+            <!-- <MarketValue>1000</MarketValue> -->
+            <Mass>0.5</Mass>
+            <WorkToMake>14400</WorkToMake>
+        </statBases>
+
+        <costList>
+            <VoidEnergyAdvancedComponent>1</VoidEnergyAdvancedComponent>
+            <Plasteel>150</Plasteel>
+        </costList>
+        
+        <recipeMaker>
+            <researchPrerequisite>VoidEnergyFocus</researchPrerequisite>
+			<skillRequirements Inherit="False">
+                <Crafting>8</Crafting>
+                <Intellectual>6</Intellectual>
+            </skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+            <!-- <workSpeedStat>SmithingSpeed</workSpeedStat> -->
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Machining</soundWorking>
+            <unfinishedThingDef>UnfinishedComponent</unfinishedThingDef>   
+            <workAmount>14400</workAmount>  
+        </recipeMaker>
+        
+    </ThingDef>
+
+</Defs>

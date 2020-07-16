@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <ResearchTabDef>
+        <defName>VoidEnergy</defName>
+        <label>希灵科技-幽能</label>
+    </ResearchTabDef>
+
+    <ResearchProjectDef Name="VoidEnergyResearchBase" Abstract="True">
+        <!-- 幽能研究台 -->
+        <requiredResearchBuilding>VoidEnergyResearchBench</requiredResearchBuilding>
+        <requiredResearchFacilities>
+            <!-- 多元分析仪 -->
+            <li>MultiAnalyzer</li>
+        </requiredResearchFacilities>
+
+        <tab>VoidEnergy</tab>
+        <techLevel>Spacer</techLevel>
+    </ResearchProjectDef>
+
+
+    <ResearchProjectDef ParentName="VoidEnergyResearchBase">
+        <defName>VoidEnergyBeginning</defName>
+        <label>幽能知识</label>
+        <description>从古老的机械族飞船中获得希灵帝国的知识</description>
+        <baseCost>3000</baseCost>
+        <prerequisites>
+            <li>AdvancedFabrication</li>
+        </prerequisites>
+        <researchViewX>0</researchViewX>
+        <researchViewY>0</researchViewY>
+        <!-- 无法研究的 -->
+        <techLevel>Ultra</techLevel>
+        <requiredResearchFacilities>
+            <li>VoidEnergyuUresearchableHelper</li>
+        </requiredResearchFacilities>
+    </ResearchProjectDef>
+
+    <ResearchProjectDef ParentName="VoidEnergyResearchBase">
+        <defName>VoidEnergyConverter</defName>
+        <label>电力转换</label>
+        <description>研究如何将次级幽能劣化为电能</description>
+        <baseCost>1000</baseCost>
+        <prerequisites>
+            <li>VoidEnergyBeginning</li>
+        </prerequisites>
+        <researchViewX>1</researchViewX>
+        <researchViewY>1</researchViewY>
+        <techLevel>Spacer</techLevel>
+    </ResearchProjectDef>
+
+    <ResearchProjectDef ParentName="VoidEnergyResearchBase">
+        <defName>VoidEnergyFocus</defName>
+        <label>聚焦晶体</label>
+        <description>研究如何令幽能聚焦</description>
+        <baseCost>2000</baseCost>
+        <prerequisites>
+            <li>VoidEnergyBeginning</li>
+        </prerequisites>
+        <researchViewX>1</researchViewX>
+        <researchViewY>0</researchViewY>
+        <techLevel>Spacer</techLevel>
+    </ResearchProjectDef>
+
+    <ResearchProjectDef ParentName="VoidEnergyResearchBase">
+        <defName>VoidEnergyTemperature</defName>
+        <label>控制温度</label>
+        <description>研究幽能对环境温度的影响</description>
+        <baseCost>1500</baseCost>
+        <prerequisites>
+            <li>VoidEnergyBeginning</li>
+        </prerequisites>
+        <researchViewX>1</researchViewX>
+        <researchViewY>2</researchViewY>
+        <techLevel>Spacer</techLevel>
+    </ResearchProjectDef>
+
+    <ResearchProjectDef ParentName="VoidEnergyResearchBase">
+        <defName>VoidEnergyAppealBase</defName>
+        <label>幽能终端</label>
+        <description>研究如何将幽能接收器小型化</description>
+        <baseCost>2000</baseCost>
+        <prerequisites>
+            <li>VoidEnergyBeginning</li>
+        </prerequisites>
+        <researchViewX>1</researchViewX>
+        <researchViewY>3</researchViewY>
+        <techLevel>Spacer</techLevel>
+    </ResearchProjectDef>
+
+    <ResearchProjectDef ParentName="VoidEnergyResearchBase">
+        <defName>VoidEnergyAppealNormal</defName>
+        <label>通用幽能终端</label>
+        <description>研究具有更多功能和更强性能的个人幽能终端</description>
+        <baseCost>4000</baseCost>
+        <prerequisites>
+            <li>VoidEnergyAppealBase</li>
+        </prerequisites>
+        <researchViewX>2</researchViewX>
+        <researchViewY>2</researchViewY>
+        <techLevel>Spacer</techLevel>
+    </ResearchProjectDef>
+
+    <ResearchProjectDef ParentName="VoidEnergyResearchBase">
+        <defName>VoidEnergyReapair</defName>
+        <label>自我修复</label>
+        <description>研究幽能对金属材料的记忆特性</description>
+        <baseCost>5000</baseCost>
+        <prerequisites>
+            <li>VoidEnergyConverter</li>
+            <li>VoidEnergyAppealBase</li>
+        </prerequisites>
+        <researchViewX>2</researchViewX>
+        <researchViewY>1</researchViewY>
+        <techLevel>Spacer</techLevel>
+    </ResearchProjectDef>
+
+    <ResearchProjectDef ParentName="VoidEnergyResearchBase">
+        <defName>VoidEnergyWeapon</defName>
+        <label>幽能武器</label>
+        <description>进一步发掘聚焦水晶的用途</description>
+        <baseCost>2000</baseCost>
+        <prerequisites>
+            <li>VoidEnergyFocus</li>
+        </prerequisites>
+        <researchViewX>2</researchViewX>
+        <researchViewY>0</researchViewY>
+        <techLevel>Spacer</techLevel>
+    </ResearchProjectDef>
+
+    <ResearchProjectDef ParentName="VoidEnergyResearchBase">
+        <defName>VoidEnergyWeaponLv2</defName>
+        <label>高级幽能武器</label>
+        <description>解锁幽能轻机枪和幽能狙击枪</description>
+        <baseCost>5000</baseCost>
+        <prerequisites>
+            <li>VoidEnergyWeapon</li>
+            <li>VoidEnergyAppealNormal</li>
+        </prerequisites>
+        <researchViewX>3</researchViewX>
+        <researchViewY>0</researchViewY>
+        <techLevel>Spacer</techLevel>
+    </ResearchProjectDef>
+
+    <ResearchProjectDef ParentName="VoidEnergyResearchBase">
+        <defName>VoidEnergyWorldTransport</defName>
+        <label>宏世界幽能网络</label>
+        <description>寻找本宇宙的幽能频率,解锁建造可以跨地图传输幽能的方尖碑</description>
+        <baseCost>7500</baseCost>
+        <prerequisites>
+            <li>VoidEnergyFocus</li>
+            <li>VoidEnergyAppealNormal</li>
+        </prerequisites>
+        <researchViewX>3</researchViewX>
+        <researchViewY>1</researchViewY>
+        <techLevel>Spacer</techLevel>
+    </ResearchProjectDef>
+    <!-- ============================================== -->
+    <!-- things -->
+    <!-- ============================================== -->
+
+
+    <ThingDef>
+        <defName>VoidEnergyuUresearchableHelper</defName>
+        <label>你无法主动研究这个科技</label>
+        <thingClass>Building</thingClass>
+    </ThingDef>
+
+
+    <ThingDef ParentName="VoidEnergyManufacturedBase">
+        <defName>VoidEnergyBeginning_Key</defName>
+        <label>生活垃圾</label>
+        <thingClass>ThingWithComps</thingClass>
+        <description>希灵帝国仆从军留下的生活垃圾,也许可以从中获得一些帝国相关的知识?</description>
+        <graphicData>
+            <texPath>VoidEnergyBeginning_Key</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <resourceReadoutPriority>Middle</resourceReadoutPriority>
+        <stackLimit>1</stackLimit>
+        <useHitPoints>true</useHitPoints>
+        <statBases>
+            <MarketValue>3000</MarketValue>
+            <MaxHitPoints>100</MaxHitPoints>
+            <Mass>2.0</Mass>
+        </statBases>
+        <thingCategories>
+            <li>Items</li>
+        </thingCategories>
+        <techLevel>Ultra</techLevel>
+        <comps>
+            <li Class="CompProperties_Usable">
+                <useJob>UseItem</useJob>
+                <useLabel>获取希灵帝国知识</useLabel>
+            </li>
+            <li Class="zhuzi.AdvancedEnergy.EnergyWell.Comp.CompProp_UseVoidEnergyBeginning_Key">
+                <research>VoidEnergyBeginning</research>
+                <chance>0.2</chance>
+                <allowRandomResearch>false</allowRandomResearch>
+                <byProductChance>0.4</byProductChance>
+                <byProduct>
+                        <!-- 幽能核心 -->
+                    <li>VoidEnergyWellCore</li>
+                        <!-- 套娃! -->
+                    <li>VoidEnergyBeginning_Key</li>
+                    <li>VoidEnergyFocusCrystal</li>
+                    <li>VoidEnergyComponent</li>
+                    <li>VoidEnergyAdvancedComponent</li>
+                    <li>VoidEnergyPistol</li>
+                </byProduct>
+            </li>
+            <li Class="CompProperties_UseEffect">
+                <compClass>CompUseEffect_DestroySelf</compClass>
+            </li>
+        </comps>
+        <tradeability>All</tradeability>
+        <thingSetMakerTags>
+            <li>RewardStandardLowFreq</li>
+        </thingSetMakerTags>
+    </ThingDef>
+
+</Defs>
