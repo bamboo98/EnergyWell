@@ -10,7 +10,7 @@
 
   <WorkGiverDef>
     <defName>VoidNetDeepDrill</defName>
-    <label>drill at deep drill</label>
+    <label>操作幽能钻井</label>
     <giverClass>zhuzi.AdvancedEnergy.EnergyWell.AI.WorkGiver_VoidNetDeepDrill</giverClass>
     <workType>Mining</workType>
     <priorityInType>49</priorityInType>

@@ -104,8 +104,8 @@
 
 	<ThingDef ParentName="VoidEnergyGunBase">
 		<defName>VoidEnergyRifle</defName>
-		<label>幽能步枪-基础型</label>
-		<description>可以将幽能转换为粗糙的能量弹射出,精度不佳,但破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
+		<label>幽能原型步枪</label>
+		<description>可以将幽能转换为粗糙的能量弹射出,精度不佳,但破坏力很大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
 		<graphicData>
 			<texPath>Things/Item/Equipment/WeaponRanged/ChargeRifle</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -211,7 +211,7 @@
 
 	<ThingDef ParentName="VoidEnergyGunBase">
 		<defName>VoidEnergyPistol</defName>
-		<label>幽能手枪-基础型</label>
+		<label>幽能原型手枪</label>
 		<description>可以将幽能转换为粗糙的能量弹射出,精度不佳,但破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
 		<techLevel>Spacer</techLevel>
 		<graphicData>
@@ -309,8 +309,8 @@
 
 	<ThingDef ParentName="VoidEnergyGunBase">
 		<defName>VoidEnergyMachineGun</defName>
-		<label>幽能轻机枪</label>
-		<description>可以在短时间内倾泻大量幽能子弹\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
+		<label>幽能原型轻机枪</label>
+		<description>拥有全自动射击模式\n可以在短时间内倾泻大量幽能子弹\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
 		<techLevel>Spacer</techLevel>
 		<graphicData>
 			<texPath>Things/Item/Equipment/WeaponRanged/ChargeRifle</texPath>
@@ -415,7 +415,7 @@
 	</ThingDef>
 	<ThingDef ParentName="VoidEnergyGunBase">
 		<defName>VoidEnergySniper</defName>
-		<label>幽能狙击枪-基础型</label>
+		<label>幽能原型狙击枪</label>
 		<description>可以将幽能转换为粗糙的能量弹射出,精度不佳,但破坏力巨大\n需要幽能无线终端供能,在没有足够幽能的情况下无法开枪</description>
 		<techLevel>Spacer</techLevel>
 		<graphicData>

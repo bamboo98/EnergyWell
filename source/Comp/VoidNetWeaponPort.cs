@@ -122,7 +122,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             {
                 if (nt > slientTick)
                 {
-                    MoteMaker.ThrowText(owner.Position.ToVector3(), owner.Map, "移动终端能量不足", Color.yellow, 2f);
+                    MoteMaker.ThrowText(owner.Position.ToVector3(), owner.Map, "TerminalOutOfEnergy".Translate(), Color.yellow, 2f);
                     slientTick = nt + 1800;
                 }
                 return false;

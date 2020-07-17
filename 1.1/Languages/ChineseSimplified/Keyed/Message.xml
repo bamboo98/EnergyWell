@@ -4,4 +4,44 @@
 	<GetByProduct>从垃圾堆中翻出了...{0}</GetByProduct>
     <GetNothing>啥也没得到</GetNothing>
     <GetResearchTechExp>从垃圾堆中翻出了几张手稿，获得{0}研究进度{1}点</GetResearchTechExp>
+
+    <OverHeatAndExplosion>幽能井过热,发生爆炸</OverHeatAndExplosion>
+    <OverHeatAndStop>幽能井过热,产出停止</OverHeatAndStop>
+    <ActiveEnergyWell>激活幽能井</ActiveEnergyWell>
+    <DontHaveEnoughPower>电网内储能不足</DontHaveEnoughPower>
+    <EnergyWellInactive>需要激活</EnergyWellInactive>
+    <EnergyWellNeedRoomWithRoof>幽能井需要置于室内的屋顶下</EnergyWellNeedRoomWithRoof>
+    <OverHeatWarning>幽能井过热!请保持环境温度足够低来让幽能井散热</OverHeatWarning>
+    <VoidEnergyCache>幽能储量: {0} / {1}</VoidEnergyCache>
+    <VoidEnergyCost>幽能需求: {0}单位/秒</VoidEnergyCost>
+    <EnergyWellHeatLabel>井内温度: {0}℃</EnergyWellHeatLabel>
+    <NoVoidEnergyEnter>无幽能供应</NoVoidEnergyEnter>
+    <VoidNetMap>区域</VoidNetMap>
+    <VoidNetWorld>星系</VoidNetWorld>
+    <VoidNetLabel1>幽能产能: {0}单位/秒</VoidNetLabel1>
+    <VoidNetLabel2>传输负载: {0}%</VoidNetLabel2>
+    <VoidNetLabel3>储量: {0}/{1}单位</VoidNetLabel3>
+
+    <VoidNetConverterLabel1>电力转换: {0}W</VoidNetConverterLabel1>
+    <VoidNetConverterLabel2>幽能输入: {0}单位/秒</VoidNetConverterLabel2>
+    <VoidNetConverterLabel3>转换率: {0}%</VoidNetConverterLabel3>
+    <WallRepairing>修复中......</WallRepairing>
+    <StartupProgress>启动进度: {0}%</StartupProgress>
+    <ShieldStartupProgress>护盾启动剩余{0}秒</ShieldStartupProgress>
+    <VoidNetTowerTransportSpeed>幽能传输率: {0}单位/秒</VoidNetTowerTransportSpeed>
+
+    
+    <TurretOutOfEnergy>炮塔储能不足</TurretOutOfEnergy>
+    <TerminalOutOfEnergy>终端储能不足</TerminalOutOfEnergy>
+    <OneShootLabel>单发</OneShootLabel>
+    <ThreeShootLabel>三连发</ThreeShootLabel>
+    <FullAutoLabel>全自动</FullAutoLabel>
+    <OneToThree>当前: 单发模式\n瞄准时间+30%,伤害+100%,耗能+125%,后摇+30%,精度+35%\n点击切换到三连发</OneToThree>
+    <ThreeToFullAuto>当前: 三连发模式\n点击切换到全自动</ThreeToFullAuto>
+    <ThreeToOne>当前: 三连发模式\n点击切换到单发</ThreeToOne>
+    <FullAutoToOne>当前: 全自动模式\n瞄准时间-100%,伤害-50%,耗能-35%,后摇-100%,精度-60%\n点击切换到单发</FullAutoToOne>
+   
+   
+
+
 </LanguageData>

@@ -47,13 +47,14 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 return "PowerNotConnected".Translate();
             }
             StringBuilder str = new StringBuilder();
-            str.AppendLine("电力转换: " + (-PowerConsumption).ToString("f0") + "W");
+            str.AppendLine("VoidNetConverterLabel1".Translate((-PowerConsumption).ToString("f0")));
             string value = (PowerNet.CurrentEnergyGainRate() / CompPower.WattsToWattDaysPerTick).ToString("F0");
             string value2 = PowerNet.CurrentStoredEnergy().ToString("F0");
             str.Append("PowerConnectedRateStored".Translate(value, value2));
             if (Prefs.DevMode)
             {
-                str.Append("\n幽能输入: " + energyCost + " 转换率: " + (convertRate * 100).ToString("F0")+"%");
+                str.Append("\n" + "VoidNetConverterLabel2".Translate(energyCost.ToString("f3")) + 
+                    "\n" + "VoidNetConverterLabel3".Translate((convertRate * 100).ToString("F0")));
             }
             return str.ToString();
         }

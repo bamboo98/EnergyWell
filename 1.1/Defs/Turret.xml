@@ -2,8 +2,9 @@
 <Defs>
     <ThingDef ParentName="BuildingBase">
         <defName>VoidNetTurret_Base</defName>
-        <label>幽能哨戒炮-基础型</label>
-        <description>A portable automatic turret. Requires steel to refurbish its barrel after heavy use. May explode when damaged. Its dumb AI brain can't be directly controlled, so beware of friendly fire.</description>
+        <label>幽能哨戒炮</label>
+        <description>装备有基础幽能步枪的无人武器站,因为没有使用常规弹药,所以没有被引燃和爆炸的风险
+配备有小型护盾</description>
         <thingClass>zhuzi.AdvancedEnergy.EnergyWell.Builds.VoidNetTurret</thingClass>
         <graphicData>
             <texPath>Things/Building/Security/TurretMini_Base</texPath>
@@ -53,9 +54,9 @@
                 <!-- 护盾的能耗分为常驻的待机能耗和充能能耗两部分,充能能耗=shieldRecharge*shieldConvertRate -->
                 <energyCostPerSec>0.005</energyCostPerSec>
                 <!-- 护盾上限 -->
-                <shieldMax>250</shieldMax>
+                <shieldMax>200</shieldMax>
                 <!-- 每秒回冲值（非百分比） -->
-                <shieldRecharge>5</shieldRecharge>
+                <shieldRecharge>2.5</shieldRecharge>
                 <!-- 回冲每点能量消耗的幽能 -->
                 <shieldConvertRate>0.026</shieldConvertRate>
                 <!-- 受到伤害转化为对护盾冲击的比例 -->

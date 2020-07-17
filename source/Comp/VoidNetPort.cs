@@ -273,10 +273,10 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             if ((ShowMode & ShowInfoMode.InspectString) != ShowInfoMode.InspectString) return "";
             StringBuilder str = new StringBuilder();
             if (!PowerOn)
-                str.AppendLine("启动进度: " +(Mathf.Min(1,(float)(initTicks-initCountdown)/(float)initTicks)*100).ToString("f1")+"%");
+                str.AppendLine("StartupProgress".Translate((Mathf.Min(1, (float)(initTicks - initCountdown) / (float)initTicks) * 100).ToString("f1")));
             else
-                str.AppendLine("幽能缓存: " + energyCache.ToString("f1") + "/" + energyCacheMax.ToString("f2"));
-            str.Append("幽能需求: " + (CompsEnergyCost * 60f).ToString("f3") + "/秒");
+                str.AppendLine("VoidEnergyCache".Translate(energyCache.ToString("f1"), energyCacheMax.ToString("f2")));
+            str.Append("VoidEnergyCost".Translate((CompsEnergyCost * 60f).ToString("f3")));
 
 
 
@@ -397,7 +397,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             Rect rect3 = rect2;
             rect3.height = rect.height / 3f;
             Text.Font = GameFont.Tiny;
-            Widgets.Label(rect3, "幽能接收终端");
+            Widgets.Label(rect3, "GizMos_VoidNetPortLabel".Translate());
 
             if (voidNetBuildShield==null || voidNetBuildShield.ShieldMax <= 0)
             {
@@ -423,7 +423,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 Text.Font = GameFont.Small;
                 Text.Anchor = TextAnchor.MiddleCenter;
                 if (voidNetBuildShield.ShieldInit > 0)
-                    Widgets.Label(rect4, "启动中:" + (voidNetBuildShield.ShieldInit / 60f).ToString("f1") + "秒");
+                    Widgets.Label(rect4, "ShieldStartupProgress".Translate((voidNetBuildShield.ShieldInit / 60f).ToString("f1")));
                 else
                     Widgets.Label(rect4, (voidNetBuildShield.ShieldCur).ToString("F0") + " / " + (voidNetBuildShield.ShieldMax).ToString("F0"));
 

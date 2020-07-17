@@ -169,7 +169,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         public string GetBurdenStr()
         {
             if (EnergyCacheMax == 0)
-                return "\n无幽能供应";
+                return "\n" + "NoVoidEnergyEnter".Translate();
             float storage = 0;
             float storageMax = 0;
             foreach (EnergyWell item in Wells)
@@ -177,8 +177,9 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 storage += item.EnergyStorage;
                 storageMax += item.EnergyStorageMax;
             }
-            return "\n世界幽能产能: " + produceEnergyPerSec.ToString("f3") + "单位/秒" +
-                "\n传输负载/储量: " + (energyNeedTotal / EnergyCacheMax * 100f).ToString("f0") + "% / " + storage.ToString("f2") + "(" + storageMax.ToString("f2") + ")单位";
+            return "\n" + "VoidNetWorld".Translate() + "VoidNetLabel1".Translate(produceEnergyPerSec.ToString("f3")) +
+                "\n" + "VoidNetLabel2".Translate((energyNeedTotal / EnergyCacheMax * 100f).ToString("f0")) +
+                "\n" + "VoidNetLabel3".Translate(storage.ToString("f2"), storageMax.ToString("f2"));
         }
 
         public override void ExposeData()
@@ -426,7 +427,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         public string GetBurdenStr()
         {
             if (EnergyCacheMax == 0)
-                return "\n无幽能供应";
+                return "\n" + "NoVoidEnergyEnter".Translate();
             float storage = 0;
             float storageMax = 0;
             foreach (EnergyWell item in Wells)
@@ -434,8 +435,9 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 storage += item.EnergyStorage;
                 storageMax += item.EnergyStorageMax;
             }
-            return "\n本地幽能产能: " + produceEnergyPerSec.ToString("f3") + "单位/秒" +
-                "\n传输负载/储量: " + (energyNeedTotal / EnergyCacheMax * 100f).ToString("f0") + "% / " + storage.ToString("f2") + "("+  storageMax.ToString("f2") + ")单位";
+            return "\n" + "VoidNetMap".Translate() + "VoidNetLabel1".Translate(produceEnergyPerSec.ToString("f3")) +
+                "\n" + "VoidNetLabel2".Translate((energyNeedTotal / EnergyCacheMax * 100f).ToString("f0")) +
+                "\n" + "VoidNetLabel3".Translate(storage.ToString("f2"), storageMax.ToString("f2"));
         }
 
 

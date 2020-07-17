@@ -281,13 +281,13 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 
                 if (!disableExplosionMessage)
                 {
-                    Messages.Message("幽能井过热,发生爆炸", new LookTargets(parent), MessageTypeDefOf.ThreatSmall);
+                    Messages.Message("OverHeatAndExplosion".Translate(), new LookTargets(parent), MessageTypeDefOf.ThreatSmall);
                     disableExplosionMessage = true;
                 }
             }
             if (heatStorage > 225 && !disableOverHeatMessage)
             {
-                Messages.Message("幽能井过热,产出停止", new LookTargets(parent), MessageTypeDefOf.NegativeEvent);
+                Messages.Message("OverHeatAndStop".Translate(), new LookTargets(parent), MessageTypeDefOf.NegativeEvent);
                 disableOverHeatMessage = true;
             }
             if (heatStorage < 150)
@@ -305,7 +305,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             if (!active)
                 yield return new Command_Action
                 {
-                    defaultLabel = "激活幽能井",
+                    defaultLabel = "ActiveEnergyWell".Translate(),
                     defaultDesc = "GizMos_ActiveWellDesc".Translate(activePower),
                     action = delegate ()
                     {
@@ -319,7 +319,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                         }
                         else
                         {
-                            Messages.Message("电网内储能不足", MessageTypeDefOf.SilentInput);
+                            Messages.Message("DontHaveEnoughPower".Translate(), MessageTypeDefOf.SilentInput);
                         }
                     }
                 };
@@ -371,22 +371,22 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             StringBuilder str = new StringBuilder();
             if (!active)
             {
-                str.AppendLine("未激活");
+                str.AppendLine("EnergyWellInactive".Translate());
             }
             else if (outSide)
             {
-                str.AppendLine("幽能井需要置于室内的屋顶下");
+                str.AppendLine("EnergyWellNeedRoomWithRoof".Translate());
             }
             else if (heatStorage > 225f)
             {
-                str.AppendLine("幽能井过热!请保持环境温度足够低来让幽能井散热");
+                str.AppendLine("OverHeatWarning".Translate());
             }
             else
             {
                 str.AppendLine("GizMos_ProduceEnergyPerSec".Translate((ProduceEnergy * 60f).ToString("f3")));
             }
-            str.AppendLine("幽能储量: " + energyStorage.ToString("f1") + " / " + energyStorageMax.ToString("f2"));
-            str.AppendLine("热能: " + heatStorage.ToString("f2"));
+            str.AppendLine("VoidEnergyCache".Translate(energyStorage.ToString("f1"), energyStorageMax.ToString("f2")));
+            str.AppendLine("EnergyWellHeatLabel".Translate(heatStorage.ToString("f2")));
             str.Append("HeatDissipationCoefficient".Translate((HeatDissipationCoefficient * 100f).ToString("f0")));
 
             return str.ToString().Trim();

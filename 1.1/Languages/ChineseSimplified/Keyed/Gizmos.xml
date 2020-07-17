@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
 
+	<GizMos_VoidNetPortLabel>幽能终端</GizMos_VoidNetPortLabel>
+
 	<GizMos_CompsEnergyCost>接收幽能{0}单位/秒</GizMos_CompsEnergyCost>
 	<GizMos_CompsEnergyCost>待机幽能消耗{0}单位/秒</GizMos_CompsEnergyCost>
 

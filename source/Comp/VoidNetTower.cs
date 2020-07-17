@@ -105,7 +105,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
         public override string CompInspectStringExtra()
         {
             StringBuilder str = new StringBuilder();
-            str.Append("幽能传输率: " + EnergyTransportPerSec.ToString("f2") + " 单位/秒");
+            str.Append("VoidNetTowerTransportSpeed".Translate(EnergyTransportPerSec.ToString("f2")));
                 //str.AppendLine("\n地图缓存: " + MapNetNode.EnergyCache.ToString("f3") + " / " + MapNetNode.EnergyCacheMax.ToString("f3"));
                 //str.AppendLine("世界缓存: " + WorldNetNode.EnergyCache.ToString("f3") + " / " + WorldNetNode.EnergyCacheMax.ToString("f3"));
                 str.Append(MapNetNode.GetBurdenStr());

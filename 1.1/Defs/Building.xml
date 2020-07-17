@@ -15,7 +15,9 @@
     <ThingDef ParentName="BuildingBase">
         <defName>SecondaryVoidEnergyWell</defName>
         <label>次级幽能井</label>
-        <description>Produces power by consuming chemfuel. Must be periodically refueled by hand.</description>
+        <description>将幽能核心置入电场,提取并缓存次级幽能的装置
+在提取和缓存幽能时需要消耗电量
+启动幽能核心时需要消耗大量的存储电量</description>
         <thingClass>Building</thingClass>
         <graphicData>
             <texPath>Build_VoidEnergyWell</texPath>
@@ -82,7 +84,7 @@
     <ThingDef ParentName="BuildingBase">
         <defName>VoidNetTower</defName>
         <label>幽能方尖碑</label>
-        <description>Produces power by consuming chemfuel. Must be periodically refueled by hand.</description>
+        <description>提取幽能井中的幽能,并将其辐射到本地区</description>
         <thingClass>Building</thingClass>
         <graphicData>
             <texPath>Build_VoidEnergyTower</texPath>
@@ -144,7 +146,8 @@
     <ThingDef ParentName="BuildingBase">
         <defName>VoidNetTowerPlus</defName>
         <label>幽能方尖碑Plus</label>
-        <description>Produces power by consuming chemfuel. Must be periodically refueled by hand.</description>
+        <description>提取幽能井中的幽能,并将其辐射到整个星系
+相比基础型号也大幅提高了传输速度</description>
         <thingClass>Building</thingClass>
         <graphicData>
             <texPath>Build_VoidEnergyTower</texPath>
@@ -206,7 +209,7 @@
     <ThingDef ParentName="BuildingBase">
         <defName>VoidPowerConverter</defName>
         <label>幽能反应堆</label>
-        <description>Produces power by consuming chemfuel. Must be periodically refueled by hand.</description>
+        <description>可以将幽能劣化为电能,转换率非常高</description>
         <thingClass>Building</thingClass>
         <graphicData>
             <texPath>Build_VoidEnergyConverter</texPath>
@@ -366,7 +369,8 @@
     <ThingDef ParentName="BuildingBase">
         <defName>VoidNetDeepDrill</defName>
         <label>幽能钻井</label>
-        <description>A deep-crust drilling rig for extracting minerals from deep under the surface. Use a ground-penetrating scanner to detect the resources. This drill will yield stone chunks if no resources are present. Can be repositioned freely.</description>
+        <description>将幽能聚焦,拥有比普通深钻井更快的挖掘速度
+但是需要大量的幽能</description>
         <graphicData>
             <graphicClass>Graphic_Single</graphicClass>
             <texPath>Things/Building/Production/DeepDrill</texPath>
@@ -459,7 +463,8 @@
     <ThingDef ParentName="BuildingBase">
         <defName>VoidEnergyThermostat</defName>
         <label>幽能恒温器</label>
-        <description>A device that can control the temperature near the target value.</description>
+        <description>通过幽能震荡来影响周围气体分子的运动速度,进而改变室内温度
+但是能效比其实很低,完全比不上普通电力空调</description>
         <thingClass>zhuzi.AdvancedEnergy.EnergyWell.Builds.VoidEnergyThermostat</thingClass>
         <graphicData>
             <texPath>Build_VoidEnergyThermostat</texPath>
@@ -528,7 +533,7 @@
     <ThingDef ParentName="LampBase">
         <defName>VoidNetSunLamp</defName>
         <label>幽能太阳灯</label>
-        <description>An industrial lamp which lights an area brightly enough to grow crops, but consumes a huge amount of power. Automatically turns itself off at night.</description>
+        <description>以幽能为能源的太阳灯,能效比很低</description>
         <thingClass>Building_SunLamp</thingClass>
         <graphicData>
             <texPath>Things/Building/Production/LampSun</texPath>
@@ -642,7 +647,6 @@
         <hasInteractionCell>true</hasInteractionCell>
         <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
         <surfaceType>Item</surfaceType>
-        <designationHotKey>Misc4</designationHotKey>
         <constructionSkillPrerequisite>6</constructionSkillPrerequisite>
         <placeWorkers>
             <li>PlaceWorker_ShowFacilitiesConnections</li>

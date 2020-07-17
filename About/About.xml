@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-	<name>高级能量系列-能量井-pre1</name>
-	<packageId>zhuzi.AdvancedEnergy.EnergyWell</packageId>
+	<name>希灵科技-幽能</name>
+	<packageId>zhuzi.CeilingTech.VoidEnergy</packageId>
 	<supportedVersions>
 		<li>1.1</li>
 	</supportedVersions>

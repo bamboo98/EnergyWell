@@ -87,7 +87,6 @@
     <Compile Include="Builds\VoidNetTurret.cs" />
     <Compile Include="Comp\EnergyWell.cs" />
     <Compile Include="Comp\GameComp_VoidNet.cs" />
-    <Compile Include="Comp\Hediff\VoidEnergyHediffTerminalMoveSpeed.cs" />
     <Compile Include="Comp\Prop\EnergyWellProp.cs" />
     <Compile Include="Comp\Prop\VoidEnergyConverterProp.cs" />
     <Compile Include="Comp\Prop\VoidNetAutoRepairProp.cs" />

@@ -103,6 +103,12 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 throw;
             }
         }
+        public override string CompInspectStringExtra()
+        {
+            if (!repairing)
+                return null;
+            return "WallRepairing".Translate();
+        }
         public override void CompTick()
         {
             base.CompTick();

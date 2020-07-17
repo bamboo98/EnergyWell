@@ -90,7 +90,7 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
             {
                 if (nt > slientTick)
                 {
-                    MoteMaker.ThrowText(turret.Position.ToVector3(), turret.Map, "炮塔能量不足", Color.yellow, 2f);
+                    MoteMaker.ThrowText(turret.Position.ToVector3(), turret.Map, "TurretOutOfEnergy".Translate(), Color.yellow, 2f);
                     slientTick = nt + 1800;
                 }
                 return false;

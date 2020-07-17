@@ -523,8 +523,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
 
                     yield return new Command_Action
                     {
-                        defaultLabel = "OneShoot",
-                        defaultDesc = "当前: 单发模式\n瞄准时间+30%,伤害+100%,耗能+125%,后摇+30%,精度+35%\n点击切换到三连发",
+                        defaultLabel = "OneShootLabel".Translate(),
+                        defaultDesc = "OneToThree".Translate(),
                         icon = Texture2Ds.Icon_OneShoot,
 
                         action = delegate ()
@@ -537,8 +537,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                     if (enableFullAuto)
                         yield return new Command_Action
                         {
-                            defaultLabel = "ThreeShoot",
-                            defaultDesc = "当前: 三连发模式\n点击切换到全自动",
+                            defaultLabel = "ThreeShootLabel".Translate(),
+                            defaultDesc = "ThreeToFullAuto".Translate(),
                             icon = Texture2Ds.Icon_ThreeShoot,
                             action = delegate ()
                             {
@@ -548,8 +548,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                     else
                         yield return new Command_Action
                         {
-                            defaultLabel = "ThreeShoot",
-                            defaultDesc = "当前: 三连发模式\n点击切换到单发",
+                            defaultLabel = "ThreeShootLabel".Translate(),
+                            defaultDesc = "ThreeToOne".Translate(),
                             icon = Texture2Ds.Icon_ThreeShoot,
                             action = delegate ()
                             {
@@ -560,8 +560,8 @@ namespace zhuzi.AdvancedEnergy.EnergyWell.Comp
                 case ShootMode.FullAuto:
                     yield return new Command_Action
                     {
-                        defaultLabel = "FullAuto",
-                        defaultDesc = "当前: 全自动模式\n瞄准时间-100%,伤害-50%,耗能-35%,后摇-100%,精度-60%\n点击切换到单发",
+                        defaultLabel = "FullAutoLabel".Translate(),
+                        defaultDesc = "FullAutoToOne".Translate(),
                         icon = Texture2Ds.Icon_FullAuto,
                         iconAngle = Find.TickManager.TicksGame % 360,
                         action = delegate ()
